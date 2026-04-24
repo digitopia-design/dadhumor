@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { getJokeBySlug } from '@/lib/jokes';
+import { ogImageUrl, jokeUrl } from '@/lib/url';
 import { Stache } from '@/components/Stache';
 import { Logo } from '@/components/Logo';
 
@@ -27,7 +28,8 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `"${joke.setup}"`;
   const description = `${joke.punchline} — Dad Humor`;
-  const ogImageUrl = `/api/og/${joke.slug}`;
+  const image = ogImageUrl(joke.slug);
+  const url = jokeUrl(joke.slug);
 
   return {
     title,
@@ -35,23 +37,16 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     openGraph: {
       title,
       description,
-      url: `https://dadhumor.app/j/${joke.slug}`,
+      url,
       siteName: 'Dad Humor',
       type: 'website',
-      images: [
-        {
-          url: ogImageUrl,
-          width: 1200,
-          height: 630,
-          alt: joke.setup,
-        },
-      ],
+      images: [{ url: image, width: 1200, height: 630, alt: joke.setup }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImageUrl],
+      images: [image],
     },
   };
 }

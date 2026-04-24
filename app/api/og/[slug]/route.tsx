@@ -1,7 +1,8 @@
 import { ImageResponse } from 'next/og';
 import { getJokeBySlug } from '@/lib/jokes';
 
-export const runtime = 'edge';
+// Node.js runtime - Supabase client is not edge-compatible
+export const runtime = 'nodejs';
 
 async function loadGoogleFont(family: string, weight: number): Promise<ArrayBuffer | null> {
   try {
@@ -17,121 +18,81 @@ async function loadGoogleFont(family: string, weight: number): Promise<ArrayBuff
   }
 }
 
+const BASE_URL = process.env.NEXT_PUBLIC_BASE_URL ?? 'https://dadhumor.app';
+
 export async function GET(
-  request: Request,
+  _request: Request,
   { params }: { params: Promise<{ slug: string }> }
 ) {
-  const { slug } = await params;
+  try {
+    const { slug } = await params;
 
-  const [joke, boldFont, bodyFont] = await Promise.all([
-    getJokeBySlug(slug),
-    loadGoogleFont('Space+Grotesk', 700),
-    loadGoogleFont('Inter', 400),
-  ]);
+    const [joke, boldFont, bodyFont] = await Promise.all([
+      getJokeBySlug(slug),
+      loadGoogleFont('Space+Grotesk', 700),
+      loadGoogleFont('Inter', 400),
+    ]);
 
-  const fonts: { name: string; data: ArrayBuffer; weight: 400 | 700; style: 'normal' }[] = [];
-  if (boldFont) fonts.push({ name: 'SpaceGrotesk', data: boldFont, weight: 700, style: 'normal' });
-  if (bodyFont) fonts.push({ name: 'Inter', data: bodyFont, weight: 400, style: 'normal' });
+    const fonts: { name: string; data: ArrayBuffer; weight: 400 | 700; style: 'normal' }[] = [];
+    if (boldFont) fonts.push({ name: 'SpaceGrotesk', data: boldFont, weight: 700, style: 'normal' });
+    if (bodyFont) fonts.push({ name: 'Inter', data: bodyFont, weight: 400, style: 'normal' });
 
-  if (!joke) {
+    if (!joke) {
+      return new ImageResponse(<DefaultCard />, { width: 1200, height: 630, fonts });
+    }
+
+    const category = joke.category.replace(/-/g, ' ');
+
     return new ImageResponse(
-      <DefaultCard />,
-      { width: 1200, height: 630, fonts }
-    );
-  }
-
-  const category = joke.category.replace(/-/g, ' ');
-
-  return new ImageResponse(
-    <div
-      style={{
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        width: '100%',
-        height: '100%',
-        background: '#121212',
-        padding: '64px 72px',
-        fontFamily: 'Inter, sans-serif',
-      }}
-    >
-      {/* Header */}
-      <div style={{ display: 'flex', alignItems: 'center' }}>
-        <span
-          style={{
-            fontFamily: 'SpaceGrotesk, sans-serif',
-            fontWeight: 700,
-            fontSize: 32,
-            color: '#E3FF00',
-            letterSpacing: '-0.5px',
-          }}
-        >
-          Dad Humor
-        </span>
-      </div>
-
-      {/* Joke content */}
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '32px', flex: 1, justifyContent: 'center' }}>
-        <p
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: 38,
-            color: '#A0A0A0',
-            margin: 0,
-            lineHeight: 1.45,
-            maxWidth: '900px',
-          }}
-        >
-          {joke.setup}
-        </p>
-        <p
-          style={{
-            fontFamily: 'SpaceGrotesk, sans-serif',
-            fontWeight: 700,
-            fontSize: 56,
-            color: '#E3FF00',
-            margin: 0,
-            lineHeight: 1.2,
-            maxWidth: '900px',
-          }}
-        >
-          {joke.punchline}
-        </p>
-      </div>
-
-      {/* Footer */}
       <div
         style={{
           display: 'flex',
+          flexDirection: 'column',
           justifyContent: 'space-between',
-          alignItems: 'center',
+          width: '100%',
+          height: '100%',
+          background: '#121212',
+          padding: '64px 72px',
         }}
       >
-        <span
-          style={{
-            fontFamily: 'Inter, sans-serif',
-            fontSize: 20,
-            color: '#333333',
-            textTransform: 'uppercase',
-            letterSpacing: '2px',
-          }}
-        >
-          {category}
-        </span>
-        <span
-          style={{
-            fontFamily: 'SpaceGrotesk, sans-serif',
-            fontWeight: 700,
-            fontSize: 20,
-            color: '#333333',
-          }}
-        >
-          dadhumor.app
-        </span>
-      </div>
-    </div>,
-    { width: 1200, height: 630, fonts }
-  );
+        {/* Header */}
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <span style={{ fontFamily: 'SpaceGrotesk', fontWeight: 700, fontSize: 30, color: '#E3FF00' }}>
+            Dad Humor
+          </span>
+          <span style={{ fontFamily: 'Inter', fontSize: 22, color: '#333333', textTransform: 'uppercase', letterSpacing: '3px' }}>
+            {category}
+          </span>
+        </div>
+
+        {/* Joke */}
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '28px', flex: 1, justifyContent: 'center', paddingTop: '40px', paddingBottom: '40px' }}>
+          <p style={{ fontFamily: 'Inter', fontSize: 40, color: '#A0A0A0', margin: 0, lineHeight: 1.4, maxWidth: '1000px' }}>
+            {joke.setup}
+          </p>
+          <div style={{ display: 'flex', width: '64px', height: '4px', background: '#E3FF00', borderRadius: '2px' }} />
+          <p style={{ fontFamily: 'SpaceGrotesk', fontWeight: 700, fontSize: 58, color: '#E3FF00', margin: 0, lineHeight: 1.15, maxWidth: '1000px' }}>
+            {joke.punchline}
+          </p>
+        </div>
+
+        {/* Footer */}
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+          <span style={{ fontFamily: 'Inter', fontSize: 22, color: '#555555' }}>
+            Tap to react · {BASE_URL.replace('https://', '')}
+          </span>
+          <div style={{ display: 'flex', gap: '12px' }}>
+            <span style={{ fontFamily: 'Inter', fontSize: 22, color: '#555555' }}>🤝 Props</span>
+            <span style={{ fontFamily: 'Inter', fontSize: 22, color: '#555555' }}>😩 Groan</span>
+          </div>
+        </div>
+      </div>,
+      { width: 1200, height: 630, fonts }
+    );
+  } catch (err) {
+    console.error('OG image error:', err);
+    return new ImageResponse(<DefaultCard />, { width: 1200, height: 630 });
+  }
 }
 
 function DefaultCard() {
@@ -145,17 +106,18 @@ function DefaultCard() {
         width: '100%',
         height: '100%',
         background: '#121212',
-        gap: '24px',
-        fontFamily: 'sans-serif',
+        gap: '20px',
       }}
     >
-      <span style={{ fontSize: 80, fontWeight: 700, color: '#E3FF00' }}>
-        Dad Humor
+      <span style={{ fontSize: 28, fontWeight: 700, color: '#E3FF00', letterSpacing: '-1px', fontFamily: 'sans-serif' }}>
+        DAD HUMOR
       </span>
-      <span style={{ fontSize: 36, color: '#A0A0A0' }}>
+      <span style={{ fontSize: 60, fontWeight: 700, color: '#FFFFFF', fontFamily: 'sans-serif', textAlign: 'center', maxWidth: '900px', lineHeight: 1.2 }}>
         Professionally unfunny since 2026.
       </span>
-      <span style={{ fontSize: 24, color: '#333333' }}>dadhumor.app</span>
+      <span style={{ fontSize: 24, color: '#555555', fontFamily: 'sans-serif', marginTop: '12px' }}>
+        dadhumor.app
+      </span>
     </div>
   );
 }

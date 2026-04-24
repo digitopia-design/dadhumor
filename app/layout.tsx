@@ -3,6 +3,7 @@ import { Inter, Space_Grotesk } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { CookieBanner } from "@/components/CookieBanner";
+import { ogImageUrl } from "@/lib/url";
 import "./globals.css";
 
 const inter = Inter({
@@ -37,7 +38,7 @@ export const metadata: Metadata = {
     type: "website",
     images: [
       {
-        url: "/api/og/default",
+        url: ogImageUrl(),
         width: 1200,
         height: 630,
         alt: "Dad Humor — the dad joke app",
@@ -48,7 +49,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Dad Humor — Professionally unfunny since 2026.",
     description: "One dad joke at a time. Tap to reveal, swipe to react.",
-    images: ["/api/og/default"],
+    images: [ogImageUrl()],
   },
   icons: {
     icon: [
