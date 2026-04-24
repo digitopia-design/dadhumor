@@ -27,8 +27,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `"${joke.setup}"`;
   const description = `${joke.punchline} — Dad Humor`;
-  // Task 4.1 will implement per-joke OG images at /api/og/[slug]
-  const ogImageUrl = `/api/og/default`;
+  const ogImageUrl = `/api/og/${joke.slug}`;
 
   return {
     title,
