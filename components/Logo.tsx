@@ -6,7 +6,10 @@ interface LogoProps {
 
 export function Logo({ className }: LogoProps) {
   return (
-    <div className={cn('font-display font-bold leading-none tracking-tight', className)}>
+    <div
+      className={cn('font-display font-bold uppercase leading-none', className)}
+      style={{ letterSpacing: '-0.04em', lineHeight: 0.85 }}
+    >
       <div className="text-white">DAD</div>
       <div className="text-yellow">HUMOR.</div>
     </div>

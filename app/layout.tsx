@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Inter, Space_Grotesk } from "next/font/google";
+import localFont from "next/font/local";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -14,6 +15,13 @@ const inter = Inter({
 const spaceGrotesk = Space_Grotesk({
   variable: "--font-space-grotesk",
   subsets: ["latin"],
+});
+
+const clashDisplay = localFont({
+  src: "../public/fonts/ClashDisplay-Bold.woff2",
+  variable: "--font-clash-display",
+  weight: "700",
+  display: "swap",
 });
 
 export const viewport: Viewport = {
@@ -52,13 +60,7 @@ export const metadata: Metadata = {
     images: [ogImageUrl()],
   },
   icons: {
-    icon: [
-      { url: "/favicon.png", type: "image/png", sizes: "32x32" },
-      { url: "/icon-192.png", type: "image/png", sizes: "192x192" },
-    ],
-    apple: [
-      { url: "/icon-192.png", sizes: "192x192" },
-    ],
+    apple: { url: "/icon-192.png", sizes: "192x192" },
   },
   manifest: "/manifest.webmanifest",
   robots: {
@@ -77,7 +79,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} h-full antialiased`}
+      className={`${inter.variable} ${spaceGrotesk.variable} ${clashDisplay.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-midnight font-body text-white" suppressHydrationWarning>
         {children}
