@@ -147,11 +147,12 @@ export async function GET(request: Request) {
         <p
           style={{
             fontFamily: 'Inter',
-            fontSize: 38,
-            color: '#888888',
+            fontSize: 42,
+            color: '#A0A0A0',
             margin: 0,
-            lineHeight: 1.4,
+            lineHeight: 1.25,
             maxWidth: '1000px',
+            letterSpacing: '-0.02em',
           }}
         >
           {setup}
@@ -169,11 +170,12 @@ export async function GET(request: Request) {
           style={{
             fontFamily: 'SpaceGrotesk',
             fontWeight: 700,
-            fontSize: 56,
+            fontSize: 72,
             color: '#E3FF00',
             margin: 0,
-            lineHeight: 1.15,
+            lineHeight: 1.0,
             maxWidth: '1000px',
+            letterSpacing: '-0.02em',
           }}
         >
           {punchline}

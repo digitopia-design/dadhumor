@@ -1,6 +1,7 @@
 'use client';
 
-import { cn } from '@/lib/utils';
+import { motion } from 'framer-motion';
+import { cn, getSetupSize, getPunchlineSize } from '@/lib/utils';
 import { CategoryPill } from './CategoryPill';
 import type { Joke } from '@/lib/jokes';
 
@@ -15,23 +16,38 @@ export function JokeCard({ joke, isRevealed }: JokeCardProps) {
       className={cn(
         'relative flex flex-col items-center justify-center w-full max-w-xl',
         'bg-charcoal border border-graphite rounded-3xl px-8 py-12',
-        'text-center select-none'
+        'text-center select-none gap-8 md:gap-10'
       )}
     >
       {joke.category && (
-        <CategoryPill category={joke.category} className="mb-8" />
+        <CategoryPill category={joke.category} />
       )}
 
-      <p className="font-display font-bold text-2xl md:text-4xl text-white leading-tight">
+      <h1
+        className={cn(
+          'font-display font-semibold text-smoke leading-tight tracking-tight',
+          getSetupSize(joke.setup)
+        )}
+        style={{ letterSpacing: '-0.02em' }}
+      >
         {joke.setup}
-      </p>
+      </h1>
 
       {isRevealed ? (
-        <p className="mt-8 font-display font-bold text-2xl md:text-4xl text-yellow leading-tight animate-fade-in-up">
+        <motion.h2
+          initial={{ opacity: 0, y: 12, scale: 0.96 }}
+          animate={{ opacity: 1, y: 0, scale: 1 }}
+          transition={{ duration: 0.45, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+          className={cn(
+            'font-display font-bold text-yellow leading-none tracking-tight',
+            getPunchlineSize(joke.punchline)
+          )}
+          style={{ letterSpacing: '-0.02em' }}
+        >
           {joke.punchline}
-        </p>
+        </motion.h2>
       ) : (
-        <p className="mt-8 font-body text-smoke text-sm uppercase tracking-widest animate-pulse">
+        <p className="font-body text-smoke/50 text-sm uppercase tracking-widest animate-pulse">
           Brace yourself. Tap.
         </p>
       )}

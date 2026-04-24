@@ -107,23 +107,27 @@ export default function SignagePage() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -24 }}
               transition={{ duration: 0.5, ease: [0.34, 1.56, 0.64, 1] }}
-              className="flex flex-col items-center text-center gap-10 max-w-6xl"
+              className="flex flex-col items-center text-center gap-12 max-w-6xl"
             >
-              <p className="font-body text-smoke text-5xl leading-relaxed">
+              <h1
+                className="font-display font-semibold text-smoke leading-tight"
+                style={{ fontSize: '4.5rem', letterSpacing: '-0.02em' }}
+              >
                 {joke.setup}
-              </p>
+              </h1>
 
               <AnimatePresence>
                 {phase === 'punchline' && (
-                  <motion.p
+                  <motion.h2
                     key="punchline"
-                    initial={{ opacity: 0, scale: 0.92, y: 16 }}
+                    initial={{ opacity: 0, scale: 0.96, y: 12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: [0.34, 1.56, 0.64, 1] }}
-                    className="font-display font-bold text-yellow text-8xl leading-tight"
+                    transition={{ duration: 0.45, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
+                    className="font-display font-bold text-yellow leading-none"
+                    style={{ fontSize: '7.5rem', letterSpacing: '-0.02em' }}
                   >
                     {joke.punchline}
-                  </motion.p>
+                  </motion.h2>
                 )}
               </AnimatePresence>
             </motion.div>
