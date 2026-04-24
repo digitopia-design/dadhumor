@@ -101,6 +101,20 @@ export async function recordShare(jokeId: number): Promise<number> {
   }
 }
 
+export async function getAllJokeSlugs(): Promise<{ slug: string; updated_at: string }[]> {
+  try {
+    const { data, error } = await supabase
+      .from('jokes')
+      .select('slug, updated_at')
+      .order('id', { ascending: true });
+    if (error) throw error;
+    return data ?? [];
+  } catch (err) {
+    console.error('getAllJokeSlugs:', err);
+    return [];
+  }
+}
+
 export async function getTopJokes(
   metric: 'props' | 'groans' | 'shares' | 'views',
   limit = 10

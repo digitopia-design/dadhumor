@@ -1,0 +1,1727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>Dad Humor - Interactive Mockup v2</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
+  :root {
+    --midnight: #121212;
+    --charcoal: #1A1A1A;
+    --graphite: #333333;
+    --yellow: #E3FF00;
+    --pink: #FF2E93;
+    --cyan: #00E0FF;
+    --lime: #7CFF6B;
+    --red: #FF4D4D;
+    --white: #FFFFFF;
+    --smoke: #A0A0A0;
+    --muted: #666666;
+
+    --display: 'Space Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+    --body: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+
+  html, body {
+    height: 100%;
+    background: var(--midnight);
+    font-family: var(--body);
+    color: var(--white);
+    overflow: hidden;
+    overscroll-behavior: none;
+    user-select: none;
+    -webkit-user-select: none;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.5;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .app {
+    position: relative;
+    width: 100%;
+    height: 100dvh;
+    display: flex;
+    flex-direction: column;
+    z-index: 1;
+  }
+
+  /* ========= HEADER ========= */
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 20px;
+    flex-shrink: 0;
+    z-index: 5;
+  }
+
+  .logo {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    line-height: 1;
+  }
+  .logo .humor { color: var(--yellow); }
+  .logo .dot { color: var(--yellow); }
+
+  .header-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+  }
+
+  .stash-counter {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    border-radius: 100px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--smoke);
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .stash-counter:hover {
+    border-color: var(--yellow);
+    color: var(--white);
+  }
+  .stash-counter .stash-num {
+    color: var(--yellow);
+    font-weight: 700;
+  }
+
+  .icon-btn {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    color: var(--white);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.15s ease;
+    font-size: 14px;
+  }
+  .icon-btn:hover, .icon-btn:active {
+    background: var(--graphite);
+    transform: scale(1.05);
+  }
+
+  /* ========= STACHE SVG ========= */
+  .stache {
+    width: 110px;
+    height: 70px;
+    flex-shrink: 0;
+  }
+
+  /* ========= JOKE STAGE ========= */
+  .joke-stage {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 20px 24px;
+    text-align: center;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .joke-card {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 28px;
+    transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.3s ease;
+    position: relative;
+  }
+
+  .joke-card.swipe-left {
+    transform: translateX(-120%) rotate(-8deg);
+    opacity: 0;
+  }
+  .joke-card.swipe-right {
+    transform: translateX(120%) rotate(8deg);
+    opacity: 0;
+  }
+  .joke-card.swipe-up {
+    transform: translateY(-120%) scale(0.9);
+    opacity: 0;
+  }
+  .joke-card.entering {
+    animation: enterFromBottom 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes enterFromBottom {
+    from { transform: translateY(60px); opacity: 0; }
+    to   { transform: translateY(0); opacity: 1; }
+  }
+
+  .stache-wrapper {
+    margin-bottom: 4px;
+    transition: transform 0.3s ease;
+  }
+  .stache-wrapper.bounce { animation: stacheBounce 0.6s ease; }
+  .stache-wrapper.shake { animation: stacheShake 0.5s ease; }
+
+  @keyframes stacheBounce {
+    0%, 100% { transform: translateY(0) scale(1); }
+    30%      { transform: translateY(-12px) scale(1.1); }
+    60%      { transform: translateY(0) scale(0.95); }
+  }
+  @keyframes stacheShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px) rotate(-3deg); }
+    75% { transform: translateX(8px) rotate(3deg); }
+  }
+
+  .setup {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(28px, 6vw, 48px);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--white);
+  }
+
+  .punchline-area {
+    min-height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+  }
+
+  .punchline {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(24px, 5vw, 40px);
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+  .punchline.revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .reveal-prompt {
+    font-family: var(--body);
+    font-weight: 500;
+    font-size: 11px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    animation: pulse 2s ease-in-out infinite;
+  }
+  .reveal-prompt.hidden { display: none; }
+
+  .reveal-prompt::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--yellow);
+    animation: dotPulse 1.5s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 0.6; }
+    50%      { opacity: 1; }
+  }
+  @keyframes dotPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50%      { opacity: 0.4; transform: scale(0.7); }
+  }
+
+  /* ========= JOKE META (category + stats) ========= */
+  .joke-meta {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    border-radius: 100px;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--smoke);
+  }
+
+  .category-pill .cat-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--yellow);
+  }
+  .category-pill[data-cat="pun"] .cat-dot { background: var(--yellow); }
+  .category-pill[data-cat="wordplay"] .cat-dot { background: var(--cyan); }
+  .category-pill[data-cat="anti-humour"] .cat-dot { background: var(--pink); }
+  .category-pill[data-cat="observational"] .cat-dot { background: var(--lime); }
+  .category-pill[data-cat="so-bad"] .cat-dot { background: var(--red); }
+
+  .stat-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 5px 10px;
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    border-radius: 100px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--smoke);
+  }
+  .stat-pill .num { color: var(--white); }
+  .stat-pill.props .num { color: var(--lime); }
+  .stat-pill.groan .num { color: var(--pink); }
+
+  /* ========= ACTION BAR ========= */
+  .action-bar {
+    flex-shrink: 0;
+    padding: 0 20px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    align-items: center;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    z-index: 3;
+  }
+
+  .action-bar.hidden {
+    opacity: 0;
+    transform: translateY(20px);
+    pointer-events: none;
+  }
+
+  .actions-row {
+    display: flex;
+    gap: 8px;
+    width: 100%;
+    max-width: 500px;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 14px 10px;
+    border-radius: 14px;
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 13px;
+    letter-spacing: 0.02em;
+    border: 1px solid var(--graphite);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    position: relative;
+    overflow: hidden;
+    background: var(--charcoal);
+    color: var(--white);
+  }
+
+  .btn:active { transform: scale(0.95); }
+
+  .btn-icon {
+    font-size: 16px;
+    line-height: 1;
+  }
+
+  .btn-props {
+    flex: 1.2;
+  }
+  .btn-props:hover { border-color: var(--lime); color: var(--lime); }
+  .btn-props.active {
+    background: var(--lime);
+    color: var(--midnight);
+    border-color: var(--lime);
+  }
+
+  .btn-groan {
+    flex: 1.2;
+  }
+  .btn-groan:hover { border-color: var(--pink); color: var(--pink); }
+  .btn-groan.active {
+    background: var(--pink);
+    color: var(--white);
+    border-color: var(--pink);
+  }
+
+  .btn-stash {
+    flex: 0 0 auto;
+    padding: 14px 14px;
+  }
+  .btn-stash:hover { border-color: var(--yellow); color: var(--yellow); }
+  .btn-stash.active {
+    background: var(--yellow);
+    color: var(--midnight);
+    border-color: var(--yellow);
+  }
+
+  .btn-share {
+    flex: 0 0 auto;
+    padding: 14px 14px;
+  }
+  .btn-share:hover { border-color: var(--cyan); color: var(--cyan); }
+
+  .btn-next {
+    flex: 1.5;
+    background: var(--yellow);
+    color: var(--midnight);
+    border-color: var(--yellow);
+    box-shadow: 0 0 24px rgba(227, 255, 0, 0.2);
+    font-weight: 700;
+  }
+  .btn-next:hover {
+    background: #d4ed00;
+    box-shadow: 0 0 32px rgba(227, 255, 0, 0.4);
+  }
+
+  /* Groan progress ring for long-press */
+  .groan-ring {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+  .groan-ring circle {
+    fill: none;
+    stroke: var(--pink);
+    stroke-width: 2;
+    stroke-dasharray: 0 1000;
+    transition: stroke-dasharray 0.1s linear;
+  }
+  .btn-groan.pressing .groan-ring circle {
+    stroke-dasharray: 1000 0;
+    transition: stroke-dasharray 0.8s linear;
+  }
+
+  /* Floating + */
+  .floating-fx {
+    position: fixed;
+    font-weight: 700;
+    font-size: 20px;
+    pointer-events: none;
+    animation: floatUp 1s ease-out forwards;
+    z-index: 200;
+  }
+  @keyframes floatUp {
+    0%   { opacity: 1; transform: translateY(0) scale(1); }
+    100% { opacity: 0; transform: translateY(-50px) scale(1.4); }
+  }
+
+  /* ========= KEYBOARD HINTS ========= */
+  .keyboard-hints {
+    display: none;
+    gap: 14px;
+    margin-top: 2px;
+    font-size: 9px;
+    color: var(--muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  @media (min-width: 768px) {
+    .keyboard-hints { display: flex; }
+  }
+
+  .kbd { display: inline-flex; align-items: center; gap: 4px; }
+  .kbd-key {
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    border-radius: 4px;
+    padding: 2px 5px;
+    font-family: var(--display);
+    font-weight: 600;
+    color: var(--smoke);
+    font-size: 9px;
+  }
+
+  /* ========= GESTURE DOTS (subtle guides on card) ========= */
+  .gesture-dots {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .gesture-dot {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 0;
+    transition: opacity 0.5s ease;
+  }
+  .gesture-dot.show { opacity: 0.6; animation: dotHint 2s ease-in-out infinite; }
+
+  .gesture-dot.left  { left: 8px;  top: 50%; background: var(--yellow); }
+  .gesture-dot.right { right: 8px; top: 50%; background: var(--lime); }
+  .gesture-dot.up    { top: 8px;   left: 50%; background: var(--cyan); }
+
+  @keyframes dotHint {
+    0%, 100% { transform: scale(1); opacity: 0.3; }
+    50%      { transform: scale(1.5); opacity: 0.8; }
+  }
+
+  /* ========= SWIPE INDICATORS ========= */
+  .swipe-indicator {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 28px;
+    padding: 14px 22px;
+    border-radius: 14px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+    border: 2px solid;
+    letter-spacing: 0.02em;
+  }
+  .swipe-indicator.left {
+    left: 20px;
+    color: var(--yellow);
+    border-color: var(--yellow);
+    transform: translateY(-50%) rotate(-10deg);
+    background: rgba(227, 255, 0, 0.1);
+  }
+  .swipe-indicator.right {
+    right: 20px;
+    color: var(--lime);
+    border-color: var(--lime);
+    transform: translateY(-50%) rotate(10deg);
+    background: rgba(124, 255, 107, 0.1);
+  }
+  .swipe-indicator.up {
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--cyan);
+    border-color: var(--cyan);
+    background: rgba(0, 224, 255, 0.1);
+  }
+  .swipe-indicator.show { opacity: 1; }
+
+  /* ========= SHARE SHEET ========= */
+  .modal-backdrop {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 50;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.25s ease;
+  }
+  .modal-backdrop.open { opacity: 1; pointer-events: auto; }
+
+  .share-sheet {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--charcoal);
+    border-top: 1px solid var(--graphite);
+    border-radius: 24px 24px 0 0;
+    padding: 20px 20px 32px;
+    z-index: 51;
+    transform: translateY(100%);
+    transition: transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    max-width: 600px;
+    margin: 0 auto;
+  }
+  .share-sheet.open { transform: translateY(0); }
+
+  .sheet-handle {
+    width: 40px;
+    height: 4px;
+    background: var(--graphite);
+    border-radius: 2px;
+    margin: 0 auto 16px;
+  }
+
+  .sheet-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 22px;
+    margin-bottom: 4px;
+  }
+  .sheet-subtitle {
+    color: var(--smoke);
+    font-size: 12px;
+    margin-bottom: 18px;
+  }
+
+  .share-options {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 8px;
+    margin-bottom: 16px;
+  }
+
+  .share-option {
+    background: var(--midnight);
+    border: 1px solid var(--graphite);
+    border-radius: 12px;
+    padding: 12px 6px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .share-option:hover, .share-option:active {
+    border-color: var(--cyan);
+    transform: translateY(-2px);
+  }
+
+  .share-option-icon { font-size: 20px; }
+  .share-option-label {
+    font-size: 9px;
+    font-weight: 600;
+    color: var(--white);
+    letter-spacing: 0.05em;
+  }
+
+  .share-preview {
+    background: var(--midnight);
+    border: 1px solid var(--graphite);
+    border-radius: 12px;
+    padding: 20px 16px;
+    text-align: center;
+    margin-bottom: 14px;
+    position: relative;
+    overflow: hidden;
+  }
+  .share-preview::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #1a1a1a 1px, transparent 1px);
+    background-size: 12px 12px;
+    opacity: 0.6;
+  }
+  .share-preview-content { position: relative; z-index: 1; }
+  .share-preview-setup {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--white);
+    margin-bottom: 6px;
+    line-height: 1.2;
+  }
+  .share-preview-punchline {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+    color: var(--yellow);
+    line-height: 1.2;
+    margin-bottom: 12px;
+  }
+  .share-preview-footer {
+    display: flex;
+    justify-content: space-between;
+    font-size: 8px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--smoke);
+    padding-top: 8px;
+    border-top: 1px solid var(--graphite);
+  }
+  .share-preview-footer .brand-mini {
+    color: var(--white);
+    font-family: var(--display);
+    font-weight: 700;
+  }
+  .share-preview-footer .brand-mini .y { color: var(--yellow); }
+
+  .copy-link-btn {
+    width: 100%;
+    background: var(--midnight);
+    border: 1px solid var(--graphite);
+    color: var(--white);
+    padding: 12px;
+    border-radius: 10px;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.15s ease;
+  }
+  .copy-link-btn:hover { border-color: var(--cyan); }
+  .copy-link-btn.copied {
+    background: var(--lime);
+    color: var(--midnight);
+    border-color: var(--lime);
+  }
+
+  /* ========= TOAST ========= */
+  .toast {
+    position: fixed;
+    bottom: 120px;
+    left: 50%;
+    transform: translateX(-50%) translateY(20px);
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    color: var(--white);
+    padding: 12px 20px;
+    border-radius: 100px;
+    font-size: 13px;
+    font-weight: 600;
+    opacity: 0;
+    pointer-events: none;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    z-index: 100;
+    white-space: nowrap;
+  }
+  .toast.show {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+  .toast.success { border-color: var(--lime); }
+  .toast.pink { border-color: var(--pink); }
+  .toast.cyan { border-color: var(--cyan); }
+
+  /* ========= ONBOARDING ========= */
+  .onboarding {
+    position: fixed;
+    inset: 0;
+    background: rgba(18, 18, 18, 0.95);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    z-index: 150;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.4s ease;
+  }
+  .onboarding.open { opacity: 1; pointer-events: auto; }
+
+  .onboard-card {
+    max-width: 420px;
+    width: 100%;
+    text-align: center;
+    padding: 30px 24px;
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    border-radius: 24px;
+  }
+
+  .onboard-step {
+    display: none;
+  }
+  .onboard-step.active { display: block; }
+
+  .onboard-visual {
+    height: 140px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 18px;
+    position: relative;
+  }
+
+  .gesture-demo {
+    font-size: 40px;
+    animation: demoMove 2s ease-in-out infinite;
+    position: relative;
+  }
+  .gesture-demo .label {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    margin-top: 8px;
+    font-family: var(--display);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @keyframes demoMove {
+    0%, 100% { transform: translateX(0); }
+    50% { transform: translateX(var(--move, 30px)); }
+  }
+  @keyframes demoMoveUp {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-30px); }
+  }
+
+  .onboard-title {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.1;
+    margin-bottom: 8px;
+    letter-spacing: -0.02em;
+  }
+  .onboard-title .accent { color: var(--yellow); }
+
+  .onboard-desc {
+    font-size: 14px;
+    color: var(--smoke);
+    line-height: 1.5;
+    margin-bottom: 20px;
+  }
+
+  .onboard-gestures {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin: 16px 0 20px;
+    text-align: left;
+  }
+
+  .onboard-gesture {
+    background: var(--midnight);
+    border: 1px solid var(--graphite);
+    border-radius: 10px;
+    padding: 10px 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 12px;
+  }
+
+  .onboard-gesture .gest-icon {
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .onboard-gesture .gest-text {
+    line-height: 1.3;
+  }
+  .onboard-gesture .gest-text strong {
+    display: block;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: 13px;
+  }
+  .onboard-gesture .gest-text span {
+    color: var(--smoke);
+    font-size: 11px;
+  }
+
+  .onboard-gesture .next  strong { color: var(--yellow); }
+  .onboard-gesture .props strong { color: var(--lime); }
+  .onboard-gesture .groan strong { color: var(--pink); }
+  .onboard-gesture .stash strong { color: var(--yellow); }
+  .onboard-gesture .share strong { color: var(--cyan); }
+
+  .onboard-nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .onboard-dots {
+    display: flex;
+    gap: 6px;
+  }
+  .onboard-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--graphite);
+    transition: all 0.2s ease;
+  }
+  .onboard-dot.active {
+    background: var(--yellow);
+    width: 24px;
+    border-radius: 4px;
+  }
+
+  .onboard-btn {
+    background: var(--yellow);
+    color: var(--midnight);
+    border: none;
+    padding: 12px 24px;
+    border-radius: 10px;
+    font-family: var(--body);
+    font-weight: 700;
+    font-size: 14px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .onboard-btn:hover { background: #d4ed00; }
+  .onboard-btn:active { transform: scale(0.97); }
+
+  .onboard-skip {
+    background: transparent;
+    color: var(--smoke);
+    border: none;
+    padding: 12px 16px;
+    font-family: var(--body);
+    font-weight: 600;
+    font-size: 13px;
+    cursor: pointer;
+  }
+  .onboard-skip:hover { color: var(--white); }
+
+  /* ========= DEMO NOTE ========= */
+  .demo-note {
+    position: fixed;
+    top: 72px;
+    right: 16px;
+    background: rgba(26, 26, 26, 0.95);
+    border: 1px solid var(--graphite);
+    border-radius: 10px;
+    padding: 10px 12px;
+    font-size: 10px;
+    color: var(--smoke);
+    z-index: 40;
+    max-width: 200px;
+    line-height: 1.5;
+    backdrop-filter: blur(8px);
+  }
+  .demo-note strong {
+    color: var(--yellow);
+    display: block;
+    margin-bottom: 4px;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+  .demo-note button {
+    margin-top: 8px;
+    background: var(--charcoal);
+    color: var(--white);
+    border: 1px solid var(--graphite);
+    border-radius: 6px;
+    padding: 4px 8px;
+    font-size: 10px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 480px) {
+    .demo-note { display: none; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- ========= ONBOARDING ========= -->
+<div class="onboarding" id="onboarding">
+  <div class="onboard-card">
+
+    <div class="onboard-step active" data-step="0">
+      <div class="onboard-visual">
+        <svg width="120" height="80" viewBox="0 0 120 75" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="42" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+          <circle cx="78" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+          <circle cx="42" cy="20" r="3" fill="#000"/>
+          <circle cx="78" cy="20" r="3" fill="#000"/>
+          <path d="M 60 38 Q 50 35, 42 40 Q 30 42, 20 50 Q 14 55, 18 62 Q 22 65, 30 60 Q 38 55, 46 52 Q 54 50, 60 52 Q 66 50, 74 52 Q 82 55, 90 60 Q 98 65, 102 62 Q 106 55, 100 50 Q 90 42, 78 40 Q 70 35, 60 38 Z" fill="#1a1a1a" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h2 class="onboard-title">Meet <span class="accent">Stache.</span></h2>
+      <p class="onboard-desc">He's the face of dad humour. He's here to deliver jokes that will make you question your life choices. You'll love him. Probably.</p>
+    </div>
+
+    <div class="onboard-step" data-step="1">
+      <div class="onboard-visual">
+        <span class="gesture-demo" style="font-size: 48px;">👆</span>
+      </div>
+      <h2 class="onboard-title">Tap to <span class="accent">reveal.</span></h2>
+      <p class="onboard-desc">Setup first. Then tap the screen or hit <code style="background:var(--midnight);padding:2px 6px;border-radius:4px;color:var(--yellow);font-size:11px;">SPACE</code> to unleash the punchline. Brace yourself.</p>
+    </div>
+
+    <div class="onboard-step" data-step="2">
+      <div class="onboard-visual">
+        <span class="gesture-demo" style="font-size: 48px; --move: 30px;">👉</span>
+      </div>
+      <h2 class="onboard-title">Swipe to <span class="accent">react.</span></h2>
+      <div class="onboard-gestures">
+        <div class="onboard-gesture">
+          <span class="gest-icon">👈</span>
+          <div class="gest-text next"><strong>Next</strong><span>Swipe left</span></div>
+        </div>
+        <div class="onboard-gesture">
+          <span class="gest-icon">👉</span>
+          <div class="gest-text props"><strong>Props</strong><span>Swipe right</span></div>
+        </div>
+        <div class="onboard-gesture">
+          <span class="gest-icon">👆</span>
+          <div class="gest-text share"><strong>Share</strong><span>Swipe up</span></div>
+        </div>
+        <div class="onboard-gesture">
+          <span class="gest-icon">✌️</span>
+          <div class="gest-text stash"><strong>Stash</strong><span>Double-tap</span></div>
+        </div>
+        <div class="onboard-gesture" style="grid-column: 1/-1;">
+          <span class="gest-icon">👇</span>
+          <div class="gest-text groan"><strong>Groan</strong><span>Long-press Groan button (or swipe down)</span></div>
+        </div>
+      </div>
+      <p class="onboard-desc" style="font-size: 12px; margin: 0;">Don't worry - every gesture has a button too. Use whatever feels right.</p>
+    </div>
+
+    <div class="onboard-nav">
+      <button class="onboard-skip" onclick="skipOnboarding()">Skip</button>
+      <div class="onboard-dots">
+        <div class="onboard-dot active"></div>
+        <div class="onboard-dot"></div>
+        <div class="onboard-dot"></div>
+      </div>
+      <button class="onboard-btn" id="onboardNext" onclick="nextOnboardStep()">Next</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========= APP ========= -->
+<div class="app">
+
+  <header class="header">
+    <div class="logo">DAD<span class="humor">HUMOR<span class="dot">.</span></span></div>
+    <div class="header-actions">
+      <div class="stash-counter" onclick="showToast('Your Stash: coming in v2', 'cyan')" title="Your saved jokes">
+        <span>📌</span>
+        <span class="stash-num" id="stashNum">0</span>
+      </div>
+      <button class="icon-btn" title="Menu" onclick="showToast('More coming soon')">≡</button>
+    </div>
+  </header>
+
+  <main class="joke-stage" id="jokeStage">
+
+    <!-- Subtle gesture dots (shown early in session) -->
+    <div class="gesture-dots" id="gestureDots">
+      <div class="gesture-dot left"></div>
+      <div class="gesture-dot right"></div>
+      <div class="gesture-dot up"></div>
+    </div>
+
+    <div class="swipe-indicator left" id="indicatorLeft">NEXT →</div>
+    <div class="swipe-indicator right" id="indicatorRight">PROPS</div>
+    <div class="swipe-indicator up" id="indicatorUp">SHARE</div>
+
+    <article class="joke-card entering" id="jokeCard">
+
+      <div class="stache-wrapper" id="stacheWrapper">
+        <svg class="stache" id="stacheSvg" viewBox="0 0 120 75" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="42" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+          <circle cx="78" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+          <circle cx="42" cy="20" r="3" fill="#000" id="pupilL"/>
+          <circle cx="78" cy="20" r="3" fill="#000" id="pupilR"/>
+          <path d="M 60 38 Q 50 35, 42 40 Q 30 42, 20 50 Q 14 55, 18 62 Q 22 65, 30 60 Q 38 55, 46 52 Q 54 50, 60 52 Q 66 50, 74 52 Q 82 55, 90 60 Q 98 65, 102 62 Q 106 55, 100 50 Q 90 42, 78 40 Q 70 35, 60 38 Z"
+                fill="#1a1a1a" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+          <path d="M 35 47 Q 30 49, 26 53" stroke="#E3FF00" stroke-width="1.5" fill="none" opacity="0.4"/>
+        </svg>
+      </div>
+
+      <h1 class="setup" id="setupText">Why don't eggs tell jokes?</h1>
+
+      <div class="punchline-area">
+        <span class="reveal-prompt" id="revealPrompt">Tap to reveal</span>
+        <h2 class="punchline" id="punchlineText">They'd crack each other up.</h2>
+      </div>
+
+      <div class="joke-meta">
+        <div class="category-pill" data-cat="pun" id="categoryPill">
+          <span class="cat-dot"></span>
+          <span id="categoryText">Pun</span>
+        </div>
+        <div class="stat-pill props" title="Props received">
+          🤝 <span class="num" id="propsCount">412</span>
+        </div>
+        <div class="stat-pill groan" title="Groans received">
+          🙄 <span class="num" id="groanCount">247</span>
+        </div>
+      </div>
+
+    </article>
+  </main>
+
+  <div class="action-bar hidden" id="actionBar">
+    <div class="actions-row">
+      <button class="btn btn-props" id="propsBtn" onclick="handleProps(event)">
+        <span class="btn-icon">🤝</span>
+        <span>Props</span>
+      </button>
+      <button class="btn btn-groan" id="groanBtn">
+        <svg class="groan-ring" viewBox="0 0 200 50">
+          <rect x="1" y="1" width="198" height="48" rx="14" ry="14" style="fill:none;stroke-dasharray:0 1000;"/>
+        </svg>
+        <span class="btn-icon">🙄</span>
+        <span>Groan</span>
+      </button>
+      <button class="btn btn-stash" id="stashBtn" onclick="handleStash(event)" title="Save to Stash">
+        <span class="btn-icon">📌</span>
+      </button>
+      <button class="btn btn-share" id="shareBtn" onclick="openShareSheet()" title="Share">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="18" cy="5" r="3"/>
+          <circle cx="6" cy="12" r="3"/>
+          <circle cx="18" cy="19" r="3"/>
+          <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/>
+          <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/>
+        </svg>
+      </button>
+      <button class="btn btn-next" onclick="nextJoke()">
+        Next →
+      </button>
+    </div>
+
+    <div class="keyboard-hints">
+      <div class="kbd"><span class="kbd-key">SPACE</span> reveal/next</div>
+      <div class="kbd"><span class="kbd-key">→</span> props</div>
+      <div class="kbd"><span class="kbd-key">←</span> skip</div>
+      <div class="kbd"><span class="kbd-key">↑</span> share</div>
+      <div class="kbd"><span class="kbd-key">G</span> groan</div>
+      <div class="kbd"><span class="kbd-key">S</span> stash</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ========= SHARE SHEET ========= -->
+<div class="modal-backdrop" id="modalBackdrop" onclick="closeShareSheet()"></div>
+<div class="share-sheet" id="shareSheet">
+  <div class="sheet-handle"></div>
+  <h3 class="sheet-title">Unleash this joke</h3>
+  <p class="sheet-subtitle">Pick your weapon. Ruin someone's day.</p>
+
+  <div class="share-preview">
+    <div class="share-preview-content">
+      <div class="share-preview-setup" id="previewSetup">Why don't eggs tell jokes?</div>
+      <div class="share-preview-punchline" id="previewPunchline">They'd crack each other up.</div>
+      <div class="share-preview-footer">
+        <span class="brand-mini">DAD<span class="y">HUMOR.</span></span>
+        <span>dadhumor.app</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="share-options">
+    <div class="share-option" onclick="shareTo('story')">
+      <div class="share-option-icon">📱</div>
+      <div class="share-option-label">STORY</div>
+    </div>
+    <div class="share-option" onclick="shareTo('insta')">
+      <div class="share-option-icon">📸</div>
+      <div class="share-option-label">INSTA</div>
+    </div>
+    <div class="share-option" onclick="shareTo('whatsapp')">
+      <div class="share-option-icon">💬</div>
+      <div class="share-option-label">WHATSAPP</div>
+    </div>
+    <div class="share-option" onclick="shareTo('download')">
+      <div class="share-option-icon">⬇</div>
+      <div class="share-option-label">DOWNLOAD</div>
+    </div>
+  </div>
+
+  <button class="copy-link-btn" id="copyLinkBtn" onclick="copyLink()">
+    <span>🔗</span>
+    <span id="copyLinkText">Copy link</span>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<!-- ========= DEMO NOTE ========= -->
+<div class="demo-note">
+  <strong>DEMO</strong>
+  <div>5 gestures, 5 buttons. Tap reveal → right swipe for Props, left for Next, up for Share, long-press Groan, double-tap card to Stash.</div>
+  <button onclick="resetOnboarding()">Replay intro</button>
+</div>
+
+<script>
+  const jokes = [
+    { setup: "Why don't eggs tell jokes?", punchline: "They'd crack each other up.", category: "pun", catLabel: "Pun", props: 412, groans: 247 },
+    { setup: "I told my wife she was drawing her eyebrows too high.", punchline: "She looked surprised.", category: "pun", catLabel: "Pun", props: 823, groans: 156 },
+    { setup: "What do you call a fake noodle?", punchline: "An impasta.", category: "wordplay", catLabel: "Wordplay", props: 612, groans: 401 },
+    { setup: "Why did the scarecrow win an award?", punchline: "He was outstanding in his field.", category: "pun", catLabel: "Pun", props: 734, groans: 189 },
+    { setup: "I'm reading a book about anti-gravity.", punchline: "It's impossible to put down.", category: "anti-humour", catLabel: "Anti-Humour", props: 298, groans: 512 },
+    { setup: "What's brown and sticky?", punchline: "A stick.", category: "so-bad", catLabel: "So Bad It's Good", props: 1204, groans: 987 },
+    { setup: "Parallel lines have so much in common.", punchline: "It's a shame they'll never meet.", category: "observational", catLabel: "Observational", props: 567, groans: 234 },
+    { setup: "Why don't skeletons fight each other?", punchline: "They don't have the guts.", category: "pun", catLabel: "Pun", props: 891, groans: 302 },
+  ];
+
+  // State
+  let currentJokeIndex = 0;
+  let isRevealed = false;
+  let jokeReactions = {}; // per-joke: { props: bool, groaned: bool, stashed: bool }
+  let isAnimating = false;
+  let stashCount = 0;
+  let interactionCount = 0; // for subtle dot guides
+  let onboardingStep = 0;
+
+  // Touch tracking
+  let touchStartX = 0;
+  let touchStartY = 0;
+  let touchCurrentX = 0;
+  let touchCurrentY = 0;
+  let isDragging = false;
+  let lastTapTime = 0;
+
+  // Long-press
+  let groanPressTimer = null;
+  let groanPressStarted = 0;
+
+  /* ============================================= */
+  /* HAPTIC FEEDBACK                                */
+  /* ============================================= */
+  // Vibration API works on Android Chrome/Firefox/Samsung Internet.
+  // iOS Safari doesn't expose it on the web - we gracefully no-op there.
+  const haptic = {
+    supported: 'vibrate' in navigator,
+    // Light tap - for reveal, small confirmations
+    light()    { if (this.supported) navigator.vibrate(10); },
+    // Medium tap - for props, stash
+    medium()   { if (this.supported) navigator.vibrate(20); },
+    // Heavy tap - for errors, "nope" feedback
+    heavy()    { if (this.supported) navigator.vibrate(40); },
+    // Double-tap feedback - for stash
+    double()   { if (this.supported) navigator.vibrate([15, 50, 15]); },
+    // Groan pattern - escalating buzz building to payoff (matches the long-press)
+    groanBuild() { if (this.supported) navigator.vibrate([30, 60, 50, 40, 80, 30, 120]); },
+    // Groan payoff - the satisfying "THUD" at the end
+    groanHit() { if (this.supported) navigator.vibrate([180, 40, 60]); },
+    // Cancel current vibration
+    stop()     { if (this.supported) navigator.vibrate(0); }
+  };
+
+  /* ============================================= */
+  /* ONBOARDING                                     */
+  /* ============================================= */
+  const hasSeenOnboarding = false; // in production: localStorage.getItem('onboarded');
+
+  function showOnboarding() {
+    document.getElementById('onboarding').classList.add('open');
+    onboardingStep = 0;
+    updateOnboardStep();
+  }
+
+  function skipOnboarding() {
+    document.getElementById('onboarding').classList.remove('open');
+    // localStorage.setItem('onboarded', 'true');
+  }
+
+  function resetOnboarding() {
+    showOnboarding();
+  }
+
+  function nextOnboardStep() {
+    onboardingStep++;
+    if (onboardingStep >= 3) {
+      skipOnboarding();
+      return;
+    }
+    updateOnboardStep();
+  }
+
+  function updateOnboardStep() {
+    document.querySelectorAll('.onboard-step').forEach((el, i) => {
+      el.classList.toggle('active', i === onboardingStep);
+    });
+    document.querySelectorAll('.onboard-dot').forEach((el, i) => {
+      el.classList.toggle('active', i === onboardingStep);
+    });
+    const btn = document.getElementById('onboardNext');
+    btn.textContent = onboardingStep === 2 ? "Let's Go" : 'Next';
+  }
+
+  /* ============================================= */
+  /* LOAD JOKE                                      */
+  /* ============================================= */
+  function loadJoke(index) {
+    const joke = jokes[index];
+    document.getElementById('setupText').textContent = joke.setup;
+    document.getElementById('punchlineText').textContent = joke.punchline;
+    document.getElementById('categoryText').textContent = joke.catLabel;
+    document.getElementById('categoryPill').setAttribute('data-cat', joke.category);
+    document.getElementById('propsCount').textContent = joke.props;
+    document.getElementById('groanCount').textContent = joke.groans;
+
+    document.getElementById('previewSetup').textContent = joke.setup;
+    document.getElementById('previewPunchline').textContent = joke.punchline;
+
+    isRevealed = false;
+    if (!jokeReactions[index]) jokeReactions[index] = {};
+
+    document.getElementById('punchlineText').classList.remove('revealed');
+    document.getElementById('revealPrompt').classList.remove('hidden');
+    document.getElementById('actionBar').classList.add('hidden');
+
+    document.getElementById('propsBtn').classList.toggle('active', !!jokeReactions[index].props);
+    document.getElementById('groanBtn').classList.toggle('active', !!jokeReactions[index].groaned);
+    document.getElementById('stashBtn').classList.toggle('active', !!jokeReactions[index].stashed);
+
+    setStacheExpression('default');
+  }
+
+  /* ============================================= */
+  /* REVEAL                                         */
+  /* ============================================= */
+  function revealPunchline() {
+    if (isRevealed || isAnimating) return;
+    isRevealed = true;
+
+    haptic.light();
+
+    document.getElementById('revealPrompt').classList.add('hidden');
+    document.getElementById('punchlineText').classList.add('revealed');
+    document.getElementById('actionBar').classList.remove('hidden');
+
+    document.getElementById('stacheWrapper').classList.add('bounce');
+    setTimeout(() => {
+      document.getElementById('stacheWrapper').classList.remove('bounce');
+    }, 600);
+    setStacheExpression('happy');
+
+    // Show subtle gesture hints for first 3 interactions
+    interactionCount++;
+    if (interactionCount <= 3) {
+      setTimeout(() => {
+        document.querySelectorAll('.gesture-dot').forEach(d => d.classList.add('show'));
+      }, 800);
+      setTimeout(() => {
+        document.querySelectorAll('.gesture-dot').forEach(d => d.classList.remove('show'));
+      }, 4000);
+    }
+  }
+
+  /* ============================================= */
+  /* NEXT JOKE                                      */
+  /* ============================================= */
+  function nextJoke(direction = 'left') {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const card = document.getElementById('jokeCard');
+    card.classList.remove('entering');
+    if (direction === 'left') card.classList.add('swipe-left');
+    else if (direction === 'right') card.classList.add('swipe-right');
+    else card.classList.add('swipe-up');
+
+    setTimeout(() => {
+      currentJokeIndex = (currentJokeIndex + 1) % jokes.length;
+      loadJoke(currentJokeIndex);
+      card.classList.remove('swipe-left', 'swipe-right', 'swipe-up');
+      card.classList.add('entering');
+
+      setTimeout(() => {
+        card.classList.remove('entering');
+        isAnimating = false;
+      }, 500);
+    }, 400);
+  }
+
+  /* ============================================= */
+  /* PROPS                                          */
+  /* ============================================= */
+  function handleProps(e, autoNext = false) {
+    if (!isRevealed) return;
+    const r = jokeReactions[currentJokeIndex];
+    if (r.props) {
+      showToast("You've already given props", 'success');
+      return;
+    }
+    r.props = true;
+
+    haptic.medium();
+
+    const btn = document.getElementById('propsBtn');
+    btn.classList.add('active');
+
+    // Floating +
+    if (e && e.currentTarget) {
+      const rect = btn.getBoundingClientRect();
+      spawnFloat('+1 🤝', rect.left + rect.width/2, rect.top, 'var(--lime)');
+    }
+
+    // Increment count
+    const el = document.getElementById('propsCount');
+    el.textContent = parseInt(el.textContent) + 1;
+
+    setStacheExpression('happy');
+    showToast('Props given. Respect noted.', 'success');
+
+    if (autoNext) setTimeout(() => nextJoke('right'), 500);
+  }
+
+  /* ============================================= */
+  /* GROAN (long-press)                             */
+  /* ============================================= */
+  function handleGroan(e) {
+    if (!isRevealed) return;
+    const r = jokeReactions[currentJokeIndex];
+    if (r.groaned) {
+      showToast("You've already groaned", 'pink');
+      return;
+    }
+    r.groaned = true;
+
+    // The payoff - satisfying thud at the end of the long-press
+    haptic.groanHit();
+
+    const btn = document.getElementById('groanBtn');
+    btn.classList.add('active');
+    btn.classList.remove('pressing');
+
+    // Floating
+    const rect = btn.getBoundingClientRect();
+    spawnFloat('+1 🙄', rect.left + rect.width/2, rect.top, 'var(--pink)');
+
+    const el = document.getElementById('groanCount');
+    el.textContent = parseInt(el.textContent) + 1;
+
+    document.getElementById('stacheWrapper').classList.add('shake');
+    setTimeout(() => {
+      document.getElementById('stacheWrapper').classList.remove('shake');
+    }, 500);
+    setStacheExpression('groan');
+
+    showToast('Noted. Your groan has been logged.', 'pink');
+  }
+
+  // Long-press setup on groan button
+  function setupGroanLongPress() {
+    const btn = document.getElementById('groanBtn');
+
+    const start = (e) => {
+      if (!isRevealed) return;
+      const r = jokeReactions[currentJokeIndex];
+      if (r.groaned) {
+        showToast("You've already groaned", 'pink');
+        return;
+      }
+      btn.classList.add('pressing');
+      // Escalating buzz pattern that syncs with the visual progress ring
+      haptic.groanBuild();
+      groanPressStarted = Date.now();
+      groanPressTimer = setTimeout(() => {
+        handleGroan();
+      }, 800);
+    };
+
+    const cancel = () => {
+      if (groanPressTimer) {
+        clearTimeout(groanPressTimer);
+        groanPressTimer = null;
+        // Cancel vibration if user released early
+        haptic.stop();
+      }
+      btn.classList.remove('pressing');
+    };
+
+    btn.addEventListener('mousedown', start);
+    btn.addEventListener('touchstart', start, { passive: true });
+    btn.addEventListener('mouseup', cancel);
+    btn.addEventListener('mouseleave', cancel);
+    btn.addEventListener('touchend', cancel);
+    btn.addEventListener('touchcancel', cancel);
+  }
+
+  /* ============================================= */
+  /* STASH                                          */
+  /* ============================================= */
+  function handleStash(e) {
+    if (!isRevealed) {
+      showToast('Reveal the joke first!');
+      return;
+    }
+    const r = jokeReactions[currentJokeIndex];
+    r.stashed = !r.stashed;
+
+    haptic.double();
+
+    const btn = document.getElementById('stashBtn');
+    btn.classList.toggle('active', r.stashed);
+
+    if (r.stashed) {
+      stashCount++;
+      if (e && e.currentTarget) {
+        const rect = btn.getBoundingClientRect();
+        spawnFloat('📌 Stashed', rect.left + rect.width/2, rect.top, 'var(--yellow)');
+      }
+      showToast('Added to your Stash', 'success');
+    } else {
+      stashCount = Math.max(0, stashCount - 1);
+      showToast('Removed from Stash');
+    }
+
+    document.getElementById('stashNum').textContent = stashCount;
+  }
+
+  /* ============================================= */
+  /* FLOATING EFFECTS                               */
+  /* ============================================= */
+  function spawnFloat(text, x, y, color) {
+    const el = document.createElement('span');
+    el.className = 'floating-fx';
+    el.textContent = text;
+    el.style.left = (x - 20) + 'px';
+    el.style.top = (y - 10) + 'px';
+    el.style.color = color;
+    document.body.appendChild(el);
+    setTimeout(() => el.remove(), 1000);
+  }
+
+  /* ============================================= */
+  /* STACHE EXPRESSIONS                             */
+  /* ============================================= */
+  function setStacheExpression(mood) {
+    const pupilL = document.getElementById('pupilL');
+    const pupilR = document.getElementById('pupilR');
+    if (mood === 'groan') {
+      pupilL.setAttribute('cy', '15');
+      pupilR.setAttribute('cy', '15');
+    } else {
+      pupilL.setAttribute('cy', '20');
+      pupilR.setAttribute('cy', '20');
+    }
+  }
+
+  /* ============================================= */
+  /* SHARE                                          */
+  /* ============================================= */
+  function openShareSheet() {
+    if (!isRevealed) {
+      showToast('Reveal the joke first!');
+      return;
+    }
+    document.getElementById('modalBackdrop').classList.add('open');
+    document.getElementById('shareSheet').classList.add('open');
+  }
+
+  function closeShareSheet() {
+    document.getElementById('modalBackdrop').classList.remove('open');
+    document.getElementById('shareSheet').classList.remove('open');
+  }
+
+  function shareTo(platform) {
+    const messages = {
+      'story':    'Story export ready (1080×1920)',
+      'insta':    'Instagram post ready (1080×1080)',
+      'whatsapp': 'Sent to WhatsApp',
+      'download': 'PNG downloaded'
+    };
+    showToast(messages[platform] || 'Shared', 'success');
+    setTimeout(closeShareSheet, 800);
+  }
+
+  function copyLink() {
+    const btn = document.getElementById('copyLinkBtn');
+    const txt = document.getElementById('copyLinkText');
+    btn.classList.add('copied');
+    txt.textContent = "Copied! Go ruin someone's day.";
+    setTimeout(() => {
+      btn.classList.remove('copied');
+      txt.textContent = 'Copy link';
+    }, 2000);
+  }
+
+  /* ============================================= */
+  /* TOAST                                          */
+  /* ============================================= */
+  let toastTimer;
+  function showToast(message, type = '') {
+    const toast = document.getElementById('toast');
+    clearTimeout(toastTimer);
+    toast.textContent = message;
+    toast.className = 'toast show ' + type;
+    toastTimer = setTimeout(() => {
+      toast.classList.remove('show');
+    }, 2200);
+  }
+
+  /* ============================================= */
+  /* KEYBOARD                                       */
+  /* ============================================= */
+  document.addEventListener('keydown', (e) => {
+    if (document.getElementById('onboarding').classList.contains('open')) {
+      if (e.code === 'Escape') skipOnboarding();
+      if (e.code === 'Enter' || e.code === 'Space') { e.preventDefault(); nextOnboardStep(); }
+      return;
+    }
+
+    if (document.getElementById('shareSheet').classList.contains('open')) {
+      if (e.code === 'Escape') closeShareSheet();
+      return;
+    }
+
+    if (e.code === 'Space') {
+      e.preventDefault();
+      if (!isRevealed) revealPunchline();
+      else nextJoke();
+    } else if (e.code === 'ArrowRight' && isRevealed) {
+      e.preventDefault();
+      handleProps({ currentTarget: document.getElementById('propsBtn') }, true);
+    } else if (e.code === 'ArrowLeft' && isRevealed) {
+      e.preventDefault();
+      nextJoke('left');
+    } else if (e.code === 'ArrowUp' && isRevealed) {
+      e.preventDefault();
+      openShareSheet();
+    } else if (e.key === 'g' || e.key === 'G') {
+      if (isRevealed) handleGroan();
+    } else if (e.key === 's' || e.key === 'S') {
+      if (isRevealed) handleStash({ currentTarget: document.getElementById('stashBtn') });
+    }
+  });
+
+  /* ============================================= */
+  /* TAP / DOUBLE-TAP                               */
+  /* ============================================= */
+  document.getElementById('jokeStage').addEventListener('click', (e) => {
+    if (isAnimating) return;
+    if (e.target.closest('.btn')) return;
+
+    // Double-tap detection for Stash (only when revealed)
+    if (isRevealed) {
+      const now = Date.now();
+      if (now - lastTapTime < 300) {
+        handleStash({ currentTarget: document.getElementById('stashBtn') });
+        lastTapTime = 0;
+        return;
+      }
+      lastTapTime = now;
+    } else {
+      revealPunchline();
+    }
+  });
+
+  /* ============================================= */
+  /* SWIPE GESTURES                                 */
+  /* ============================================= */
+  const stage = document.getElementById('jokeStage');
+
+  stage.addEventListener('touchstart', (e) => {
+    if (!isRevealed || isAnimating) return;
+    if (e.target.closest('.btn')) return;
+    touchStartX = e.touches[0].clientX;
+    touchStartY = e.touches[0].clientY;
+    isDragging = true;
+  }, { passive: true });
+
+  stage.addEventListener('touchmove', (e) => {
+    if (!isDragging || !isRevealed) return;
+    touchCurrentX = e.touches[0].clientX;
+    touchCurrentY = e.touches[0].clientY;
+    const dx = touchCurrentX - touchStartX;
+    const dy = touchCurrentY - touchStartY;
+
+    const card = document.getElementById('jokeCard');
+    card.style.transform = `translate(${dx}px, ${dy * 0.3}px) rotate(${dx * 0.05}deg)`;
+    card.style.transition = 'none';
+
+    // Directional indicators
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+
+    document.getElementById('indicatorLeft').classList.remove('show');
+    document.getElementById('indicatorRight').classList.remove('show');
+    document.getElementById('indicatorUp').classList.remove('show');
+
+    if (absY > absX && dy < -60) {
+      document.getElementById('indicatorUp').classList.add('show');
+    } else if (dx < -60) {
+      document.getElementById('indicatorLeft').classList.add('show');
+    } else if (dx > 60) {
+      document.getElementById('indicatorRight').classList.add('show');
+    }
+  }, { passive: true });
+
+  stage.addEventListener('touchend', (e) => {
+    if (!isDragging || !isRevealed) return;
+    isDragging = false;
+
+    const dx = touchCurrentX - touchStartX;
+    const dy = touchCurrentY - touchStartY;
+    const card = document.getElementById('jokeCard');
+
+    document.getElementById('indicatorLeft').classList.remove('show');
+    document.getElementById('indicatorRight').classList.remove('show');
+    document.getElementById('indicatorUp').classList.remove('show');
+
+    card.style.transition = '';
+    card.style.transform = '';
+
+    const threshold = 100;
+    const absX = Math.abs(dx);
+    const absY = Math.abs(dy);
+
+    if (absY > absX && dy < -threshold) {
+      // Swipe up = share
+      haptic.light();
+      openShareSheet();
+    } else if (dx < -threshold) {
+      // Swipe left = next
+      haptic.light();
+      nextJoke('left');
+    } else if (dx > threshold) {
+      // Swipe right = props + next
+      handleProps({ currentTarget: document.getElementById('propsBtn') }, true);
+    }
+
+    touchStartX = touchStartY = touchCurrentX = touchCurrentY = 0;
+  }, { passive: true });
+
+  /* ============================================= */
+  /* INIT                                           */
+  /* ============================================= */
+  loadJoke(0);
+  setupGroanLongPress();
+  showOnboarding(); // In production: only if !hasSeenOnboarding
+</script>
+
+</body>
+</html>
