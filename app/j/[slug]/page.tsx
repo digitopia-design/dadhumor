@@ -28,7 +28,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
   const title = `"${joke.setup}"`;
   const description = `${joke.punchline} — Dad Humor`;
-  const image = ogImageUrl(joke.slug);
+  const image = ogImageUrl(joke);
   const url = jokeUrl(joke.slug);
 
   return {
