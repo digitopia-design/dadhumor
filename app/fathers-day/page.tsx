@@ -159,6 +159,9 @@ export default function FathersDayPage() {
             <Link href="/" className="font-body text-smoke text-sm hover:text-white transition-colors">
               All jokes
             </Link>
+            <Link href="/quiz" className="font-body text-smoke text-sm hover:text-yellow transition-colors">
+              Take the quiz
+            </Link>
             <Link href="/privacy" className="font-body text-smoke text-sm hover:text-white transition-colors">
               Privacy
             </Link>
