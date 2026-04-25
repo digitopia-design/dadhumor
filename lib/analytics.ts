@@ -11,7 +11,10 @@ export type AnalyticsEvent =
   | 'joke_skipped'
   | 'onboarding_started'
   | 'onboarding_completed'
-  | 'onboarding_skipped';
+  | 'onboarding_skipped'
+  | 'fathers_day_lead_capture'
+  | 'dad_mode_toggled'
+  | 'send_to_dad_clicked';
 
 export function track(event: AnalyticsEvent, properties?: Record<string, unknown>) {
   if (typeof window === 'undefined') return;
