@@ -1,8 +1,8 @@
-@AGENTS.md
-
 # CLAUDE.md
 
 This file gives Claude context about the Dad Humor project. Claude reads this automatically at the start of every session. Keep it current.
+
+**Document version:** 1.1
 
 ---
 
@@ -13,6 +13,7 @@ This file gives Claude context about the Dad Humor project. Claude reads this au
 **Owner:** Digitopia Design Ltd
 **Stage:** MVP live, rebuilding for v1 launch
 **Current phase:** Phase 2 - Technical Foundation
+**Sister brand:** Bantered (POD/Shopify, owned by same parent) - merch integration planned for Phase 6
 
 ---
 
@@ -21,6 +22,10 @@ This file gives Claude context about the Dad Humor project. Claude reads this au
 1. **Read `/docs/handover.md`** - full project context, data model, gesture system, brand
 2. **Read `/docs/build-plan.md`** - sequenced tasks to work through
 3. **Reference `/docs/dadhumor_mockup_v2.html`** whenever you need UX clarity - open it or read the source; it's self-contained and shows the intended feel
+4. **For phase-specific work, read the relevant strategy doc:**
+   - `/docs/fathers-day-campaign.md` (Phase 4.5)
+   - `/docs/bantered-integration-spec.md` (Phase 6)
+   - `/docs/monetisation-roadmap.md` (Phase 9+ context)
 
 If any of those files are missing, stop and ask the user where they are.
 
@@ -165,7 +170,7 @@ Every gesture has a button equivalent. Users can learn either way.
 
 ---
 
-## What's In Scope For v1
+## What's In Scope For v1 (Phases 2-4)
 
 ✅ 50 seed jokes with categories
 ✅ All 5 gestures working on mobile + desktop
@@ -173,24 +178,31 @@ Every gesture has a button equivalent. Users can learn either way.
 ✅ Individual joke permalinks (`/j/[slug]`)
 ✅ Stash via localStorage
 ✅ Full onboarding flow
-✅ Analytics (Vercel + GA4 + PostHog)
+✅ Analytics (Vercel + GA4 + PostHog) with country tracking
 ✅ Haptic feedback (Android - iOS no-ops gracefully)
 ✅ Joke of the Day API
 ✅ Digital signage widget page
 ✅ WordPress plugin
 
-## What's NOT In Scope For v1
+## What's For Phases 4.5-8 (Post-Launch, Time-bound or Strategic)
 
-❌ User accounts / auth
-❌ User-submitted jokes
-❌ Comments / replies
-❌ Following / social graph
+🟡 Phase 4.5 - Father's Day campaign (June 2026)
+🟡 Phase 5 - Battle mode, collections, streaks, Send-a-Joke, user submissions
+🟡 Phase 5.5 - AI joke generator
+🟡 Phase 6 - Bantered merchandise integration
+🟡 Phase 7 - Sound effects (toggle, off by default)
+🟡 Phase 8 - Press/data marketing infrastructure
+
+## What's NOT In Scope At All
+
 ❌ Light mode (never - it's brand)
-❌ AI-generated imagery per joke
-❌ Audio / TTS readings
-❌ Stache evolution / streaks
+❌ NFTs/blockchain
+❌ SMS subscription
+❌ AI-generated imagery per joke (different from AI joke text generator)
+❌ Comments / replies / threaded discussions
+❌ Following / social graph
 
-These are Phase 5+ features. Don't scope-creep into them.
+These are explicitly out. Don't scope-creep into them.
 
 ---
 

@@ -9,7 +9,9 @@ import { Logo } from '@/components/Logo';
 import { Stache, type StacheMood } from '@/components/Stache';
 import { Onboarding } from '@/components/Onboarding';
 import { ShareSheet } from '@/components/ShareSheet';
+import { DadModeToggle } from '@/components/DadModeToggle';
 import { useOnboarding } from '@/hooks/useOnboarding';
+import { useDadMode } from '@/hooks/useDadMode';
 import { giveProps, giveGroan } from '@/lib/jokes';
 import { addToStash, removeFromStash, isStashed } from '@/lib/stash';
 import { markProps, markGroaned, markStashed, hasGivenProps, hasGroaned } from '@/lib/reactions';
@@ -18,6 +20,7 @@ import { track } from '@/lib/analytics';
 export default function Home() {
   const { joke, loading, loadNext } = useJoke();
   const { show: showOnboarding, step: onboardingStep, totalSteps, next: nextStep, skip: skipOnboarding } = useOnboarding();
+  const { isDadMode, toggleDadMode, campaignActive } = useDadMode();
   const [isRevealed, setIsRevealed] = useState(false);
   const [stashed, setStashed] = useState(false);
   const [propsGiven, setPropsGiven] = useState(false);
@@ -148,13 +151,20 @@ export default function Home() {
       />
       <header className="w-full max-w-xl flex items-center justify-between">
         <Logo className="text-xl" />
-        <span className="font-body text-smoke text-xs uppercase tracking-widest">
-          #{joke.id}
-        </span>
+        <div className="flex items-center gap-3">
+          <DadModeToggle
+            isDadMode={isDadMode}
+            onToggle={toggleDadMode}
+            campaignActive={campaignActive}
+          />
+          <span className="font-body text-smoke text-xs uppercase tracking-widest">
+            #{joke.id}
+          </span>
+        </div>
       </header>
 
       <div className="flex-1 flex flex-col items-center justify-center w-full gap-6 py-8">
-        <Stache mood={stacheMood} size="lg" priority />
+        <Stache mood={stacheMood} size="lg" priority dadMode={isDadMode} />
         <SwipeableCard
           onSwipeLeft={handleNext}
           onSwipeRight={handleProps}

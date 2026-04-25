@@ -2,9 +2,15 @@
 
 **Project:** dadhumor.app
 **Owner:** Digitopia Design Ltd
-**Document version:** 1.0
+**Document version:** 1.1
 **Last updated:** April 2026
 **Status:** MVP live, ready for Phase 2 (Technical Foundation)
+
+**Related docs:**
+- `build-plan.md` - sequenced tasks for Phase 2-8
+- `fathers-day-campaign.md` - Father's Day 2026 brief (Phase 4.5)
+- `bantered-integration-spec.md` - merchandise integration plan (Phase 6)
+- `monetisation-roadmap.md` - revenue strategy across all phases
 
 ---
 
@@ -74,6 +80,26 @@ Full brand guidelines are in `DadHumor_Brand_Guidelines_v1.0.pdf` (shared separa
 - **Display:** Clash Display (Fontshare) - headings, punchlines, wordmark
 - **Fallback:** Space Grotesk (Google Fonts, free)
 - **Body:** Inter (Google Fonts)
+
+### Joke Card Type Rules
+**Critical hierarchy: Punchline must be ~1.5x larger than setup. Same size = no comedic timing.**
+
+| Element | Mobile | Desktop | Weight | Colour | Notes |
+|---|---|---|---|---|---|
+| Setup | 24px | 36px | 600 (Semibold) | Smoke (#A0A0A0) | Muted to push focus to punchline |
+| Punchline | 36px | 56px | 700 (Bold) | Cyber Yellow (#E3FF00) | The hero |
+
+**Dynamic sizing (length-aware):**
+- Long setup (>40 chars): 20px / 28px
+- Short punchline (<10 chars, e.g. "Bison."): 48px / 72px (BIGGER for drama)
+- Long punchline (>60 chars): 28px / 44px
+
+**Other rules:**
+- Letter spacing: tracking-tight (-0.02em) on both
+- Line height: leading-tight (1.2) on setup, leading-none (1.0) on punchline
+- Gap between: 32px mobile, 40px desktop (the "comedic pause")
+- Setup never animates - it's been there since load
+- Punchline animates in with 100ms delay (the comedic beat)
 
 ### Wordmark
 Stacked two-line lockup:
@@ -293,6 +319,18 @@ All G-rated, few PG. Each has a `category` field for filtering.
 - **WordPress plugin** (free, for widget distribution)
 - **Digital signage page** (hosted URL, 16:9 auto-refresh)
 
+### Phase 4.5: Father's Day Campaign (June 2026) - NEW
+Time-bound campaign for UK Father's Day (21 June 2026). See `fathers-day-campaign.md` for full brief.
+- "Dad Mode" toggle - swaps to Premium Dad Stache (pipe/slippers/BBQ tongs)
+- Limited-edition Father's Day share card frames
+- Email capture lead magnet: "20 Brand New Dad Jokes for Father's Day"
+- Dedicated landing page `/fathers-day` with countdown
+- Send-to-Dad share priority
+- "Jokes Your Dad Definitely Already Told" filter
+- Father's Day-specific microcopy across the app
+- Free downloadable Father's Day cards
+- Post-day: "How many of these did your dad tell you?" interactive quiz
+
 ### Phase 5: v2 Features (post-launch, prioritised)
 1. **Joke Battle Mode** (head-to-head voting, Elo rankings) - virality engine
 2. **Custom Joke Collections** (level up Stash with themed collections) - retention
@@ -300,18 +338,68 @@ All G-rated, few PG. Each has a `category` field for filtering.
 4. **Send-a-Joke** (P2P messaging with tracking) - viral loop
 5. **Hot Takes** (prewritten reactions)
 6. **User submissions** with moderation
-7. **AI Dad Voice** readings (ElevenLabs) - TikTok fuel
+7. **Sound effects library** - drum roll, trombone "wah wah", applause, swipe whoosh, click, ding, snore. Toggle in header, OFF by default. localStorage persistence. Web Audio API. See Phase 7 detail below.
+8. **AI Dad Voice** readings (ElevenLabs) - TikTok fuel
 
-### Phase 6+: Monetisation
-Priority order:
+### Phase 5.5: AI Joke Generator - NEW
+Standalone feature at `/generate`:
+- Input: user-provided subject/topic
+- Output: 3 AI-generated dad joke variations
+- Model: Claude Haiku, GPT-4o-mini, or Gemini Flash (cheap and fast)
+- Rate limit: 5/day free, 50/day premium
+- "Submit to public feed" with moderation queue
+- Strong system prompt with humour guardrails (no offensive content)
+- Track Props/Groans on AI jokes vs curated jokes (quality monitoring)
+- Tagline: "Make your dad joke worse, instantly."
+
+### Phase 6: Bantered Integration (Merchandise) - NEW
+Integration with owner's existing POD/Shopify brand. See `bantered-integration-spec.md`.
+- `/shop` route with Shopify Buy Button or full embed
+- "Buy this on a tee" button on individual jokes
+- Joke-of-the-day → tee-of-the-week pipeline
+- Cross-promotion between Dad Humor and Bantered brands
+- Dedicated Dad Humor merchandise collection
+- Initial product line: tees, hoodies, posters, mugs, greeting cards
+- Print-ready file pipeline from joke selection to product mockup
+
+### Phase 7: Sound System - NEW
+Small but distinct phase. Can ship alongside Phase 5.
+- Sound effect library (10 effects)
+- Toggle UI in header (speaker icon)
+- First-time prompt: "Want sound effects? They're stupid and great." (ON/OFF)
+- Settings persistence in localStorage
+- Web Audio API integration
+- Volume normalised across effects
+- All sounds preloaded after toggle enabled
+- Default state: OFF (always)
+
+### Phase 8: Press & Data Marketing - NEW
+Quarterly content marketing engine driven by user data.
+- Add `country_code` (from IP) to all event tracking
+- Quarterly data review process
+- Press release templates
+- Curated journalist pitch list (BuzzFeed, Mashable, Daily Mail, MetroUK, MailOnline, ladbible, joe.co.uk)
+- Story angles bank: "Most groaned-at joke," "UK vs US humour," "Mathematical formula for dad jokes," etc.
+- Each story is a backlink-generating asset
+
+### Phase 9+: Monetisation
+See `monetisation-roadmap.md` for full priority order. Top items:
 1. Sticker pack (£6.99)
 2. Enamel pin (£8.99)
-3. Greeting card packs (£9.99)
-4. Book (£14.99)
-5. Premium tier (£2.99/mo)
-6. Custom printed cards (£4.99)
+3. Greeting card multi-packs (£9.99)
+4. The Dad Humor book (£14.99)
+5. Tear-away daily calendar (£12.99 annually)
+6. Wall calendar (£14.99 annually)
+7. The Dad Humour Yearbook (£19.99 annually)
+8. Premium tier (£2.99/mo)
+9. Custom printed cards (£4.99 each)
+10. Joke subscription box (£14.99/mo)
+11. Pub Quiz Pack (£19.99)
+12. Corporate Branded API (£49-99/mo + setup)
+13. Wedding Speeches PDF (£9.99)
+14. School/Teacher Pack (£29.99)
 
-**Parked:** Stache plushie, corporate workshop pack, AI Dad Voice (explore later)
+**Parked:** Stache plushie, AI Dad Voice, NFTs (skip)
 **Killed:** SMS subscription
 
 ---
@@ -322,17 +410,21 @@ Track via PostHog (primary) + GA4 (secondary):
 
 | Event | Properties |
 |---|---|
-| `joke_viewed` | joke_id, category, referrer |
-| `punchline_revealed` | joke_id, time_to_reveal_ms |
-| `props_given` | joke_id, via (gesture/button/keyboard) |
-| `joke_groaned` | joke_id, via (gesture/button/keyboard) |
-| `joke_stashed` | joke_id, via |
+| `joke_viewed` | joke_id, category, referrer, country_code |
+| `punchline_revealed` | joke_id, time_to_reveal_ms, country_code |
+| `props_given` | joke_id, via (gesture/button/keyboard), country_code |
+| `joke_groaned` | joke_id, via (gesture/button/keyboard), country_code |
+| `joke_stashed` | joke_id, via, country_code |
 | `joke_unstashed` | joke_id |
-| `joke_shared` | joke_id, platform (story/insta/whatsapp/copy/native) |
-| `joke_skipped` | joke_id, time_on_joke_ms |
-| `onboarding_started` | - |
-| `onboarding_completed` | steps_viewed |
-| `onboarding_skipped` | step_reached |
+| `joke_shared` | joke_id, platform (story/insta/whatsapp/copy/native), country_code |
+| `joke_skipped` | joke_id, time_on_joke_ms, country_code |
+| `onboarding_started` | country_code |
+| `onboarding_completed` | steps_viewed, country_code |
+| `onboarding_skipped` | step_reached, country_code |
+| `ai_joke_generated` | subject, country_code (Phase 5.5) |
+| `sound_toggle_changed` | new_state, country_code (Phase 7) |
+
+**Why country_code on everything:** powers the press/data strategy (Phase 8). Get geo data from request headers (Vercel provides `x-vercel-ip-country` for free) or PostHog's built-in geolocation. Not stored as PII - just country code.
 
 Funnel to track: viewed → revealed → reacted (props/groan/stash/share).
 

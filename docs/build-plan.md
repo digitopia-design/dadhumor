@@ -4,6 +4,13 @@ Sequenced tasks for Claude Code to work through. Each task has clear acceptance 
 
 Current phase: **Phase 2 - Technical Foundation**
 
+**Document version:** 1.1
+**Related docs:**
+- `handover.md` - project context, data model, brand
+- `fathers-day-campaign.md` - Phase 4.5 detailed brief
+- `bantered-integration-spec.md` - Phase 6 merchandise integration
+- `monetisation-roadmap.md` - revenue strategy
+
 ---
 
 ## Phase 2: Technical Foundation
@@ -573,7 +580,7 @@ Submit to WP.org directory after testing.
 
 ---
 
-### Task 4.5: Launch Polish
+### Task 4.5: Launch Polish (final task before launch)
 
 Checklist items, each fairly small:
 - Proper loading states (skeleton, not "Loading...")
@@ -588,6 +595,169 @@ Checklist items, each fairly small:
 - robots.txt
 - Open Graph meta on all pages
 - Twitter card meta on all pages
+
+---
+
+## Phase 4.5: Father's Day Campaign
+
+**See `fathers-day-campaign.md` for full brief.** High-level tasks below.
+
+### Task 4.5.1: Father's Day Landing Page
+Create `/fathers-day` route with countdown to 21 June 2026. Use existing brand system. Hero, share CTA, "Send to Dad" feature, email capture.
+
+### Task 4.5.2: Dad Mode Toggle
+Header toggle that swaps Stache asset to "Premium Dad Stache" (with pipe/slippers/tongs accessory - generate via Midjourney first). Persists in localStorage. Auto-disables 1 week after Father's Day.
+
+### Task 4.5.3: Father's Day Share Card Frame
+Variant of OG share cards with Father's Day border/badge. Active only during campaign window (1 June - 25 June 2026). Logic in `/api/og/[slug]/route.tsx` - check current date.
+
+### Task 4.5.4: Email Capture Flow
+Lead magnet: "20 Brand New Dad Jokes for Father's Day" - PDF download. Uses existing email service (recommend Resend or MailerLite). Auto-tags subscribers as `fathers_day_2026`.
+
+### Task 4.5.5: "Jokes Your Dad Definitely Already Told" Filter
+Curated collection accessible via `/collections/dad-classics`. Manual curation of the 20 most stereotypically "dad" jokes from the seed set.
+
+### Task 4.5.6: Send-to-Dad Priority
+Re-order share sheet during campaign window so "Send to Dad" appears first (uses native share or pre-filled WhatsApp/SMS).
+
+### Task 4.5.7: Post-Day Quiz
+"How many of these did your dad tell you?" - 10-question quiz showing classic dad jokes. User taps "Yes/No" for each. Results: "You're a [Dad-Joke Apprentice/Survivor/Veteran/Hostage]." Shareable.
+
+---
+
+## Phase 5: v2 Features (Post-Launch)
+
+Tasks for the highest-priority v2 features. Detail to be expanded when work begins.
+
+### Task 5.1: Joke Battle Mode
+Head-to-head voting. Two jokes shown, user picks winner. Elo rating system in Postgres. New `joke_battles` table. Real-time leaderboard at `/leaderboard/all-time`.
+
+### Task 5.2: Custom Joke Collections
+Authenticated users can create themed collections from their Stash. Collections have public share URLs. New tables: `collections`, `collection_jokes`. Requires Phase 5.x auth setup first.
+
+### Task 5.3: Daily Streak + Stache Evolution
+Track consecutive daily visits. Stache asset progresses through tiers (Day 1 thin → Day 365 magnificent). Requires user accounts. Showcase on profile page.
+
+### Task 5.4: Send-a-Joke
+P2P share with tracking link. User enters recipient name, app generates a custom URL `/sent/[token]` that shows the joke + custom message. Sender gets notified when link is opened.
+
+---
+
+## Phase 5.5: AI Joke Generator
+
+**See `handover.md` Phase 5.5 for context.**
+
+### Task 5.5.1: AI Generation Endpoint
+Create `/api/generate` route. Accept `subject` parameter. Call AI provider (start with Claude Haiku via Anthropic API for cost). Return 3 variations. Strong system prompt - included below.
+
+System prompt for AI generation:
+```
+You are a dad joke generator for dadhumor.app. Generate 3 dad joke variations on the user's topic.
+
+Rules:
+- Pure pun-based humour, wordplay, or anti-humour
+- Setup + punchline format
+- G-rated, never offensive
+- No mentions of: religion, politics, race, gender, weight, mental health, or anything that could harm
+- Aim for the "groan" reaction - the worse, the better
+- Keep punchlines under 60 characters
+- Return only the 3 jokes as JSON: [{setup, punchline}, {setup, punchline}, {setup, punchline}]
+```
+
+### Task 5.5.2: Generator UI Page
+Create `/generate` route. Input field, "Generate" button, three result cards each with same Props/Groan/Share/Stash actions as main jokes. Reuses existing components.
+
+### Task 5.5.3: Rate Limiting
+Use Vercel KV or Upstash Redis. 5 generations per day per IP for free, 50 for premium (when premium exists). Return 429 with friendly error message in brand voice.
+
+### Task 5.5.4: Submit-To-Feed Flow
+"Submit to public feed" button on AI-generated jokes. Goes to a `joke_submissions` table for moderation. Email admin on new submission. Approval flow comes in Phase 5.x.
+
+### Task 5.5.5: AI Joke Tracking
+Tag AI-generated jokes with `source: 'ai'` field in DB. Track Props/Groans separately to monitor quality. Surface comparison data ("AI jokes get 30% fewer props than curated").
+
+---
+
+## Phase 6: Bantered Integration
+
+**See `bantered-integration-spec.md` for full plan.** High-level tasks below.
+
+### Task 6.1: Shop Route + Shopify Buy Button
+Add `/shop` route. Embed Shopify Buy Button SDK or redirect to bantered.com/dadhumor collection. Use Shopify's preset that matches brand colours.
+
+### Task 6.2: "Buy on a Tee" Per-Joke Button
+Add button on individual joke pages: "Get this on a tee →". Links to product page on Bantered Shopify with the joke pre-selected/customised.
+
+### Task 6.3: Tee-Of-The-Week Pipeline
+Admin tool to select a joke each week, auto-generate product mockup (PNG with joke text on tee template), push to Bantered as new product. Featured prominently on `/shop`.
+
+### Task 6.4: Cross-Brand Header
+Add Bantered logo + "by Bantered" subtle credit in footer. Bantered side adds "Powered by Dad Humor" on relevant collection pages.
+
+---
+
+## Phase 7: Sound System
+
+### Task 7.1: Sound Asset Library
+Source 10 sound effects (under 1 second each, normalised volume):
+- `drumroll.mp3` - reveal anticipation
+- `wahwah.mp3` - groan (THE classic dad joke trombone)
+- `applause.mp3` - props
+- `ding.mp3` - share
+- `whoosh.mp3` - swipe
+- `click.mp3` - stash
+- `snore.mp3` - idle/loading
+- `tada.mp3` - mind-blown moments
+- `fanfare.mp3` - achievement (Phase 5)
+- `boo.mp3` - extra groan punctuation
+
+Source from Freesound.org or commission from Fiverr (~£50). Store in `/public/sounds/`.
+
+### Task 7.2: Sound Manager Utility
+Create `/src/lib/sound.ts`:
+```typescript
+export const sound = {
+  enabled: false,
+  init() { /* preload all assets if enabled */ },
+  play(name: SoundName) { /* play if enabled */ },
+  toggle() { /* flip state, save to localStorage */ },
+};
+```
+Uses Web Audio API. Handles preloading. Respects `prefers-reduced-motion` (also disable sound by default if set).
+
+### Task 7.3: Sound Toggle UI
+Speaker icon in header. Three states: muted (default), enabled, "first-time" prompt. First-time prompt is a small toast: "Sound effects? They're stupid and great. [On] [Off]"
+
+### Task 7.4: Wire Sound Into Interactions
+Call `sound.play()` from existing interaction handlers. No haptic conflicts - sound and haptic both fire. Match logic:
+- Reveal → drumroll
+- Props → applause
+- Groan → wahwah (this is essential)
+- Share → ding
+- Swipe → whoosh
+- Stash → click
+
+---
+
+## Phase 8: Press & Data Marketing
+
+### Task 8.1: Country Tracking
+Add `country_code` to all PostHog/GA4 events. Source from `x-vercel-ip-country` header (free with Vercel). Backfill onto existing events if possible.
+
+### Task 8.2: Internal Stats Dashboard
+Create `/admin/stats` (auth-protected). Shows:
+- Top jokes by props/groans/shares globally
+- Top jokes by country (UK/US/AU at minimum)
+- Trend lines over time
+- Submission queue
+Uses Supabase queries + simple chart library (Recharts).
+
+### Task 8.3: Quarterly Report Templates
+Markdown templates in `/docs/press/` for:
+- "Most Groaned Joke of [Quarter]"
+- "[Country] vs [Country] Humour Analysis"
+- "The Mathematical Formula for the Perfect Dad Joke"
+Each template has data placeholders that admin fills from dashboard.
 
 ---
 

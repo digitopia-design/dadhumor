@@ -17,18 +17,33 @@ interface StacheProps {
   size?: 'sm' | 'md' | 'lg' | 'xl';
   className?: string;
   priority?: boolean;
+  // Set true during Father's Day campaign - swaps to Premium Dad Stache assets.
+  // Replace files in /public/stache/dad/ with Midjourney-generated variants before 1 June.
+  dadMode?: boolean;
 }
 
 const MOOD_MAP: Record<StacheMood, string> = {
-  'smug':        '/stache/01-smug-default.png',
-  'anticipation':'/stache/02-anticipation.png',
-  'laughing':    '/stache/03-laughing.png',
-  'groan':       '/stache/04-groan.png',
-  'mind-blown':  '/stache/05-mind-blown.png',
-  'winking':     '/stache/06-winking.png',
-  'sleeping':    '/stache/07-sleeping.png',
-  'pointing':    '/stache/08-pointing.png',
-  'shrugging':   '/stache/09-shrugging.png',
+  'smug':         '/stache/01-smug-default.png',
+  'anticipation': '/stache/02-anticipation.png',
+  'laughing':     '/stache/03-laughing.png',
+  'groan':        '/stache/04-groan.png',
+  'mind-blown':   '/stache/05-mind-blown.png',
+  'winking':      '/stache/06-winking.png',
+  'sleeping':     '/stache/07-sleeping.png',
+  'pointing':     '/stache/08-pointing.png',
+  'shrugging':    '/stache/09-shrugging.png',
+};
+
+const DAD_MOOD_MAP: Record<StacheMood, string> = {
+  'smug':         '/stache/dad/01-smug-default.png',
+  'anticipation': '/stache/dad/02-anticipation.png',
+  'laughing':     '/stache/dad/03-laughing.png',
+  'groan':        '/stache/dad/04-groan.png',
+  'mind-blown':   '/stache/dad/05-mind-blown.png',
+  'winking':      '/stache/dad/06-winking.png',
+  'sleeping':     '/stache/dad/07-sleeping.png',
+  'pointing':     '/stache/dad/08-pointing.png',
+  'shrugging':    '/stache/dad/09-shrugging.png',
 };
 
 const SIZE_MAP: Record<NonNullable<StacheProps['size']>, number> = {
@@ -38,16 +53,18 @@ const SIZE_MAP: Record<NonNullable<StacheProps['size']>, number> = {
   xl: 240,
 };
 
-export function Stache({ mood = 'smug', size = 'md', className, priority }: StacheProps) {
-  const px = SIZE_MAP[size];
+export function Stache({ mood = 'smug', size = 'md', className, priority, dadMode = false }: StacheProps) {
+  const px  = SIZE_MAP[size];
+  const map = dadMode ? DAD_MOOD_MAP : MOOD_MAP;
+
   return (
     <Image
-      src={MOOD_MAP[mood]}
+      src={map[mood]}
       alt={`Stache is ${mood}`}
       width={px}
       height={px}
       priority={priority}
-      className={cn('object-contain', className)}
+      className={cn('object-contain transition-opacity duration-300', className)}
     />
   );
 }
