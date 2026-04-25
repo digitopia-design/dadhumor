@@ -1,10 +1,11 @@
 'use client';
 
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { cn } from '@/lib/utils';
 import { recordShare } from '@/lib/jokes';
 import { track } from '@/lib/analytics';
+import { isCampaignLive } from '@/lib/campaign';
 import type { Joke } from '@/lib/jokes';
 
 interface ShareSheetProps {
@@ -17,6 +18,8 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
   const url = typeof window !== 'undefined'
     ? `${window.location.origin}/j/${joke.slug}`
     : `/j/${joke.slug}`;
+
+  const [campaignActive] = useState(() => isCampaignLive());
 
   // Close on Escape
   useEffect(() => {
@@ -53,6 +56,14 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
     onClose();
   }
 
+  async function handleSendToDad() {
+    const text = `Your material is looking thin this year 👔\n\n${joke.setup}\n\n${joke.punchline}\n\n${url}\n\nYou're welcome. (Sorry.)`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(text)}`, '_blank');
+    await recordShare(joke.id);
+    track('send_to_dad_clicked', { joke_id: joke.id });
+    onClose();
+  }
+
   const hasNativeShare = typeof navigator !== 'undefined' && typeof navigator.share === 'function';
 
   return (
@@ -80,7 +91,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
             <div className="w-10 h-1 rounded-full bg-graphite mx-auto" />
 
             <h3 className="font-display font-bold text-2xl text-white text-center">
-              Share this banger.
+              {campaignActive ? "Send it. He deserves this." : "Share this banger."}
             </h3>
 
             {/* Joke preview */}
@@ -94,6 +105,17 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
 
             {/* Share buttons */}
             <div className="flex flex-col gap-3">
+              {/* Send to Dad - campaign priority placement */}
+              {campaignActive && (
+                <button
+                  onClick={handleSendToDad}
+                  className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-base hover:bg-yellow/90 transition-colors"
+                >
+                  <span>👔</span>
+                  Send to Dad
+                </button>
+              )}
+
               <div className="flex gap-3">
                 <button
                   onClick={handleCopy}
