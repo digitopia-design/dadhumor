@@ -101,6 +101,15 @@ export default function PrivacyPage() {
             </section>
           </div>
         </div>
+
+        <div className="flex items-center gap-6 pt-4 border-t border-graphite">
+          <Link href="/terms" className="font-body text-smoke text-sm hover:text-white transition-colors">
+            Terms of Service
+          </Link>
+          <Link href="/" className="font-body text-smoke text-sm hover:text-white transition-colors">
+            Back to jokes
+          </Link>
+        </div>
       </div>
     </main>
   );
