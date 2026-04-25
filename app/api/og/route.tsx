@@ -4,6 +4,14 @@ import { join } from 'path';
 
 export const runtime = 'nodejs';
 
+const FD_START = new Date('2026-06-01T00:00:00Z');
+const FD_END   = new Date('2026-06-26T00:00:00Z');
+
+function isFathersDay(): boolean {
+  const now = new Date();
+  return now >= FD_START && now < FD_END;
+}
+
 function loadFont(filename: string): ArrayBuffer {
   const fontPath = join(process.cwd(), 'public', 'fonts', filename);
   const buffer = readFileSync(fontPath);
@@ -15,6 +23,8 @@ export async function GET(request: Request) {
   const setup = searchParams.get('setup');
   const punchline = searchParams.get('punchline');
   const category = searchParams.get('category')?.replace(/-/g, ' ') ?? '';
+  const fdParam = searchParams.get('fd') === '1';
+  const fathersDay = fdParam || isFathersDay();
 
   const boldFont = loadFont('SpaceGrotesk-Bold.woff');
   const bodyFont = loadFont('Inter-Regular.woff');
@@ -102,7 +112,9 @@ export async function GET(request: Request) {
         width: '100%',
         height: '100%',
         background: '#121212',
-        padding: '64px 72px',
+        padding: fathersDay ? '56px 64px' : '64px 72px',
+        border: fathersDay ? '6px solid #E3FF00' : 'none',
+        boxSizing: 'border-box',
       }}
     >
       {/* Header */}
@@ -117,7 +129,25 @@ export async function GET(request: Request) {
         >
           Dad Humor
         </span>
-        {category && (
+        {fathersDay ? (
+          <div
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '8px',
+              background: '#E3FF00',
+              color: '#121212',
+              fontFamily: 'SpaceGrotesk',
+              fontWeight: 700,
+              fontSize: 18,
+              padding: '6px 14px',
+              borderRadius: '20px',
+              letterSpacing: '0.5px',
+            }}
+          >
+            Happy Father&#39;s Day 2026
+          </div>
+        ) : category ? (
           <span
             style={{
               fontFamily: 'Inter',
@@ -129,7 +159,7 @@ export async function GET(request: Request) {
           >
             {category}
           </span>
-        )}
+        ) : null}
       </div>
 
       {/* Joke */}
@@ -193,8 +223,8 @@ export async function GET(request: Request) {
         <span style={{ fontFamily: 'Inter', fontSize: 20, color: '#444444' }}>
           dadhumor.app
         </span>
-        <span style={{ fontFamily: 'Inter', fontSize: 20, color: '#444444' }}>
-          Tap to react →
+        <span style={{ fontFamily: 'Inter', fontSize: 20, color: fathersDay ? '#A0A0A0' : '#444444' }}>
+          {fathersDay ? 'Send to your dad →' : 'Tap to react →'}
         </span>
       </div>
     </div>,
