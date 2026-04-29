@@ -3,7 +3,6 @@ import { getAllArticles } from '@/lib/content';
 export const revalidate = 3600; // 1 hour
 
 const SITE_URL = 'https://dadhumor.app';
-const FEED_URL = `${SITE_URL}/feed.xml`;
 const FEED_TITLE = 'Dad Humor — The Archive';
 const FEED_DESCRIPTION =
   'Long-form thoughts on dad jokes, the data behind them, and the people who tell them.';
@@ -25,7 +24,9 @@ function rfc822(iso: string): string {
   return new Date(iso).toUTCString();
 }
 
-export async function GET() {
+export async function GET(request: Request) {
+  const requestUrl = new URL(request.url);
+  const selfHref = `${requestUrl.origin}${requestUrl.pathname}`;
   const articles = getAllArticles();
   const lastBuild = articles[0]?.frontmatter.updated ?? new Date().toISOString();
 
@@ -61,7 +62,7 @@ export async function GET() {
     <link>${SITE_URL}/blog</link>
     <description>${escapeXml(FEED_DESCRIPTION)}</description>
     <language>en-gb</language>
-    <atom:link href="${FEED_URL}" rel="self" type="application/rss+xml" />
+    <atom:link href="${selfHref}" rel="self" type="application/rss+xml" />
     <lastBuildDate>${rfc822(lastBuild)}</lastBuildDate>
     <generator>dadhumor.app</generator>${items}
   </channel>
