@@ -142,3 +142,14 @@ body::before {
   pointer-events: none;
   z-index: 0;
 }
+
+/* Print: clean black-on-white reading view */
+@media print {
+  html, body { background: #FFFFFF !important; color: #000000 !important; }
+  body::before { display: none !important; }
+  nav, footer, button, .print\:hidden { display: none !important; }
+  a { color: #000 !important; text-decoration: underline; }
+  h1, h2, h3, h4 { color: #000 !important; page-break-after: avoid; }
+  p, li { color: #000 !important; }
+  article { max-width: 100% !important; }
+}

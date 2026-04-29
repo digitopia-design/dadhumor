@@ -9,6 +9,10 @@ import { Logo } from '@/components/Logo';
 import { Stache } from '@/components/Stache';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { ArticleCard } from '@/components/ArticleCard';
+import { ReadingProgress } from '@/components/ReadingProgress';
+import { BackToTop } from '@/components/BackToTop';
+import { ArticleShareButtons } from '@/components/ArticleShareButtons';
+import { TableOfContents } from '@/components/TableOfContents';
 import { mdxComponents } from '@/components/mdx';
 import {
   getAllArticleSlugs,
@@ -47,6 +51,7 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 
   const { frontmatter } = article;
   const url = `https://dadhumor.app/blog/${frontmatter.slug}`;
+  const ogImage = frontmatter.ogImage ?? `https://dadhumor.app/api/og/article/${frontmatter.slug}`;
 
   return {
     title: frontmatter.title,
@@ -64,15 +69,13 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
       modifiedTime: frontmatter.updated,
       authors: [frontmatter.author],
       tags: frontmatter.tags,
-      ...(frontmatter.ogImage && {
-        images: [{ url: frontmatter.ogImage, width: 1200, height: 630, alt: frontmatter.title }],
-      }),
+      images: [{ url: ogImage, width: 1200, height: 630, alt: frontmatter.title }],
     },
     twitter: {
       card: 'summary_large_image',
       title: frontmatter.title,
       description: frontmatter.description,
-      ...(frontmatter.ogImage && { images: [frontmatter.ogImage] }),
+      images: [ogImage],
     },
   };
 }
@@ -114,8 +117,11 @@ export default async function ArticlePage({ params }: PageProps) {
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
 
+      <ReadingProgress />
+      <BackToTop />
+
       {/* Nav */}
-      <nav className="w-full max-w-3xl flex items-center justify-between px-6 py-8">
+      <nav className="w-full max-w-5xl flex items-center justify-between px-6 py-8 print:hidden">
         <Logo className="text-xl" />
         <div className="flex items-center gap-3">
           <ThemeToggle />
@@ -149,38 +155,53 @@ export default async function ArticlePage({ params }: PageProps) {
           {frontmatter.description}
         </p>
 
-        <div className="flex items-center gap-3 pt-2">
-          <Stache mood="pointing" size="sm" />
-          <span className="font-body text-text-secondary text-sm">
-            By <span className="text-text font-bold">{frontmatter.author}</span>
-          </span>
+        <div className="flex items-center justify-between pt-2 flex-wrap gap-4">
+          <div className="flex items-center gap-3">
+            <Stache mood="pointing" size="sm" />
+            <span className="font-body text-text-secondary text-sm">
+              By <span className="text-text font-bold">{frontmatter.author}</span>
+            </span>
+          </div>
+          <ArticleShareButtons title={frontmatter.title} url={url} />
         </div>
       </header>
 
-      <div className="w-full max-w-3xl px-6">
+      <div className="w-full max-w-3xl px-6 print:hidden">
         <div className="h-px bg-bg-border" />
       </div>
 
-      {/* Body */}
-      <article className="w-full max-w-3xl px-6 py-10">
-        <MDXRemote
-          source={content}
-          components={mdxComponents}
-          options={{
-            mdxOptions: {
-              remarkPlugins: [remarkGfm],
-              rehypePlugins: [
-                rehypeSlug,
-                [rehypeAutolinkHeadings, { behavior: 'wrap' }],
-              ],
-            },
-          }}
-        />
-      </article>
+      {/* Body + TOC */}
+      <div className="w-full max-w-5xl px-6 py-10 flex gap-10 lg:justify-center">
+        <article id="article-body" className="flex-1 max-w-3xl">
+          <MDXRemote
+            source={content}
+            components={mdxComponents}
+            options={{
+              mdxOptions: {
+                remarkPlugins: [remarkGfm],
+                rehypePlugins: [
+                  rehypeSlug,
+                  [rehypeAutolinkHeadings, { behavior: 'wrap' }],
+                ],
+              },
+            }}
+          />
+
+          {/* Footer share */}
+          <div className="mt-12 pt-8 border-t border-bg-border flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 print:hidden">
+            <p className="font-body text-text-secondary text-sm">
+              Found this useful? Send it sideways.
+            </p>
+            <ArticleShareButtons title={frontmatter.title} url={url} />
+          </div>
+        </article>
+
+        <TableOfContents />
+      </div>
 
       {/* Tags */}
       {frontmatter.tags.length > 0 && (
-        <div className="w-full max-w-3xl px-6 pb-10 flex flex-wrap gap-2">
+        <div className="w-full max-w-3xl px-6 pb-10 flex flex-wrap gap-2 print:hidden">
           {frontmatter.tags.map(tag => (
             <span
               key={tag}
@@ -194,7 +215,7 @@ export default async function ArticlePage({ params }: PageProps) {
 
       {/* Related */}
       {related.length > 0 && (
-        <section className="w-full max-w-5xl px-6 py-16 border-t border-bg-border">
+        <section className="w-full max-w-5xl px-6 py-16 border-t border-bg-border print:hidden">
           <h2
             className="font-display font-bold text-2xl text-text mb-6"
             style={{ letterSpacing: '-0.02em' }}
@@ -210,7 +231,7 @@ export default async function ArticlePage({ params }: PageProps) {
       )}
 
       {/* CTA back to app */}
-      <section className="w-full max-w-3xl px-6 py-16 flex flex-col items-center gap-4 text-center">
+      <section className="w-full max-w-3xl px-6 py-16 flex flex-col items-center gap-4 text-center print:hidden">
         <Stache mood="winking" size="md" />
         <h2
           className="font-display font-bold text-3xl text-text"
@@ -227,7 +248,7 @@ export default async function ArticlePage({ params }: PageProps) {
       </section>
 
       {/* Footer */}
-      <footer className="w-full border-t border-bg-border mt-auto">
+      <footer className="w-full border-t border-bg-border mt-auto print:hidden">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-8 max-w-5xl mx-auto">
           <Logo className="text-base" />
           <div className="flex items-center gap-6">
