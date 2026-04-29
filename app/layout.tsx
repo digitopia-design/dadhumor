@@ -3,8 +3,30 @@ import { Inter, Outfit } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { CookieBanner } from "@/components/CookieBanner";
+import { ThemeManager } from "@/components/ThemeManager";
+import { READING_CONTEXT_PATHS, THEME_STORAGE_KEY } from "@/lib/theme";
 import { ogImageUrl } from "@/lib/url";
 import "./globals.css";
+
+const themeScript = `
+(function(){
+  try {
+    var paths = ${JSON.stringify(READING_CONTEXT_PATHS)};
+    var p = window.location.pathname;
+    var isReading = paths.some(function(path){
+      return p === path || p.indexOf(path + '/') === 0;
+    });
+    if (!isReading) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      return;
+    }
+    var saved = localStorage.getItem('${THEME_STORAGE_KEY}');
+    document.documentElement.setAttribute('data-theme', saved === 'dark' ? 'dark' : 'light');
+  } catch (e) {
+    document.documentElement.setAttribute('data-theme', 'dark');
+  }
+})();
+`;
 
 const inter = Inter({
   variable: "--font-inter",
@@ -76,8 +98,13 @@ export default function RootLayout({
     <html
       lang="en"
       className={`${inter.variable} ${outfit.variable} h-full antialiased`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="min-h-full flex flex-col bg-bg font-body text-text" suppressHydrationWarning>
+        <ThemeManager />
         {children}
         <CookieBanner />
         <Analytics />

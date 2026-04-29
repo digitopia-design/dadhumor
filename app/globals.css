@@ -1,5 +1,9 @@
 @import "tailwindcss";
 
+/* Custom variants for theme-aware utilities */
+@custom-variant theme-light (&:where([data-theme="light"] *));
+@custom-variant theme-dark (&:where([data-theme="dark"] *, :not([data-theme]) *));
+
 /* ========================================
    BRAND CONTEXT (DARK) - default everywhere
    except Reading Context pages

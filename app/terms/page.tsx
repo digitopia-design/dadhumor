@@ -1,6 +1,7 @@
 import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Logo } from '@/components/Logo';
+import { ThemeToggle } from '@/components/ThemeToggle';
 
 export const metadata: Metadata = {
   title: 'Terms of Service — Dad Humor',
@@ -13,9 +14,12 @@ export default function TermsPage() {
       <div className="w-full max-w-2xl flex flex-col gap-8">
         <header className="flex items-center justify-between">
           <Logo className="text-xl" />
-          <Link href="/" className="font-body text-text-secondary text-sm hover:text-text transition-colors">
-            ← Back
-          </Link>
+          <div className="flex items-center gap-3">
+            <ThemeToggle />
+            <Link href="/" className="font-body text-text-secondary text-sm hover:text-text transition-colors">
+              ← Back
+            </Link>
+          </div>
         </header>
 
         <div className="flex flex-col gap-6">
