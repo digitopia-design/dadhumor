@@ -51,7 +51,10 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return {
     title: frontmatter.title,
     description: frontmatter.description,
-    alternates: { canonical: url },
+    alternates: {
+      canonical: url,
+      types: { 'application/rss+xml': 'https://dadhumor.app/feed.xml' },
+    },
     openGraph: {
       title: frontmatter.title,
       description: frontmatter.description,

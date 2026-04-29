@@ -11,6 +11,9 @@ import { ARTICLE_CATEGORIES, type ArticleCategory } from '@/types/content';
 export const metadata: Metadata = {
   title: 'The Archive — Dad Humor',
   description: "Long-form thoughts on dad jokes, the data behind them, and the people who tell them. Read at your own risk.",
+  alternates: {
+    types: { 'application/rss+xml': 'https://dadhumor.app/feed.xml' },
+  },
   openGraph: {
     title: 'The Archive — Dad Humor',
     description: 'Long-form thoughts on dad jokes. Read at your own risk.',
