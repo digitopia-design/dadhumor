@@ -48,7 +48,7 @@ export default function FathersDayPage() {
         <Logo className="text-xl" />
         <Link
           href="/"
-          className="font-body text-smoke text-sm hover:text-white transition-colors"
+          className="font-body text-text-secondary text-sm hover:text-text transition-colors"
         >
           All jokes →
         </Link>
@@ -59,14 +59,14 @@ export default function FathersDayPage() {
         <Stache mood="laughing" size="xl" priority dadMode />
 
         <div className="flex flex-col gap-4">
-          <p className="font-body text-smoke text-sm uppercase tracking-widest">
+          <p className="font-body text-text-secondary text-sm uppercase tracking-widest">
             Father's Day 2026 — 21 June
           </p>
-          <h1 className="font-display font-bold text-5xl md:text-7xl text-white leading-none" style={{ letterSpacing: '-0.03em' }}>
+          <h1 className="font-display font-bold text-5xl md:text-7xl text-text leading-none" style={{ letterSpacing: '-0.03em' }}>
             The one day a year<br />
-            <span className="text-yellow">his jokes are tolerated.</span>
+            <span className="text-brand-yellow">his jokes are tolerated.</span>
           </h1>
-          <p className="font-body text-smoke text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
+          <p className="font-body text-text-secondary text-lg md:text-xl max-w-xl mx-auto leading-relaxed">
             Give him something to work with. Dad Humor has 200 fresh groans — send the best ones before he does.
           </p>
         </div>
@@ -77,7 +77,7 @@ export default function FathersDayPage() {
           href={WHATSAPP_URL}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-lg hover:bg-yellow/90 transition-colors"
+          className="flex items-center gap-2 px-8 py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-lg hover:bg-brand-yellow/90 transition-colors"
         >
           <span>💬</span>
           Send to your dad. He'll send three back.
@@ -86,27 +86,27 @@ export default function FathersDayPage() {
 
       {/* Divider */}
       <div className="w-full max-w-4xl px-6">
-        <div className="h-px bg-graphite" />
+        <div className="h-px bg-bg-border" />
       </div>
 
       {/* Dad Classics */}
       <section className="flex flex-col items-center text-center gap-8 px-6 py-16 max-w-4xl w-full">
         <div className="flex flex-col gap-3">
-          <p className="font-body text-smoke text-sm uppercase tracking-widest">The classics</p>
-          <h2 className="font-display font-bold text-4xl md:text-5xl text-white" style={{ letterSpacing: '-0.02em' }}>
+          <p className="font-body text-text-secondary text-sm uppercase tracking-widest">The classics</p>
+          <h2 className="font-display font-bold text-4xl md:text-5xl text-text" style={{ letterSpacing: '-0.02em' }}>
             Jokes your dad definitely<br />already told you.
           </h2>
-          <p className="font-body text-smoke text-lg">How many have you heard? Don't lie.</p>
+          <p className="font-body text-text-secondary text-lg">How many have you heard? Don't lie.</p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 w-full">
           {SAMPLE_JOKES.map((joke, i) => (
             <div
               key={i}
-              className="flex flex-col gap-3 bg-charcoal border border-graphite rounded-2xl px-6 py-5 text-left"
+              className="flex flex-col gap-3 bg-bg-surface border border-bg-border rounded-2xl px-6 py-5 text-left"
             >
-              <p className="font-body text-smoke text-sm leading-relaxed">{joke.setup}</p>
-              <p className="font-display font-bold text-yellow text-xl leading-tight" style={{ letterSpacing: '-0.02em' }}>
+              <p className="font-body text-text-secondary text-sm leading-relaxed">{joke.setup}</p>
+              <p className="font-display font-bold text-brand-yellow text-xl leading-tight" style={{ letterSpacing: '-0.02em' }}>
                 {joke.punchline}
               </p>
             </div>
@@ -115,7 +115,7 @@ export default function FathersDayPage() {
 
         <Link
           href="/collections/dad-classics"
-          className="px-8 py-4 rounded-2xl border border-graphite text-smoke font-body font-bold hover:border-yellow hover:text-yellow transition-colors"
+          className="px-8 py-4 rounded-2xl border border-bg-border text-text-secondary font-body font-bold hover:border-brand-yellow hover:text-brand-yellow transition-colors"
         >
           See all 20 dad classics →
         </Link>
@@ -123,7 +123,7 @@ export default function FathersDayPage() {
 
       {/* Divider */}
       <div className="w-full max-w-4xl px-6">
-        <div className="h-px bg-graphite" />
+        <div className="h-px bg-bg-border" />
       </div>
 
       {/* Email capture */}
@@ -131,14 +131,14 @@ export default function FathersDayPage() {
         <Stache mood="winking" size="lg" dadMode />
 
         <div className="flex flex-col gap-3">
-          <h2 className="font-display font-bold text-4xl text-white" style={{ letterSpacing: '-0.02em' }}>
+          <h2 className="font-display font-bold text-4xl text-text" style={{ letterSpacing: '-0.02em' }}>
             20 brand new dad jokes<br />
-            <span className="text-yellow">for Father's Day.</span>
+            <span className="text-brand-yellow">for Father's Day.</span>
           </h2>
-          <p className="font-body text-smoke text-lg leading-relaxed">
+          <p className="font-body text-text-secondary text-lg leading-relaxed">
             Fresh material he hasn't heard yet. Free PDF, no faff.
             <br />
-            <span className="text-smoke/60 text-sm">
+            <span className="text-text-secondary/60 text-sm">
               "20 jokes your dad doesn't know yet (but soon will)"
             </span>
           </p>
@@ -146,30 +146,30 @@ export default function FathersDayPage() {
 
         <EmailCapture />
 
-        <p className="font-body text-smoke/40 text-xs">
+        <p className="font-body text-text-secondary/40 text-xs">
           No spam. Unsubscribe any time. We're dad joke people, not newsletter people.
         </p>
       </section>
 
       {/* Footer */}
-      <footer className="w-full border-t border-graphite mt-8">
+      <footer className="w-full border-t border-bg-border mt-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4 px-6 py-8 max-w-4xl mx-auto">
           <Logo className="text-base" />
           <div className="flex items-center gap-6">
-            <Link href="/" className="font-body text-smoke text-sm hover:text-white transition-colors">
+            <Link href="/" className="font-body text-text-secondary text-sm hover:text-text transition-colors">
               All jokes
             </Link>
-            <Link href="/quiz" className="font-body text-smoke text-sm hover:text-yellow transition-colors">
+            <Link href="/quiz" className="font-body text-text-secondary text-sm hover:text-brand-yellow transition-colors">
               Take the quiz
             </Link>
-            <Link href="/privacy" className="font-body text-smoke text-sm hover:text-white transition-colors">
+            <Link href="/privacy" className="font-body text-text-secondary text-sm hover:text-text transition-colors">
               Privacy
             </Link>
             <a
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="font-body text-lime text-sm hover:text-lime/80 transition-colors"
+              className="font-body text-reaction-lime text-sm hover:text-reaction-lime/80 transition-colors"
             >
               Send to Dad →
             </a>

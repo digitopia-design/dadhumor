@@ -12,18 +12,18 @@ export default function NotFound() {
       <Stache mood="shrugging" size="lg" priority />
 
       <div className="flex flex-col gap-3 max-w-sm">
-        <h1 className="font-display font-bold text-5xl text-yellow">404</h1>
-        <p className="font-display font-bold text-2xl text-white">
+        <h1 className="font-display font-bold text-5xl text-brand-yellow">404</h1>
+        <p className="font-display font-bold text-2xl text-text">
           This page walked into a bar.
         </p>
-        <p className="font-body text-smoke text-lg">
+        <p className="font-body text-text-secondary text-lg">
           {"It's not there anymore."}
         </p>
       </div>
 
       <Link
         href="/"
-        className="px-8 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-lg hover:bg-yellow/90 transition-colors"
+        className="px-8 py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-lg hover:bg-brand-yellow/90 transition-colors"
       >
         Back to the jokes →
       </Link>

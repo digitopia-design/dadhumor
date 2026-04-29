@@ -61,7 +61,7 @@ export default async function JokePage({ params }: Props) {
     <main className="flex min-h-screen flex-col items-center justify-between px-6 py-8">
       <header className="w-full max-w-xl flex items-center justify-between">
         <Logo className="text-xl" />
-        <span className="font-body text-smoke text-xs uppercase tracking-widest">
+        <span className="font-body text-text-secondary text-xs uppercase tracking-widest">
           #{joke.id}
         </span>
       </header>
@@ -69,12 +69,12 @@ export default async function JokePage({ params }: Props) {
       <div className="flex flex-col items-center w-full max-w-xl text-center gap-10">
         <Stache mood="laughing" size="lg" priority />
 
-        <div className="w-full bg-charcoal border border-graphite rounded-3xl px-8 py-10 flex flex-col gap-6">
-          <p className="font-body text-smoke text-xl leading-relaxed">{joke.setup}</p>
-          <p className="font-display font-bold text-yellow text-3xl leading-tight">
+        <div className="w-full bg-bg-surface border border-bg-border rounded-3xl px-8 py-10 flex flex-col gap-6">
+          <p className="font-body text-text-secondary text-xl leading-relaxed">{joke.setup}</p>
+          <p className="font-display font-bold text-brand-yellow text-3xl leading-tight">
             {joke.punchline}
           </p>
-          <span className="font-body text-smoke/50 text-xs uppercase tracking-widest">
+          <span className="font-body text-text-secondary/50 text-xs uppercase tracking-widest">
             {joke.category.replace(/-/g, ' ')}
           </span>
         </div>
@@ -83,11 +83,11 @@ export default async function JokePage({ params }: Props) {
       <div className="flex flex-col items-center gap-4">
         <Link
           href="/"
-          className="px-8 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-lg hover:bg-yellow/90 transition-colors"
+          className="px-8 py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-lg hover:bg-brand-yellow/90 transition-colors"
         >
           More dad jokes →
         </Link>
-        <p className="font-body text-smoke/50 text-xs">dadhumor.app</p>
+        <p className="font-body text-text-secondary/50 text-xs">dadhumor.app</p>
       </div>
     </main>
   );

@@ -66,7 +66,7 @@ export function SwipeableCard({
         style={{ opacity: rightOpacity }}
         className="absolute inset-y-0 left-6 flex items-center pointer-events-none z-10"
       >
-        <span className="font-display font-bold text-xl text-lime drop-shadow-lg">
+        <span className="font-display font-bold text-xl text-reaction-lime drop-shadow-lg">
           PROPS 🤝
         </span>
       </motion.div>
@@ -75,7 +75,7 @@ export function SwipeableCard({
         style={{ opacity: leftOpacity }}
         className="absolute inset-y-0 right-6 flex items-center pointer-events-none z-10"
       >
-        <span className="font-display font-bold text-xl text-yellow drop-shadow-lg">
+        <span className="font-display font-bold text-xl text-brand-yellow drop-shadow-lg">
           NEXT →
         </span>
       </motion.div>
@@ -84,7 +84,7 @@ export function SwipeableCard({
         style={{ opacity: upOpacity }}
         className="absolute inset-x-0 top-6 flex justify-center pointer-events-none z-10"
       >
-        <span className="font-display font-bold text-xl text-cyan drop-shadow-lg">
+        <span className="font-display font-bold text-xl text-reaction-cyan drop-shadow-lg">
           ↑ SHARE
         </span>
       </motion.div>

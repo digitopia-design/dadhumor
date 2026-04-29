@@ -4,7 +4,7 @@ Sequenced tasks for Claude Code to work through. Each task has clear acceptance 
 
 Current phase: **Phase 2 - Technical Foundation**
 
-**Document version:** 1.1
+**Document version:** 1.3
 **Related docs:**
 - `handover.md` - project context, data model, brand
 - `fathers-day-campaign.md` - Phase 4.5 detailed brief
@@ -300,9 +300,100 @@ Also create `/src/lib/reactions.ts` for tracking which jokes the user has alread
 
 ### Task 2.9: Tailwind Theme Configuration
 
-**Goal:** Lock in the brand as design tokens.
+**Goal:** Lock in the dual-context brand as design tokens.
 
-**Update `tailwind.config.ts`:**
+**Architecture:** Use CSS custom properties for context-dependent values. The `data-theme` attribute on the `<body>` or root element switches between brand context (dark, default) and reading context (light). Tailwind references the CSS variables, not raw hex values.
+
+**Step 1 - Update `globals.css` with the token system:**
+
+```css
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ========================================
+   BRAND CONTEXT (DARK) - default everywhere
+   except Reading Context pages
+   ======================================== */
+:root,
+[data-theme="dark"] {
+  /* Backgrounds */
+  --bg-primary:    #121212;
+  --bg-surface:    #1A1A1A;
+  --bg-elevated:   #242424;
+  --bg-border:     #333333;
+
+  /* Text */
+  --text-primary:   #FFFFFF;
+  --text-secondary: rgba(255, 255, 255, 0.7);
+  --text-tertiary:  rgba(255, 255, 255, 0.45);
+  --text-inverse:   #1A1A1A;
+
+  /* Brand */
+  --brand-yellow:        #E3FF00;
+  --brand-yellow-hover:  #C9E600;
+
+  /* Reactions */
+  --reaction-lime: #7CFF6B;
+  --reaction-pink: #FF4DA6;
+  --reaction-cyan: #00E0FF;
+  --reaction-red:  #FF6B6B;
+
+  /* Decorative only */
+  --smoke: #A0A0A0;
+}
+
+/* ========================================
+   READING CONTEXT (LIGHT) - articles & legal
+   Only applied where data-theme="light"
+   ======================================== */
+[data-theme="light"] {
+  /* Backgrounds */
+  --bg-primary:    #FAF8F2;
+  --bg-surface:    #F4F1E8;
+  --bg-elevated:   #ECE8DA;
+  --bg-border:     #DDD7C5;
+
+  /* Text */
+  --text-primary:   #1A1A1A;
+  --text-secondary: rgba(26, 26, 26, 0.7);
+  --text-tertiary:  rgba(26, 26, 26, 0.5);
+  --text-inverse:   #FFFFFF;
+
+  /* Brand - yellow stays cyber yellow but used inside dark pills */
+  --brand-yellow:        #E3FF00;
+  --brand-yellow-hover:  #C9E600;
+
+  /* Reactions - deeper for accessibility on cream */
+  --reaction-lime: #2D8C1F;
+  --reaction-pink: #C2185B;
+  --reaction-cyan: #007A99;
+  --reaction-red:  #C62828;
+}
+
+/* Halftone background pattern - context-aware */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: radial-gradient(circle, currentColor 1px, transparent 1px);
+  background-size: 18px 18px;
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+  color: var(--text-primary);
+}
+
+/* No-flash theme application */
+html { background: var(--bg-primary); }
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+}
+```
+
+**Step 2 - Update `tailwind.config.ts` to consume the variables:**
+
 ```typescript
 import type { Config } from 'tailwindcss';
 
@@ -311,23 +402,47 @@ const config: Config = {
     './src/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './src/components/**/*.{js,ts,jsx,tsx,mdx}',
     './src/app/**/*.{js,ts,jsx,tsx,mdx}',
+    './content/**/*.{md,mdx}',
   ],
   theme: {
     extend: {
       colors: {
-        midnight:  '#121212',
-        charcoal:  '#1A1A1A',
-        graphite:  '#333333',
-        yellow:    '#E3FF00',
-        pink:      '#FF2E93',
-        cyan:      '#00E0FF',
-        lime:      '#7CFF6B',
-        red:       '#FF4D4D',
-        smoke:     '#A0A0A0',
+        // Context-aware tokens (use these by default)
+        bg: {
+          DEFAULT: 'var(--bg-primary)',
+          surface: 'var(--bg-surface)',
+          elevated: 'var(--bg-elevated)',
+          border: 'var(--bg-border)',
+        },
+        text: {
+          DEFAULT: 'var(--text-primary)',
+          secondary: 'var(--text-secondary)',
+          tertiary: 'var(--text-tertiary)',
+          inverse: 'var(--text-inverse)',
+        },
+        brand: {
+          yellow: 'var(--brand-yellow)',
+          'yellow-hover': 'var(--brand-yellow-hover)',
+        },
+        reaction: {
+          lime: 'var(--reaction-lime)',
+          pink: 'var(--reaction-pink)',
+          cyan: 'var(--reaction-cyan)',
+          red:  'var(--reaction-red)',
+        },
+
+        // Direct brand colours (use only when context-independent)
+        // e.g. share cards always use these regardless of page theme
+        midnight: '#121212',
+        charcoal: '#1A1A1A',
+        cream:    '#FAF8F2',
+        paper:    '#F4F1E8',
+        yellow:   '#E3FF00',
+        smoke:    '#A0A0A0',
       },
       fontFamily: {
-        display: ['var(--font-clash)', 'var(--font-space-grotesk)', 'sans-serif'],
-        body:    ['var(--font-inter)', 'sans-serif'],
+        display: ['var(--font-outfit)', 'system-ui', 'sans-serif'],
+        body:    ['var(--font-inter)', 'system-ui', 'sans-serif'],
       },
       animation: {
         'fade-in-up': 'fadeInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
@@ -368,24 +483,40 @@ const config: Config = {
 export default config;
 ```
 
-**Also add global background halftone pattern in `globals.css`:**
-```css
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
-  background-size: 18px 18px;
-  opacity: 0.5;
-  pointer-events: none;
-  z-index: 0;
-}
+**Step 3 - Load fonts via next/font in `layout.tsx`:**
+
+```typescript
+import { Outfit, Inter } from 'next/font/google';
+
+const outfit = Outfit({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700', '800'],
+  variable: '--font-outfit',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  weight: ['400', '500', '600', '700'],
+  variable: '--font-inter',
+  display: 'swap',
+});
+
+// In the JSX:
+<html lang="en" className={`${outfit.variable} ${inter.variable}`}>
 ```
 
+**Step 4 - Add the no-flash theme script** (Phase 4.6 - covered in Task 4.6.x_theme_toggle, but stub here):
+
+The layout.tsx should have an inline script BEFORE React hydrates that reads the saved theme preference and sets `data-theme` on `<html>`. This prevents the flash of wrong theme on page load.
+
 **Acceptance criteria:**
-- Can use `bg-yellow`, `text-midnight`, `border-graphite` etc throughout
-- Fonts loaded via `next/font` in layout.tsx
+- Can use `bg-bg`, `text-text`, `text-brand-yellow`, `bg-reaction-pink` etc throughout
+- Tokens swap correctly when `data-theme` attribute changes
+- Fonts loaded via `next/font/google` in layout.tsx
 - All brand animations available as Tailwind classes
+- Default theme is `dark` (no attribute = brand context)
+- Halftone pattern adapts to context (subtle dark dots on dark, subtle light dots on cream)
 
 ---
 
@@ -622,6 +753,470 @@ Re-order share sheet during campaign window so "Send to Dad" appears first (uses
 
 ### Task 4.5.7: Post-Day Quiz
 "How many of these did your dad tell you?" - 10-question quiz showing classic dad jokes. User taps "Yes/No" for each. Results: "You're a [Dad-Joke Apprentice/Survivor/Veteran/Hostage]." Shareable.
+
+---
+
+## Phase 4.6: Articles / Content System
+
+Adds an MDX-powered article system for SEO content, data stories, guides, and legal pages. Lightweight, file-based, lives in the repo. Powers the press/data strategy in Phase 8 and supports Father's Day SEO content.
+
+**Approach:** MDX files under `/content/`, statically generated, custom React components for inline interactivity (live joke embeds, Stache reactions, leaderboard widgets). No external CMS - articles are committed to Git, deploys are publishes.
+
+### Task 4.6.1: MDX Infrastructure
+
+**Goal:** Set up the content pipeline.
+
+**What to do:**
+1. Install packages:
+   - `next-mdx-remote` (serves MDX from filesystem)
+   - `gray-matter` (frontmatter parsing)
+   - `remark-gfm` (GitHub-flavoured markdown)
+   - `rehype-slug` (auto heading IDs)
+   - `rehype-autolink-headings` (anchor links)
+   - `reading-time` ("5 min read" calc)
+2. Create directory structure:
+   ```
+   /content
+     /articles      ← blog posts
+     /pages         ← static pages (about, privacy, terms)
+   /src/components/mdx
+     index.tsx      ← exports all MDX components
+   /src/lib
+     content.ts     ← article fetching/parsing helpers
+   ```
+3. Add `content.ts` helper functions:
+   - `getAllArticles()` - returns array of article metadata, sorted by date desc
+   - `getArticleBySlug(slug)` - returns single article with parsed MDX
+   - `getAllPages()` / `getPageBySlug(slug)` - same for static pages
+   - `getArticlesByCategory(cat)` / `getArticlesByTag(tag)` - filtering
+   - All functions exclude `draft: true` articles in production
+4. Define TypeScript types for Article and Page in `/src/types/content.ts`.
+
+**Acceptance criteria:**
+- Can place a `.mdx` file in `/content/articles/` and read it programmatically via helper functions
+- Frontmatter parsing works correctly
+- Draft articles are hidden in production (NODE_ENV check)
+- All helpers fully typed
+
+### Task 4.6.2: Frontmatter Schema
+
+**Goal:** Lock in the metadata schema so articles are consistent.
+
+Required frontmatter for articles:
+```yaml
+---
+title: "The 10 Worst Dad Jokes Ever Told (Backed By Data)"
+slug: "10-worst-dad-jokes-data"
+description: "We analysed 50,000 user reactions. The results will horrify you."
+date: 2026-05-15
+updated: 2026-05-15           # optional, defaults to date
+author: "Stache"               # currently always Stache, future: support other authors
+category: "data"               # one of: data | guides | press | brand | jokes
+tags: ["data", "groan-rankings", "research"]
+ogImage: "/articles/og/10-worst-dad-jokes.png"  # optional, falls back to default
+featured: true                 # appears in featured section on /blog
+draft: false                   # if true, hidden in production
+---
+```
+
+Required frontmatter for static pages (simpler):
+```yaml
+---
+title: "About Dad Humor"
+slug: "about"
+description: "Why we built the internet's premier dad joke authority."
+updated: 2026-04-20
+---
+```
+
+Validate frontmatter via Zod schema. Throw clear errors if required fields missing.
+
+**Acceptance criteria:**
+- Articles fail to build if required frontmatter missing
+- Defaults applied correctly (e.g., `updated` defaults to `date`)
+- Type-safe throughout
+
+### Task 4.6.3: Article Listing Page (`/blog`)
+
+**Goal:** The main blog index.
+
+**What to build:**
+- Route: `/src/app/blog/page.tsx`
+- Static generation
+- Featured article hero (if any article has `featured: true`)
+- Article cards in a grid (3 columns desktop, 1 mobile)
+- Each card shows: thumbnail (from ogImage or default), title, description, category pill, date, reading time
+- Pagination if more than 12 articles
+- Category filter pills at the top
+- Search (client-side, simple fuzzy match) - optional, can defer
+
+**Visual style:**
+- Use brand tokens (Midnight bg, Charcoal cards, Cyber Yellow accents)
+- Stache decorative element (e.g. pointing Stache next to "Latest" heading)
+- Hover state on cards: slight Yellow border glow
+- Reading time and category pills use existing component patterns
+
+**SEO:**
+- Page meta title: "Articles - Dad Humor"
+- Description: brand voice
+- OG image: a generic blog OG (can be the default)
+
+**Acceptance criteria:**
+- Renders all non-draft articles
+- Sorted newest first
+- Category filtering works
+- Mobile responsive
+- Lighthouse SEO score 95+
+
+### Task 4.6.4: Article Detail Page (`/blog/[slug]`)
+
+**Goal:** Individual article view.
+
+**What to build:**
+- Route: `/src/app/blog/[slug]/page.tsx`
+- Static generation with `generateStaticParams()`
+- Renders MDX content with custom components
+- Article header: title, description, date, reading time, category pill, share buttons
+- Article body: prose styling, max-width readable column
+- Article footer: related articles (same category, 3 max), author bio (Stache), comment-free CTA back to main app
+- 404 if slug not found (use Next.js `notFound()`)
+
+**Prose typography:**
+- Body: Inter, 18px, line-height 1.7
+- Headings: Clash Display
+- Code blocks: dark theme, monospace
+- Block quotes: Yellow left border
+- Images: rounded corners, captions in Smoke
+- Links: Cyber Yellow underline on hover
+
+**SEO per article:**
+- Use `generateMetadata()` to build:
+  - `<title>` from frontmatter
+  - `<meta description>` from frontmatter
+  - OG tags (image, title, description, url, type=article)
+  - Twitter card tags
+  - Canonical URL
+- Add `Article` schema.org structured data via JSON-LD
+- Set `<link rel="alternate" type="application/rss+xml">` for RSS
+
+**Acceptance criteria:**
+- Articles render correctly with all custom components
+- SEO meta is fully populated
+- Structured data validates in Google's Rich Results Test
+- Mobile responsive
+- Lighthouse score 95+ across all categories
+
+### Task 4.6.5: Custom MDX Components
+
+**Goal:** Reusable React components that authors can drop into MDX.
+
+Build these in `/src/components/mdx/`:
+
+**`<JokeEmbed slug="..." />`**
+- Fetches joke by slug from Supabase at build time (or revalidate hourly)
+- Renders a mini joke card inline with reveal interaction
+- Uses existing JokeCard component, scaled down
+- Falls back gracefully if joke not found
+
+**`<StacheReact mood="..." caption="..." size="sm|md|lg" />`**
+- Inline Stache image with caption underneath
+- Uses existing Stache component
+- Default size: md
+- Caption styled in Smoke, italic
+
+**`<Callout type="data|warning|tip|joke">...</Callout>`**
+- Styled callout box
+- `data` - cyan border, "📊 DATA" label
+- `warning` - red border, "⚠️ HEADS UP" label
+- `tip` - lime border, "💡 TIP" label
+- `joke` - yellow border, "🎭 JOKE" label
+- Children render as normal MDX inside
+
+**`<GroanLeaderboard limit={10} category="..." />`**
+- Live leaderboard pulled from Supabase at build time
+- Default limit: 10
+- Optional category filter
+- Each row: rank, joke setup (truncated), groan count, link to joke
+- Refreshes on next deploy or revalidate (set ISR to 24h)
+
+**`<PropsLeaderboard limit={10} category="..." />`**
+- Same as GroanLeaderboard but ordered by props_count
+- Uses lime accent instead of pink
+
+**`<DadJokeQuiz questions={[...]} />`**
+- Inline interactive quiz component
+- Takes array of joke objects as questions
+- User answers Yes/No for each ("Have you heard this?")
+- Shows result at the end with shareable card
+- Uses brand patterns from main app
+
+**`<TweetEmbed id="..." />`**
+- Embed a tweet (use react-tweet or similar)
+- For citing user reactions in articles
+
+**`<ImageGrid columns={2|3|4}>...</ImageGrid>`**
+- Wraps multiple images in a responsive grid
+- Useful for "here's all 9 Stache moods" kinds of articles
+
+**Acceptance criteria:**
+- All components fully typed
+- All use brand tokens (no hardcoded colours)
+- All work in MDX without imports (registered globally via mdx-components.tsx)
+- Mobile responsive
+- Components fail gracefully if data missing
+
+### Task 4.6.6: Static Pages System
+
+**Goal:** Use the same MDX system for non-article pages, all in Reading Context (light theme).
+
+**What to build:**
+- Route: `/src/app/[slug]/page.tsx` (catch-all for static pages)
+- Reads from `/content/pages/`
+- Same MDX rendering pipeline as articles
+- Apply Reading Context (light theme by default)
+- Slightly different layout (no "back to blog" nav, no related articles)
+
+**Initial pages to create (all in light theme):**
+- `/about` - the brand story
+- `/privacy` - privacy policy (use a template, customise for actual data collected)
+- `/terms` - terms of service (use a template)
+- `/contact` - simple contact info
+- `/colophon` - tech stack, credits, fonts (developers love these)
+
+**Theming:**
+- These pages set `data-theme="light"` on the layout wrapper
+- Inherit the same theme toggle behaviour as articles (via Task 4.6.x_theme below)
+- User's saved theme preference applies across all Reading Context pages
+
+**Acceptance criteria:**
+- All static pages render in light theme by default
+- Each has correct SEO metadata
+- Theme toggle works consistently across articles and static pages
+- Routing works without conflicting with `/blog/[slug]` or `/j/[slug]`
+- Brand Context pages (joke app, etc.) remain unaffected by theme changes here
+
+### Task 4.6.7: Theme System Implementation
+
+**Goal:** Implement the dual-context theme system - dark Brand Context default, light Reading Context with toggle.
+
+**Architecture:**
+- Brand Context pages: `data-theme="dark"` (or no attribute - dark is default)
+- Reading Context pages: `data-theme="light"` by default, can be toggled to `"dark"` by user
+- Theme preference persisted in localStorage as `dh_reading_theme: "light" | "dark"`
+- Brand Context pages NEVER respond to the saved theme - they're locked dark
+
+**What to build:**
+
+**1. Theme detection script (no-flash):**
+Add to `layout.tsx` - inline `<script>` that runs BEFORE React hydrates. Determines correct theme and sets `data-theme` attribute on `<html>`.
+
+```tsx
+// Place inline in <head> via dangerouslySetInnerHTML
+const themeScript = `
+  (function() {
+    const isReadingContext = ${/* server-determined boolean based on route */};
+    if (!isReadingContext) {
+      document.documentElement.setAttribute('data-theme', 'dark');
+      return;
+    }
+    const saved = localStorage.getItem('dh_reading_theme');
+    if (saved === 'dark' || saved === 'light') {
+      document.documentElement.setAttribute('data-theme', saved);
+    } else {
+      // Default for reading context = light
+      document.documentElement.setAttribute('data-theme', 'light');
+    }
+  })();
+`;
+```
+
+**2. Page-level theme detection:**
+Create `/src/lib/theme.ts`:
+```typescript
+const READING_CONTEXT_PATHS = [
+  '/about', '/privacy', '/terms', '/contact', '/colophon',
+  '/blog', // and all sub-paths
+];
+
+export function isReadingContext(pathname: string): boolean {
+  return READING_CONTEXT_PATHS.some(path =>
+    pathname === path || pathname.startsWith(path + '/')
+  );
+}
+```
+
+**3. Layout wrapper:**
+Each Reading Context page wraps content in a layout that:
+- Sets `data-theme` based on user preference
+- Renders the theme toggle in the header
+- Listens for system preference changes
+
+**4. ThemeToggle component:**
+Create `/src/components/ThemeToggle.tsx`:
+- Sun/moon icon button
+- Click toggles between `light` and `dark`
+- Saves to localStorage as `dh_reading_theme`
+- Updates `data-theme` attribute on `<html>`
+- Smooth icon transition
+- Only renders on Reading Context pages
+
+**5. useTheme hook:**
+Create `/src/hooks/useTheme.ts`:
+```typescript
+export function useTheme() {
+  const [theme, setTheme] = useState<'light' | 'dark'>('light');
+
+  useEffect(() => {
+    const current = document.documentElement.getAttribute('data-theme') as 'light' | 'dark';
+    setTheme(current || 'light');
+  }, []);
+
+  const toggle = () => {
+    const next = theme === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('dh_reading_theme', next);
+    setTheme(next);
+  };
+
+  return { theme, toggle };
+}
+```
+
+**Acceptance criteria:**
+- Joke app routes (`/`, `/j/[slug]`, etc.) are ALWAYS dark, no toggle visible
+- Reading routes (`/about`, `/blog/*`, etc.) default to light with toggle in header
+- No flash of wrong theme on page load (the inline script handles this)
+- Theme preference persists across page navigations within Reading Context
+- Theme preference persists across browser sessions
+- Brand Context routes ignore the saved preference (always dark regardless)
+- Toggle icon animates smoothly between sun and moon
+
+### Task 4.6.8: RSS Feed
+
+**Goal:** RSS feed at `/feed.xml` for articles.
+
+**What to do:**
+- Create `/src/app/feed.xml/route.ts`
+- Generate RSS 2.0 XML
+- Include all non-draft articles
+- Author: Stache
+- Categories from frontmatter
+- Full article body in `<content:encoded>` (CDATA wrapped)
+- Properly cached (revalidate every hour)
+
+Add `<link rel="alternate" type="application/rss+xml">` to article and blog pages so feed readers detect it.
+
+**Acceptance criteria:**
+- Feed validates at validator.w3.org/feed
+- Opens correctly in Feedly, Reeder, etc.
+- Updates on next deploy
+
+### Task 4.6.9: Sitemap Inclusion
+
+**Goal:** All articles and pages in sitemap.xml.
+
+Update existing `/src/app/sitemap.ts` to include:
+- All article URLs with `lastmod` from `updated` frontmatter
+- All static page URLs
+- Priority: 0.8 for articles, 0.5 for static pages, 1.0 for homepage
+
+**Acceptance criteria:**
+- Sitemap includes all content
+- Validates in Google Search Console
+- Lastmod dates correct
+
+### Task 4.6.10: Initial Article Drafts
+
+**Goal:** Ship 3-5 articles at launch to seed the system.
+
+Articles to create (Claude Code can write the content):
+
+1. **About Dad Humor** (`/about`)
+   - Brand story, mission, who we are
+   - 400-600 words
+   - Stache origin story
+   - Mention Bantered parent brand
+
+2. **How To Tell A Dad Joke (Properly)** (`/blog/how-to-tell-a-dad-joke`)
+   - Practical guide with humour
+   - 800-1000 words
+   - Use Callout components
+   - Include 5-10 example jokes via JokeEmbed
+   - SEO target: "how to tell a dad joke"
+
+3. **The 25 Best Father's Day Jokes Of 2026** (`/blog/best-fathers-day-jokes-2026`)
+   - Listicle, 1500 words
+   - Time-sensitive (publish 1 June 2026)
+   - Each joke has a JokeEmbed
+   - Strong SEO target: "father's day jokes"
+   - Featured on Father's Day landing page
+
+4. **Why We Built Dad Humor** (`/blog/why-we-built-dad-humor`)
+   - Founder story, suitable for press
+   - 600-800 words
+   - First-person from Stache (or Digitopia voice - decide)
+   - Good for backlink outreach
+
+5. **The Anatomy Of A Dad Joke** (`/blog/anatomy-of-a-dad-joke`)
+   - Educational/entertaining breakdown
+   - 1000 words
+   - Visual breakdown of setup/punchline structure
+   - Categorisation explanation (puns vs wordplay etc.)
+   - Stache reactions throughout
+
+6. **Privacy Policy** (`/privacy`)
+   - Standard UK GDPR-compliant policy
+   - Use a template, customise for the actual data collected (analytics, localStorage)
+
+7. **Terms of Service** (`/terms`)
+   - Standard ToS template
+   - Customise for the service offered
+
+**Acceptance criteria:**
+- All articles published (draft: false)
+- All have correct frontmatter
+- All include at least one custom MDX component where appropriate
+- Privacy and Terms reviewed for compliance accuracy
+- Internal links between articles where relevant
+
+### Task 4.6.11: OG Image Generation For Articles
+
+**Goal:** Each article gets a branded OG image without manual design work.
+
+**What to do:**
+- Create `/src/app/articles/og/[slug]/route.tsx` using `@vercel/og`
+- Layout:
+  - Midnight background with halftone pattern
+  - "DAD HUMOR." wordmark top-left
+  - Article title (large, white, Clash Display)
+  - "Articles" pill or category badge
+  - Stache mascot bottom-right (mood based on category - e.g., `pointing` for guides, `mind-blown` for data pieces)
+  - Subtle "dadhumor.app" footer
+- Each article frontmatter `ogImage` defaults to this dynamic URL
+- Override with custom static image if provided
+
+**Acceptance criteria:**
+- OG images generate correctly for each article
+- Renders in Twitter card preview, Facebook debugger, Slack unfurl
+- 1200x630 dimensions
+- Loads in under 1 second
+
+### Task 4.6.12: Reading Experience Polish
+
+Small but important details:
+
+- **Reading progress bar** at top of article (1px Cyber Yellow, fills as you scroll)
+- **Estimated reading time** in article header
+- **Table of contents** sidebar on desktop for long articles (auto-generated from h2/h3 tags)
+- **"Back to top"** button after scrolling past 50%
+- **Share buttons** in article header AND footer (Twitter, LinkedIn, copy link, native share on mobile)
+- **Print stylesheet** (clean black-on-white, hides interactive components)
+
+**Acceptance criteria:**
+- Reading progress works smoothly
+- Table of contents updates active state on scroll
+- Share buttons fire correctly
+- Print preview looks clean
 
 ---
 

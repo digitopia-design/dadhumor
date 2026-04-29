@@ -15,7 +15,7 @@ export function JokeCard({ joke, isRevealed }: JokeCardProps) {
     <div
       className={cn(
         'relative flex flex-col items-center justify-center w-full max-w-xl',
-        'bg-charcoal border border-graphite rounded-3xl px-8 py-12',
+        'bg-bg-surface border border-bg-border rounded-3xl px-8 py-12',
         'text-center select-none gap-8 md:gap-10'
       )}
     >
@@ -25,7 +25,7 @@ export function JokeCard({ joke, isRevealed }: JokeCardProps) {
 
       <h1
         className={cn(
-          'font-display font-semibold text-smoke leading-tight tracking-tight',
+          'font-display font-semibold text-text-secondary leading-tight tracking-tight',
           getSetupSize(joke.setup)
         )}
         style={{ letterSpacing: '-0.02em' }}
@@ -39,7 +39,7 @@ export function JokeCard({ joke, isRevealed }: JokeCardProps) {
           animate={{ opacity: 1, y: 0, scale: 1 }}
           transition={{ duration: 0.45, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
           className={cn(
-            'font-display font-bold text-yellow leading-none tracking-tight',
+            'font-display font-bold text-brand-yellow leading-none tracking-tight',
             getPunchlineSize(joke.punchline)
           )}
           style={{ letterSpacing: '-0.02em' }}
@@ -47,7 +47,7 @@ export function JokeCard({ joke, isRevealed }: JokeCardProps) {
           {joke.punchline}
         </motion.h2>
       ) : (
-        <p className="font-body text-smoke/50 text-sm uppercase tracking-widest animate-pulse">
+        <p className="font-body text-text-secondary/50 text-sm uppercase tracking-widest animate-pulse">
           Brace yourself. Tap.
         </p>
       )}

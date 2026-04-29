@@ -1,0 +1,1019 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dad Humor - Hybrid Theme Approach (Option 2)</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  /* DARK MODE TOKENS (joke app) */
+  :root {
+    --dark-bg:        #121212;
+    --dark-surface:   #1A1A1A;
+    --dark-elevated:  #242424;
+    --dark-border:    #333333;
+    --dark-text:      #FFFFFF;
+    --dark-text-mute: rgba(255, 255, 255, 0.7);
+    --yellow:         #E3FF00;
+    --pink:           #FF4DA6;
+    --cyan:           #00E0FF;
+    --lime:           #7CFF6B;
+
+    /* LIGHT MODE TOKENS (articles only) */
+    --light-bg:       #FAF8F2;
+    --light-surface:  #F4F1E8;
+    --light-elevated: #ECE8DA;
+    --light-border:   #DDD7C5;
+    --light-text:     #1A1A1A;
+    --light-text-mute: rgba(26, 26, 26, 0.65);
+
+    --font-display: 'Outfit', system-ui, sans-serif;
+    --font-body:    'Inter', system-ui, sans-serif;
+  }
+
+  body {
+    background: #0A0A0A;
+    font-family: var(--font-inter);
+    color: white;
+    min-height: 100vh;
+    padding: 30px 16px 80px;
+  }
+
+  /* PAGE HEADER */
+  .page-header {
+    max-width: 1400px;
+    margin: 0 auto 30px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .page-title {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: clamp(28px, 5vw, 48px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 12px;
+    color: white;
+  }
+  .page-title .accent { color: var(--yellow); }
+
+  .page-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 15px;
+    line-height: 1.5;
+    max-width: 700px;
+    margin: 0 auto;
+    font-family: var(--font-body);
+  }
+
+  /* SECTION INTRO */
+  .section-intro {
+    max-width: 1400px;
+    margin: 50px auto 20px;
+    padding: 0 20px;
+    text-align: center;
+  }
+
+  .section-label {
+    display: inline-block;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+  }
+  .section-label.dark-context {
+    background: rgba(227, 255, 0, 0.1);
+    color: var(--yellow);
+    border: 1px solid var(--yellow);
+  }
+  .section-label.light-context {
+    background: rgba(255, 255, 255, 0.05);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .section-heading {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(22px, 3vw, 32px);
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    color: white;
+  }
+
+  .section-desc {
+    color: rgba(255, 255, 255, 0.55);
+    font-size: 14px;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto;
+    font-family: var(--font-body);
+  }
+
+  /* DEMO FRAME */
+  .demo-frame {
+    max-width: 1400px;
+    margin: 0 auto;
+    border-radius: 24px;
+    overflow: hidden;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  /* ============================================
+     DARK MODE - JOKE APP
+     ============================================ */
+  .joke-app {
+    background: var(--dark-bg);
+    color: var(--dark-text);
+    position: relative;
+    min-height: 580px;
+  }
+
+  .joke-app::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .browser-bar {
+    background: var(--dark-surface);
+    padding: 10px 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-bottom: 1px solid var(--dark-border);
+    position: relative;
+    z-index: 2;
+  }
+
+  .browser-dot {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+  }
+  .browser-dot.red { background: #FF5F57; }
+  .browser-dot.yellow { background: #FEBC2E; }
+  .browser-dot.green { background: #28C840; }
+
+  .browser-url {
+    flex: 1;
+    text-align: center;
+    background: var(--dark-elevated);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+    margin: 0 16px;
+  }
+  .browser-url .protocol { color: rgba(255, 255, 255, 0.3); }
+  .browser-url .domain { color: white; }
+  .browser-url .path { color: var(--yellow); }
+
+  .app-header {
+    position: relative;
+    z-index: 2;
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .app-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+  }
+  .app-logo .yel { color: var(--yellow); }
+
+  .header-right {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+  }
+
+  .nav-link {
+    padding: 6px 14px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    color: rgba(255, 255, 255, 0.6);
+    text-decoration: none;
+    transition: all 0.15s ease;
+    cursor: pointer;
+  }
+  .nav-link:hover { color: white; }
+  .nav-link.active { color: var(--yellow); font-weight: 600; }
+
+  .stash-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 12px;
+    background: var(--dark-surface);
+    border: 1px solid var(--dark-border);
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .stash-btn .num { color: var(--yellow); }
+
+  .joke-stage {
+    position: relative;
+    z-index: 2;
+    padding: 50px 30px 30px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 28px;
+    min-height: 380px;
+  }
+
+  .stache-svg {
+    width: 90px;
+    height: 56px;
+  }
+
+  .joke-setup {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.9);
+    max-width: 600px;
+  }
+  @media (min-width: 768px) {
+    .joke-setup { font-size: 28px; }
+  }
+
+  .joke-punchline {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+    max-width: 600px;
+  }
+  @media (min-width: 768px) {
+    .joke-punchline { font-size: 52px; }
+  }
+
+  .joke-meta {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 12px;
+    background: var(--dark-surface);
+    border: 1px solid var(--dark-border);
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    color: rgba(255, 255, 255, 0.7);
+  }
+  .pill .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--yellow);
+  }
+  .pill.lime .num { color: var(--lime); }
+  .pill.pink .num { color: var(--pink); }
+
+  .action-bar {
+    position: relative;
+    z-index: 2;
+    padding: 0 20px 24px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+  .btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 12px 18px;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-weight: 600;
+    font-size: 13px;
+    border: 1px solid var(--dark-border);
+    background: var(--dark-surface);
+    color: white;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { transform: translateY(-1px); }
+  .btn.btn-props:hover { border-color: var(--lime); color: var(--lime); }
+  .btn.btn-groan:hover { border-color: var(--pink); color: var(--pink); }
+  .btn.btn-share:hover { border-color: var(--cyan); color: var(--cyan); }
+  .btn.btn-next {
+    background: var(--yellow);
+    color: #121212;
+    border-color: var(--yellow);
+    font-weight: 700;
+  }
+
+  /* ============================================
+     LIGHT MODE - ARTICLE READING
+     ============================================ */
+  .article-app {
+    background: var(--light-bg);
+    color: var(--light-text);
+    position: relative;
+    min-height: 800px;
+  }
+
+  /* Light browser bar */
+  .article-app .browser-bar {
+    background: var(--light-surface);
+    border-bottom: 1px solid var(--light-border);
+  }
+  .article-app .browser-url {
+    background: var(--light-elevated);
+    color: var(--light-text-mute);
+  }
+  .article-app .browser-url .protocol { color: rgba(26, 26, 26, 0.4); }
+  .article-app .browser-url .domain { color: var(--light-text); }
+  .article-app .browser-url .path { color: #9DB300; }
+
+  .article-header {
+    padding: 16px 24px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid var(--light-border);
+    background: var(--light-bg);
+  }
+
+  .article-logo {
+    font-family: var(--font-display);
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: -0.03em;
+    line-height: 1;
+    color: var(--light-text);
+  }
+  .article-logo .yel-light {
+    /* In light mode, brand still uses yellow but we wrap key moments in dark pills */
+    background: var(--light-text);
+    color: var(--yellow);
+    padding: 0 6px;
+    border-radius: 4px;
+  }
+
+  .article-nav {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+  }
+
+  .article-nav-link {
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-weight: 500;
+    font-size: 13px;
+    color: var(--light-text-mute);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .article-nav-link:hover { color: var(--light-text); }
+  .article-nav-link.active {
+    color: var(--light-text);
+    background: var(--light-surface);
+    font-weight: 600;
+  }
+
+  /* Theme toggle - only present on articles */
+  .theme-toggle {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    border: 1px solid var(--light-border);
+    background: var(--light-surface);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: var(--light-text-mute);
+    margin-left: 8px;
+    transition: all 0.15s ease;
+  }
+  .theme-toggle:hover { color: var(--light-text); border-color: var(--light-text); }
+
+  .article-container {
+    max-width: 720px;
+    margin: 0 auto;
+    padding: 50px 24px 60px;
+  }
+
+  /* Reading progress indicator (decorative) */
+  .reading-progress {
+    height: 2px;
+    background: var(--light-border);
+    border-radius: 1px;
+    margin-bottom: 30px;
+    overflow: hidden;
+    position: relative;
+  }
+  .reading-progress::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 32%;
+    height: 100%;
+    background: var(--light-text);
+    border-radius: 1px;
+  }
+
+  /* Article meta */
+  .article-meta-row {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    margin-bottom: 24px;
+    font-family: var(--font-body);
+    font-size: 13px;
+    color: var(--light-text-mute);
+  }
+
+  .article-category-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 12px;
+    background: var(--light-text);
+    color: var(--yellow);
+    border-radius: 100px;
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  .article-meta-row .dot-sep {
+    width: 3px;
+    height: 3px;
+    border-radius: 50%;
+    background: var(--light-text-mute);
+  }
+
+  /* Article title */
+  .article-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 5vw, 48px);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    color: var(--light-text);
+    margin-bottom: 16px;
+  }
+
+  .article-title .highlight {
+    background: var(--yellow);
+    color: var(--light-text);
+    padding: 0 10px;
+    margin: 0 -2px;
+    border-radius: 6px;
+    display: inline-block;
+  }
+
+  .article-deck {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 1.55;
+    color: var(--light-text-mute);
+    margin-bottom: 36px;
+  }
+
+  /* Article body prose */
+  .article-prose {
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 1.75;
+    color: var(--light-text);
+  }
+
+  .article-prose p {
+    margin-bottom: 22px;
+  }
+
+  .article-prose h2 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    margin: 40px 0 16px;
+    color: var(--light-text);
+  }
+
+  /* THE PUNCHLINE PILL TREATMENT - the clever fix for yellow on light */
+  .punchline-pill {
+    display: inline-block;
+    background: var(--light-text);
+    color: var(--yellow);
+    padding: 4px 14px;
+    border-radius: 6px;
+    font-family: var(--font-display);
+    font-weight: 700;
+    margin: 0 2px;
+  }
+
+  /* Embedded joke card in light mode */
+  .embedded-joke {
+    background: var(--light-text);
+    border-radius: 16px;
+    padding: 32px 28px;
+    margin: 32px 0;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .embedded-joke::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+    background-size: 14px 14px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .embedded-joke-label {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-body);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.4);
+    margin-bottom: 12px;
+  }
+
+  .embedded-joke-setup {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-body);
+    font-weight: 400;
+    font-size: 16px;
+    line-height: 1.4;
+    color: rgba(255, 255, 255, 0.85);
+    margin-bottom: 14px;
+  }
+
+  .embedded-joke-punchline {
+    position: relative;
+    z-index: 2;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 28px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+  }
+
+  .embedded-joke-cta {
+    position: relative;
+    z-index: 2;
+    margin-top: 18px;
+    font-family: var(--font-body);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+  .embedded-joke-cta a { color: var(--yellow); text-decoration: none; }
+
+  /* Callout in light mode */
+  .callout {
+    border-left: 3px solid var(--light-text);
+    background: var(--light-surface);
+    padding: 16px 20px;
+    margin: 28px 0;
+    border-radius: 0 10px 10px 0;
+  }
+  .callout-label {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+  .callout-label.tip { color: #2D8C1F; }
+  .callout-label.data { color: #007A99; }
+  .callout-text {
+    font-size: 15px;
+    color: var(--light-text);
+    line-height: 1.6;
+  }
+
+  .article-prose strong { font-weight: 700; color: var(--light-text); }
+
+  /* Article footer */
+  .article-footer-cta {
+    margin-top: 60px;
+    padding: 32px;
+    background: var(--light-text);
+    border-radius: 16px;
+    text-align: center;
+    color: white;
+  }
+
+  .article-footer-cta-title {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 26px;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: 8px;
+    color: white;
+  }
+  .article-footer-cta-title .yel { color: var(--yellow); }
+
+  .article-footer-cta-desc {
+    font-family: var(--font-body);
+    font-size: 15px;
+    color: rgba(255, 255, 255, 0.7);
+    margin-bottom: 18px;
+  }
+
+  .article-footer-cta-btn {
+    display: inline-block;
+    background: var(--yellow);
+    color: var(--light-text);
+    padding: 12px 28px;
+    border-radius: 12px;
+    font-family: var(--font-body);
+    font-weight: 700;
+    font-size: 14px;
+    text-decoration: none;
+  }
+
+  /* WHY EXPLAINER */
+  .why-section {
+    max-width: 800px;
+    margin: 80px auto 0;
+    padding: 0 20px;
+  }
+
+  .why-card {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 20px;
+    padding: 28px;
+  }
+
+  .why-card h3 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    margin-bottom: 14px;
+    color: var(--yellow);
+  }
+
+  .why-card p, .why-card li {
+    font-family: var(--font-body);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 10px;
+  }
+
+  .why-card ul {
+    list-style: none;
+    margin-top: 8px;
+  }
+
+  .why-card .check { color: var(--lime); margin-right: 6px; }
+  .why-card .cross { color: var(--pink); margin-right: 6px; }
+
+  .why-card strong {
+    color: white;
+    font-weight: 600;
+  }
+
+  /* TINY TOGGLE INDICATOR */
+  .toggle-indicator {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    z-index: 5;
+    background: rgba(0,0,0,0.4);
+    backdrop-filter: blur(8px);
+    color: white;
+    padding: 6px 12px;
+    border-radius: 100px;
+    font-family: var(--font-body);
+    font-size: 11px;
+    font-weight: 600;
+    border: 1px solid rgba(255,255,255,0.15);
+  }
+
+  .toggle-indicator.in-light {
+    background: rgba(0,0,0,0.05);
+    color: var(--light-text);
+    border: 1px solid var(--light-border);
+  }
+
+  .toggle-indicator-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    margin-right: 6px;
+  }
+  .toggle-indicator-dot.dark { background: white; }
+  .toggle-indicator-dot.light { background: var(--light-text); }
+
+  /* Footer */
+  .page-footer {
+    max-width: 1400px;
+    margin: 60px auto 0;
+    padding: 30px 20px 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-family: var(--font-body);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <h1 class="page-title">Hybrid Theme <span class="accent">Approach.</span></h1>
+  <p class="page-subtitle">
+    Joke app stays loud and dark - it's the brand identity. Articles go light - reading is genuinely better that way. Two contexts, two treatments. The toggle only appears on articles.
+  </p>
+</div>
+
+<!-- ============================================
+     SECTION 1: DARK JOKE APP (always)
+     ============================================ -->
+
+<div class="section-intro">
+  <span class="section-label dark-context">CONTEXT 1 - JOKE APP</span>
+  <h2 class="section-heading">Always dark. No toggle. Brand-defining.</h2>
+  <p class="section-desc">
+    Main app, share cards, signage, OG images, mascot moments. This is what people screenshot and share. Cyber Yellow on Midnight is the visual identity.
+  </p>
+</div>
+
+<div class="demo-frame">
+  <div class="joke-app">
+    <div class="toggle-indicator">
+      <span class="toggle-indicator-dot dark"></span>Locked dark mode
+    </div>
+
+    <div class="browser-bar">
+      <span class="browser-dot red"></span>
+      <span class="browser-dot yellow"></span>
+      <span class="browser-dot green"></span>
+      <div class="browser-url">
+        <span class="protocol">https://</span><span class="domain">dadhumor.app</span><span class="path">/</span>
+      </div>
+    </div>
+
+    <div class="app-header">
+      <div class="app-logo">DAD<span class="yel">HUMOR.</span></div>
+      <div class="header-right">
+        <a class="nav-link active">App</a>
+        <a class="nav-link">Articles</a>
+        <a class="nav-link">Shop</a>
+        <div class="stash-btn">
+          <span>📌</span>
+          <span class="num">12</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="joke-stage">
+      <svg class="stache-svg" viewBox="0 0 120 75">
+        <circle cx="42" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="78" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="42" cy="20" r="3" fill="#000"/>
+        <circle cx="78" cy="20" r="3" fill="#000"/>
+        <path d="M 60 38 Q 50 35, 42 40 Q 30 42, 20 50 Q 14 55, 18 62 Q 22 65, 30 60 Q 38 55, 46 52 Q 54 50, 60 52 Q 66 50, 74 52 Q 82 55, 90 60 Q 98 65, 102 62 Q 106 55, 100 50 Q 90 42, 78 40 Q 70 35, 60 38 Z" fill="#1a1a1a" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+
+      <h2 class="joke-setup">Why don't eggs tell jokes?</h2>
+      <h1 class="joke-punchline">They'd crack each other up.</h1>
+
+      <div class="joke-meta">
+        <div class="pill"><span class="dot"></span><span>Pun</span></div>
+        <div class="pill lime">🤝 <span class="num">412</span></div>
+        <div class="pill pink">🙄 <span class="num">247</span></div>
+      </div>
+    </div>
+
+    <div class="action-bar">
+      <button class="btn btn-props">🤝 Props</button>
+      <button class="btn btn-groan">🙄 Groan</button>
+      <button class="btn btn-share">↗</button>
+      <button class="btn btn-next">Next →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     SECTION 2: LIGHT ARTICLES (default + toggle)
+     ============================================ -->
+
+<div class="section-intro">
+  <span class="section-label light-context">CONTEXT 2 - ARTICLES</span>
+  <h2 class="section-heading">Light by default. Reader-optimised. Toggle available.</h2>
+  <p class="section-desc">
+    Articles, guides, data stories, About page, legal pages. Long-form reading is genuinely easier in light mode. A subtle theme toggle in the header lets users switch if they want dark.
+  </p>
+</div>
+
+<div class="demo-frame">
+  <div class="article-app">
+    <div class="toggle-indicator in-light">
+      <span class="toggle-indicator-dot light"></span>Light mode default + toggle
+    </div>
+
+    <div class="browser-bar">
+      <span class="browser-dot red"></span>
+      <span class="browser-dot yellow"></span>
+      <span class="browser-dot green"></span>
+      <div class="browser-url">
+        <span class="protocol">https://</span><span class="domain">dadhumor.app</span><span class="path">/blog/anatomy-of-a-dad-joke</span>
+      </div>
+    </div>
+
+    <div class="article-header">
+      <div class="article-logo">DAD<span class="yel-light">HUMOR.</span></div>
+      <div class="article-nav">
+        <a class="article-nav-link">App</a>
+        <a class="article-nav-link active">Articles</a>
+        <a class="article-nav-link">Shop</a>
+        <button class="theme-toggle" title="Toggle theme">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="article-container">
+
+      <div class="reading-progress"></div>
+
+      <div class="article-meta-row">
+        <span class="article-category-pill">📊 Data</span>
+        <span>By Stache</span>
+        <span class="dot-sep"></span>
+        <span>15 May 2026</span>
+        <span class="dot-sep"></span>
+        <span>6 min read</span>
+      </div>
+
+      <h1 class="article-title">
+        The Anatomy Of A <span class="highlight">Dad Joke.</span>
+      </h1>
+
+      <p class="article-deck">
+        We've analysed 50,000 user reactions across our entire joke catalogue. Here's the structural DNA of the perfect setup-and-punchline combo - and the formula that makes you groan against your will.
+      </p>
+
+      <div class="article-prose">
+        <p>
+          A dad joke is not just any bad joke. It's a specific, finely-tuned comedic mechanism that has evolved over decades of after-dinner deployment. Strip away the affection and the cringe, and you're left with a remarkably consistent structure.
+        </p>
+
+        <p>
+          We define a dad joke by three properties: <strong>brevity, predictability, and groan-factor</strong>. Get all three right and you've got a punchline that hits like a thrown slipper. Get one wrong and it's just a joke. Get two wrong and you're at an open mic night.
+        </p>
+
+        <h2>The setup-punchline ratio</h2>
+
+        <p>
+          The platonic dad joke is short. Of the top 100 most-Propped jokes on this site, 87% have setups under 12 words. The setup builds expectation; the punchline detonates it. Drag the setup out and you lose the rhythm. Consider:
+        </p>
+
+        <div class="embedded-joke">
+          <div class="embedded-joke-label">EMBEDDED JOKE</div>
+          <div class="embedded-joke-setup">Why don't eggs tell jokes?</div>
+          <div class="embedded-joke-punchline">They'd crack each other up.</div>
+          <div class="embedded-joke-cta">
+            <a href="#">Read on dadhumor.app →</a>
+          </div>
+        </div>
+
+        <p>
+          The setup is six words. The punchline is six words. That's not coincidence - it's structural balance. The punchline mirrors the setup's length but pivots its meaning. It's almost mathematical.
+        </p>
+
+        <div class="callout">
+          <div class="callout-label data">📊 The Data</div>
+          <div class="callout-text">
+            Our most-Propped joke ("They'd crack each other up.") has a setup-to-punchline word ratio of 1:1. The 10 next-best jokes average 1.2:1. Anything beyond 1.6:1 sees engagement drop by 40%.
+          </div>
+        </div>
+
+        <h2>The pun is everything</h2>
+
+        <p>
+          Of our top 50 jokes by Props, <strong>78% are pun-based</strong>. The remaining 22% are roughly split between wordplay and observational humour. Anti-humour - the deliberately disappointing punchline - underperforms on Props but over-performs on Groans, which is its own kind of victory.
+        </p>
+
+        <p>
+          The single highest-engagement joke on the platform isn't even one of the funniest. It's the one that earns the most violent eye-roll. That's the secret of the dad joke as a category: <span class="punchline-pill">groans count as engagement.</span>
+        </p>
+
+        <div class="callout">
+          <div class="callout-label tip">💡 Tip</div>
+          <div class="callout-text">
+            When writing your own dad jokes, prioritise the pun. If the punchline isn't a wordplay, it's not really a dad joke - it's just a short joke. There's a difference, and your audience will subconsciously feel it.
+          </div>
+        </div>
+
+      </div>
+
+      <!-- CTA at end of article -->
+      <div class="article-footer-cta">
+        <h3 class="article-footer-cta-title">Want to test these <span class="yel">theories?</span></h3>
+        <p class="article-footer-cta-desc">Stop reading. Start groaning. We've got 50+ jokes waiting.</p>
+        <a href="#" class="article-footer-cta-btn">Read jokes →</a>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ============================================
+     WHY THIS WORKS
+     ============================================ -->
+
+<div class="why-section">
+  <div class="why-card">
+    <h3>Why this hybrid works</h3>
+    <ul>
+      <li><span class="check">✓</span> <strong>Brand identity stays untouched.</strong> The joke app, share cards, mascot moments - all stay on the dark, cyber-yellow visual language people will associate with Dad Humor.</li>
+      <li><span class="check">✓</span> <strong>Articles get the right reading experience.</strong> Long-form prose IS easier on cream than midnight. Inter on cream at 17px / 1.75 line-height is genuinely comfortable.</li>
+      <li><span class="check">✓</span> <strong>Yellow still pops in light mode.</strong> The "yellow inside black pill" treatment becomes the brand's signature highlight - a visual hat tip to the dark app, used consistently for: punchlines, key takeaways, headline highlights, embedded jokes.</li>
+      <li><span class="check">✓</span> <strong>Embedded jokes use a dark card on light pages.</strong> When you embed a joke into an article, it appears in a midnight-coloured box - a small window into the app's visual world. Reinforces brand without disrupting reading flow.</li>
+      <li><span class="check">✓</span> <strong>Toggle only on articles, only optional.</strong> Users who want dark for articles can switch, but light is default. No theme toggle in the joke app at all.</li>
+      <li><span class="check">✓</span> <strong>Accessibility wins on both fronts.</strong> Dark app contrast is 17:1 on punchlines. Light articles contrast is 16:1 on body text. Everything passes WCAG AAA.</li>
+    </ul>
+  </div>
+
+  <div class="why-card" style="margin-top: 20px;">
+    <h3>Things this approach decides for you</h3>
+    <ul>
+      <li><span class="check">✓</span> <strong>Stache mascot:</strong> Keep PNG assets as-is (designed for dark). When Stache appears in articles, he's inside the embedded-joke dark cards. Problem solved.</li>
+      <li><span class="check">✓</span> <strong>Share cards:</strong> Always dark. No light variants needed. Father's Day, OG images, signage - all stay consistent.</li>
+      <li><span class="check">✓</span> <strong>Email lead magnet PDF:</strong> Could go either way. Recommend dark to feel like the brand artefact users expect.</li>
+      <li><span class="check">✓</span> <strong>WP plugin:</strong> Default dark, allow site owners to override to light. Best of both for distribution.</li>
+      <li><span class="cross">✗</span> Skipping: Full dual theme system on the joke app (would dilute the brand)</li>
+    </ul>
+  </div>
+</div>
+
+<div class="page-footer">
+  Dad Humor - Hybrid Theme Mockup (Option 2) · April 2026
+</div>
+
+</body>
+</html>

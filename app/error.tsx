@@ -18,17 +18,17 @@ export default function Error({ error, reset }: ErrorProps) {
       <Stache mood="groan" size="lg" priority />
 
       <div className="flex flex-col gap-3 max-w-sm">
-        <h1 className="font-display font-bold text-3xl text-white">
+        <h1 className="font-display font-bold text-3xl text-text">
           Oof. That one bombed.
         </h1>
-        <p className="font-body text-smoke">
+        <p className="font-body text-text-secondary">
           Something broke on our end. Try again?
         </p>
       </div>
 
       <button
         onClick={reset}
-        className="px-8 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-lg hover:bg-yellow/90 transition-colors"
+        className="px-8 py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-lg hover:bg-brand-yellow/90 transition-colors"
       >
         Try again →
       </button>

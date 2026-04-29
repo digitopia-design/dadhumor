@@ -76,7 +76,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
             onClick={onClose}
-            className="fixed inset-0 z-40 bg-midnight/80 backdrop-blur-sm"
+            className="fixed inset-0 z-40 bg-bg/80 backdrop-blur-sm"
           />
 
           {/* Drawer */}
@@ -85,22 +85,22 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
             animate={{ y: 0 }}
             exit={{ y: '100%' }}
             transition={{ type: 'spring', damping: 30, stiffness: 300 }}
-            className="fixed bottom-0 inset-x-0 z-50 flex flex-col gap-6 bg-charcoal border-t border-graphite rounded-t-3xl px-6 pt-6 pb-10"
+            className="fixed bottom-0 inset-x-0 z-50 flex flex-col gap-6 bg-bg-surface border-t border-bg-border rounded-t-3xl px-6 pt-6 pb-10"
           >
             {/* Handle */}
-            <div className="w-10 h-1 rounded-full bg-graphite mx-auto" />
+            <div className="w-10 h-1 rounded-full bg-bg-border mx-auto" />
 
-            <h3 className="font-display font-bold text-2xl text-white text-center">
+            <h3 className="font-display font-bold text-2xl text-text text-center">
               {campaignActive ? "Send it. He deserves this." : "Share this banger."}
             </h3>
 
             {/* Joke preview */}
-            <div className="bg-midnight border border-graphite rounded-2xl px-6 py-5 flex flex-col gap-3 text-center">
-              <p className="font-body text-smoke text-sm">{joke.setup}</p>
-              <p className="font-display font-bold text-yellow text-lg leading-tight">
+            <div className="bg-bg border border-bg-border rounded-2xl px-6 py-5 flex flex-col gap-3 text-center">
+              <p className="font-body text-text-secondary text-sm">{joke.setup}</p>
+              <p className="font-display font-bold text-brand-yellow text-lg leading-tight">
                 {joke.punchline}
               </p>
-              <p className="font-body text-smoke/50 text-xs">{url}</p>
+              <p className="font-body text-text-secondary/50 text-xs">{url}</p>
             </div>
 
             {/* Share buttons */}
@@ -109,7 +109,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
               {campaignActive && (
                 <button
                   onClick={handleSendToDad}
-                  className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-base hover:bg-yellow/90 transition-colors"
+                  className="w-full flex items-center justify-center gap-3 py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-base hover:bg-brand-yellow/90 transition-colors"
                 >
                   <span>👔</span>
                   Send to Dad
@@ -119,7 +119,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
               <div className="flex gap-3">
                 <button
                   onClick={handleCopy}
-                  className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-midnight border border-graphite hover:border-cyan hover:text-cyan text-smoke font-body text-sm transition-colors"
+                  className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-bg border border-bg-border hover:border-reaction-cyan hover:text-reaction-cyan text-text-secondary font-body text-sm transition-colors"
                 >
                   <span className="text-2xl">📋</span>
                   Copy link
@@ -127,7 +127,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
 
                 <button
                   onClick={handleWhatsApp}
-                  className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-midnight border border-graphite hover:border-lime hover:text-lime text-smoke font-body text-sm transition-colors"
+                  className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-bg border border-bg-border hover:border-reaction-lime hover:text-reaction-lime text-text-secondary font-body text-sm transition-colors"
                 >
                   <span className="text-2xl">💬</span>
                   WhatsApp
@@ -136,7 +136,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
                 {hasNativeShare && (
                   <button
                     onClick={handleNativeShare}
-                    className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-midnight border border-graphite hover:border-yellow hover:text-yellow text-smoke font-body text-sm transition-colors"
+                    className="flex-1 flex flex-col items-center gap-2 py-4 rounded-2xl bg-bg border border-bg-border hover:border-brand-yellow hover:text-brand-yellow text-text-secondary font-body text-sm transition-colors"
                   >
                     <span className="text-2xl">↑</span>
                     Share
@@ -144,7 +144,7 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
                 )}
               </div>
 
-              <p className="font-body text-smoke/40 text-xs text-center">
+              <p className="font-body text-text-secondary/40 text-xs text-center">
                 Story and image cards coming soon.
               </p>
             </div>
@@ -152,8 +152,8 @@ export function ShareSheet({ joke, isOpen, onClose }: ShareSheetProps) {
             <button
               onClick={onClose}
               className={cn(
-                'w-full py-4 rounded-2xl border border-graphite',
-                'font-body font-bold text-smoke hover:text-white transition-colors'
+                'w-full py-4 rounded-2xl border border-bg-border',
+                'font-body font-bold text-text-secondary hover:text-text transition-colors'
               )}
             >
               Cancel

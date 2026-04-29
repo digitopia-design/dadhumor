@@ -22,8 +22,8 @@ export function DadModeToggle({ isDadMode, onToggle, campaignActive }: DadModeTo
         className={cn(
           'flex items-center gap-1.5 px-3 py-1.5 rounded-full border font-body text-xs font-bold uppercase tracking-widest transition-colors',
           isDadMode
-            ? 'bg-yellow text-midnight border-yellow'
-            : 'bg-transparent text-smoke border-graphite hover:border-yellow hover:text-yellow'
+            ? 'bg-brand-yellow text-midnight border-brand-yellow'
+            : 'bg-transparent text-text-secondary border-bg-border hover:border-brand-yellow hover:text-brand-yellow'
         )}
       >
         <span>👔</span>

@@ -120,7 +120,7 @@ export function DadQuiz() {
       {/* Nav */}
       <nav className="w-full max-w-2xl flex items-center justify-between px-6 py-8">
         <Logo className="text-xl" />
-        <Link href="/" className="font-body text-smoke text-sm hover:text-white transition-colors">
+        <Link href="/" className="font-body text-text-secondary text-sm hover:text-text transition-colors">
           All jokes →
         </Link>
       </nav>
@@ -130,28 +130,28 @@ export function DadQuiz() {
 
           {/* Header */}
           <div className="flex flex-col items-center gap-2 text-center">
-            <p className="font-body text-smoke text-sm uppercase tracking-widest">
+            <p className="font-body text-text-secondary text-sm uppercase tracking-widest">
               The dad joke damage test
             </p>
             <h1
-              className="font-display font-bold text-3xl md:text-4xl text-white"
+              className="font-display font-bold text-3xl md:text-4xl text-text"
               style={{ letterSpacing: '-0.02em' }}
             >
               How many did your dad<br />
-              <span className="text-yellow">already tell you?</span>
+              <span className="text-brand-yellow">already tell you?</span>
             </h1>
           </div>
 
           {/* Progress bar */}
           <div className="w-full flex flex-col gap-2">
-            <div className="w-full h-1.5 bg-graphite rounded-full overflow-hidden">
+            <div className="w-full h-1.5 bg-bg-border rounded-full overflow-hidden">
               <motion.div
-                className="h-full bg-yellow rounded-full"
+                className="h-full bg-brand-yellow rounded-full"
                 animate={{ width: `${progress}%` }}
                 transition={{ duration: 0.3 }}
               />
             </div>
-            <p className="font-body text-smoke/60 text-xs text-right">
+            <p className="font-body text-text-secondary/60 text-xs text-right">
               {index + 1} of {QUIZ_JOKES.length}
             </p>
           </div>
@@ -165,14 +165,14 @@ export function DadQuiz() {
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: direction * -40 }}
                 transition={{ duration: 0.2 }}
-                className="w-full bg-charcoal border border-graphite rounded-3xl px-8 py-10 flex flex-col gap-5 text-center"
+                className="w-full bg-bg-surface border border-bg-border rounded-3xl px-8 py-10 flex flex-col gap-5 text-center"
               >
-                <p className="font-body text-smoke text-lg leading-relaxed">
+                <p className="font-body text-text-secondary text-lg leading-relaxed">
                   {joke.setup}
                 </p>
-                <div className="h-px bg-graphite mx-auto w-12" />
+                <div className="h-px bg-bg-border mx-auto w-12" />
                 <p
-                  className="font-display font-bold text-yellow text-2xl md:text-3xl leading-tight"
+                  className="font-display font-bold text-brand-yellow text-2xl md:text-3xl leading-tight"
                   style={{ letterSpacing: '-0.02em' }}
                 >
                   {joke.punchline}
@@ -185,21 +185,21 @@ export function DadQuiz() {
           <div className="flex gap-4 w-full">
             <button
               onClick={() => answer(false)}
-              className="flex-1 flex flex-col items-center gap-1.5 py-5 rounded-2xl bg-charcoal border border-graphite hover:border-smoke text-smoke hover:text-white font-body font-bold text-base transition-colors"
+              className="flex-1 flex flex-col items-center gap-1.5 py-5 rounded-2xl bg-bg-surface border border-bg-border hover:border-smoke text-text-secondary hover:text-text font-body font-bold text-base transition-colors"
             >
               <span className="text-2xl">😐</span>
               Never heard it
             </button>
             <button
               onClick={() => answer(true)}
-              className="flex-1 flex flex-col items-center gap-1.5 py-5 rounded-2xl bg-yellow text-midnight hover:bg-yellow/90 font-body font-bold text-base transition-colors"
+              className="flex-1 flex flex-col items-center gap-1.5 py-5 rounded-2xl bg-brand-yellow text-midnight hover:bg-brand-yellow/90 font-body font-bold text-base transition-colors"
             >
               <span className="text-2xl">😬</span>
               Heard it
             </button>
           </div>
 
-          <p className="font-body text-smoke/40 text-xs text-center pb-8">
+          <p className="font-body text-text-secondary/40 text-xs text-center pb-8">
             Be honest. Your dad isn't watching. Probably.
           </p>
         </div>
@@ -217,27 +217,27 @@ export function DadQuiz() {
           {/* Score */}
           <div className="flex items-baseline gap-2">
             <span
-              className="font-display font-bold text-yellow"
+              className="font-display font-bold text-brand-yellow"
               style={{ fontSize: '80px', lineHeight: 1, letterSpacing: '-0.04em' }}
             >
               {score}
             </span>
-            <span className="font-body text-smoke text-xl">/ 10</span>
+            <span className="font-body text-text-secondary text-xl">/ 10</span>
           </div>
 
           {/* Result card */}
-          <div className="w-full bg-charcoal border border-yellow/30 rounded-3xl px-8 py-8 flex flex-col gap-4">
-            <p className="font-body text-yellow text-sm uppercase tracking-widest">
+          <div className="w-full bg-bg-surface border border-brand-yellow/30 rounded-3xl px-8 py-8 flex flex-col gap-4">
+            <p className="font-body text-brand-yellow text-sm uppercase tracking-widest">
               Your verdict
             </p>
             <p
-              className="font-display font-bold text-white text-2xl md:text-3xl leading-tight"
+              className="font-display font-bold text-text text-2xl md:text-3xl leading-tight"
               style={{ letterSpacing: '-0.02em' }}
             >
               {result.badge}
             </p>
-            <div className="h-px bg-graphite" />
-            <p className="font-body text-smoke text-base leading-relaxed">
+            <div className="h-px bg-bg-border" />
+            <p className="font-body text-text-secondary text-base leading-relaxed">
               {result.title} {result.description}
             </p>
           </div>
@@ -246,7 +246,7 @@ export function DadQuiz() {
           <div className="flex flex-col gap-3 w-full">
             <button
               onClick={handleShare}
-              className="w-full py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-base hover:bg-yellow/90 transition-colors"
+              className="w-full py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-base hover:bg-brand-yellow/90 transition-colors"
             >
               Share your result →
             </button>
@@ -255,7 +255,7 @@ export function DadQuiz() {
               href={WHATSAPP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="w-full py-4 rounded-2xl border border-graphite text-smoke font-body font-bold text-base hover:border-lime hover:text-lime transition-colors"
+              className="w-full py-4 rounded-2xl border border-bg-border text-text-secondary font-body font-bold text-base hover:border-reaction-lime hover:text-reaction-lime transition-colors"
             >
               💬 Challenge your dad
             </a>
@@ -263,20 +263,20 @@ export function DadQuiz() {
             <div className="flex gap-3">
               <button
                 onClick={restart}
-                className="flex-1 py-3 rounded-2xl border border-graphite text-smoke font-body text-sm hover:border-smoke hover:text-white transition-colors"
+                className="flex-1 py-3 rounded-2xl border border-bg-border text-text-secondary font-body text-sm hover:border-smoke hover:text-text transition-colors"
               >
                 Try again
               </button>
               <Link
                 href="/"
-                className="flex-1 py-3 rounded-2xl border border-graphite text-smoke font-body text-sm hover:border-smoke hover:text-white transition-colors text-center"
+                className="flex-1 py-3 rounded-2xl border border-bg-border text-text-secondary font-body text-sm hover:border-smoke hover:text-text transition-colors text-center"
               >
                 More jokes →
               </Link>
             </div>
           </div>
 
-          <p className="font-body text-smoke/40 text-xs pb-8">
+          <p className="font-body text-text-secondary/40 text-xs pb-8">
             Results accurate to ±1 traumatised childhood.
           </p>
         </motion.div>

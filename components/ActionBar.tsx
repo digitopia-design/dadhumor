@@ -72,14 +72,14 @@ export function ActionBar({
         disabled={hasProps}
         className={cn(
           'relative flex-1 py-4 rounded-2xl border font-body font-bold text-sm transition-colors overflow-hidden',
-          hasGroaned && 'bg-pink/20 border-pink text-pink',
-          hasProps && 'border-graphite text-smoke/30 cursor-not-allowed',
-          !hasGroaned && !hasProps && 'bg-charcoal border-graphite text-smoke hover:border-pink hover:text-pink cursor-pointer'
+          hasGroaned && 'bg-reaction-pink/20 border-reaction-pink text-reaction-pink',
+          hasProps && 'border-bg-border text-text-secondary/30 cursor-not-allowed',
+          !hasGroaned && !hasProps && 'bg-bg-surface border-bg-border text-text-secondary hover:border-reaction-pink hover:text-reaction-pink cursor-pointer'
         )}
       >
         {groanProgress > 0 && (
           <span
-            className="absolute inset-0 bg-pink/20 origin-left transition-none"
+            className="absolute inset-0 bg-reaction-pink/20 origin-left transition-none"
             style={{ transform: `scaleX(${groanProgress})` }}
           />
         )}
@@ -96,9 +96,9 @@ export function ActionBar({
         disabled={hasGroaned}
         className={cn(
           'flex-1 py-4 rounded-2xl border font-body font-bold text-sm transition-colors',
-          hasProps && 'bg-lime/20 border-lime text-lime',
-          hasGroaned && 'border-graphite text-smoke/30 cursor-not-allowed',
-          !hasProps && !hasGroaned && 'bg-charcoal border-graphite text-smoke hover:border-lime hover:text-lime cursor-pointer'
+          hasProps && 'bg-reaction-lime/20 border-reaction-lime text-reaction-lime',
+          hasGroaned && 'border-bg-border text-text-secondary/30 cursor-not-allowed',
+          !hasProps && !hasGroaned && 'bg-bg-surface border-bg-border text-text-secondary hover:border-reaction-lime hover:text-reaction-lime cursor-pointer'
         )}
       >
         🤝 Props
@@ -109,8 +109,8 @@ export function ActionBar({
         className={cn(
           'px-4 py-4 rounded-2xl border font-body font-bold text-base transition-colors',
           isStashed
-            ? 'bg-yellow/20 border-yellow text-yellow'
-            : 'bg-charcoal border-graphite text-smoke hover:border-yellow hover:text-yellow'
+            ? 'bg-brand-yellow/20 border-brand-yellow text-brand-yellow'
+            : 'bg-bg-surface border-bg-border text-text-secondary hover:border-brand-yellow hover:text-brand-yellow'
         )}
         aria-label={isStashed ? 'Unstash joke' : 'Stash joke'}
       >
@@ -119,7 +119,7 @@ export function ActionBar({
 
       <button
         onClick={() => { haptic.light(); onShare(); }}
-        className="px-4 py-4 rounded-2xl border border-graphite bg-charcoal text-smoke hover:border-cyan hover:text-cyan font-body font-bold text-base transition-colors"
+        className="px-4 py-4 rounded-2xl border border-bg-border bg-bg-surface text-text-secondary hover:border-reaction-cyan hover:text-reaction-cyan font-body font-bold text-base transition-colors"
         aria-label="Share joke"
       >
         ↑
@@ -127,7 +127,7 @@ export function ActionBar({
 
       <button
         onClick={() => { haptic.light(); onNext(); }}
-        className="flex-1 py-4 rounded-2xl bg-yellow hover:bg-yellow/90 text-midnight font-body font-bold text-base transition-colors shadow-[0_0_15px_rgba(227,255,0,0.25)]"
+        className="flex-1 py-4 rounded-2xl bg-brand-yellow hover:bg-brand-yellow/90 text-midnight font-body font-bold text-base transition-colors shadow-[0_0_15px_rgba(227,255,0,0.25)]"
       >
         Next →
       </button>

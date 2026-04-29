@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, Space_Grotesk } from "next/font/google";
-import localFont from "next/font/local";
+import { Inter, Outfit } from "next/font/google";
 import Script from "next/script";
 import { Analytics } from "@vercel/analytics/react";
 import { CookieBanner } from "@/components/CookieBanner";
@@ -10,17 +9,14 @@ import "./globals.css";
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
 });
 
-const spaceGrotesk = Space_Grotesk({
-  variable: "--font-space-grotesk",
+const outfit = Outfit({
+  variable: "--font-outfit",
   subsets: ["latin"],
-});
-
-const clashDisplay = localFont({
-  src: "../public/fonts/ClashDisplay-Bold.woff2",
-  variable: "--font-clash-display",
-  weight: "700",
+  weight: ["400", "500", "600", "700", "800"],
   display: "swap",
 });
 
@@ -79,9 +75,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${inter.variable} ${spaceGrotesk.variable} ${clashDisplay.variable} h-full antialiased`}
+      className={`${inter.variable} ${outfit.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col bg-midnight font-body text-white" suppressHydrationWarning>
+      <body className="min-h-full flex flex-col bg-bg font-body text-text" suppressHydrationWarning>
         {children}
         <CookieBanner />
         <Analytics />

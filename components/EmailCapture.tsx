@@ -34,10 +34,10 @@ export function EmailCapture() {
   if (state === 'success') {
     return (
       <div className="flex flex-col items-center gap-3 text-center">
-        <p className="font-display font-bold text-2xl text-yellow">
+        <p className="font-display font-bold text-2xl text-brand-yellow">
           Check your inbox.
         </p>
-        <p className="font-body text-smoke">
+        <p className="font-body text-text-secondary">
           20 fresh groans, incoming. He'll never see them coming.
         </p>
       </div>
@@ -53,20 +53,20 @@ export function EmailCapture() {
         onChange={e => setEmail(e.target.value)}
         placeholder="your@email.com"
         className={cn(
-          'flex-1 px-4 py-3 rounded-xl bg-charcoal border font-body text-white placeholder:text-smoke/50',
-          'focus:outline-none focus:border-yellow transition-colors',
-          state === 'error' ? 'border-red' : 'border-graphite'
+          'flex-1 px-4 py-3 rounded-xl bg-bg-surface border font-body text-text placeholder:text-text-secondary/50',
+          'focus:outline-none focus:border-brand-yellow transition-colors',
+          state === 'error' ? 'border-reaction-red' : 'border-bg-border'
         )}
       />
       <button
         type="submit"
         disabled={state === 'loading'}
-        className="px-6 py-3 rounded-xl bg-yellow text-midnight font-body font-bold hover:bg-yellow/90 transition-colors disabled:opacity-50 shrink-0"
+        className="px-6 py-3 rounded-xl bg-brand-yellow text-midnight font-body font-bold hover:bg-brand-yellow/90 transition-colors disabled:opacity-50 shrink-0"
       >
         {state === 'loading' ? 'Sending…' : 'Send me the jokes'}
       </button>
       {state === 'error' && (
-        <p className="text-red font-body text-sm w-full">
+        <p className="text-reaction-red font-body text-sm w-full">
           Oof. Something went wrong. Try again?
         </p>
       )}

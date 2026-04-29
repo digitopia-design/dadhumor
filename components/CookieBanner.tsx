@@ -32,27 +32,27 @@ export function CookieBanner() {
       <div
         className={cn(
           'pointer-events-auto mx-auto max-w-xl',
-          'bg-charcoal border border-graphite rounded-2xl px-5 py-4',
+          'bg-bg-surface border border-bg-border rounded-2xl px-5 py-4',
           'flex flex-col sm:flex-row items-start sm:items-center gap-4'
         )}
       >
-        <p className="font-body text-smoke text-sm flex-1">
+        <p className="font-body text-text-secondary text-sm flex-1">
           We use cookies — nothing weird, just analytics to know which jokes
           land hardest.{' '}
-          <Link href="/privacy" className="text-cyan underline underline-offset-2 hover:text-cyan/80">
+          <Link href="/privacy" className="text-reaction-cyan underline underline-offset-2 hover:text-reaction-cyan/80">
             Privacy policy
           </Link>
         </p>
         <div className="flex gap-2 shrink-0">
           <button
             onClick={essential}
-            className="px-4 py-2 rounded-xl border border-graphite font-body text-smoke text-sm hover:text-white transition-colors"
+            className="px-4 py-2 rounded-xl border border-bg-border font-body text-text-secondary text-sm hover:text-text transition-colors"
           >
             Essential only
           </button>
           <button
             onClick={accept}
-            className="px-4 py-2 rounded-xl bg-yellow text-midnight font-body font-bold text-sm hover:bg-yellow/90 transition-colors"
+            className="px-4 py-2 rounded-xl bg-brand-yellow text-midnight font-body font-bold text-sm hover:bg-brand-yellow/90 transition-colors"
           >
             Accept all
           </button>

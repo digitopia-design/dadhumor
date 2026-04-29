@@ -2,7 +2,7 @@
 
 **Project:** dadhumor.app
 **Owner:** Digitopia Design Ltd
-**Document version:** 1.1
+**Document version:** 1.3
 **Last updated:** April 2026
 **Status:** MVP live, ready for Phase 2 (Technical Foundation)
 
@@ -62,32 +62,114 @@ To be added:
 
 Full brand guidelines are in `DadHumor_Brand_Guidelines_v1.0.pdf` (shared separately). Key tokens:
 
-### Colours
+### Page Context Rules
+
+The site uses two distinct visual contexts. The decision is behavioural, not structural.
+
+**Brand Context (always dark, no toggle)**
+Used for joke delivery, share artefacts, and visual brand moments. Punchy, scrolling, sharing.
+- `/` - Main joke experience
+- `/j/[slug]` - Individual joke permalinks
+- `/fathers-day` - Campaign landing
+- `/widget/signage` - Digital signage
+- `/generate` - AI joke generator (Phase 5.5)
+- `/leaderboard` - Battle mode (Phase 5)
+- `/shop` - Product showcase
+- API responses, OG image renders, share cards
+
+**Reading Context (light default, dark toggle available)**
+Used anywhere the user is consuming text for more than 30 seconds. Sustained reading.
+- `/about`, `/privacy`, `/terms`, `/contact`, `/colophon`
+- `/blog` - Article listing
+- `/blog/[slug]` - Individual articles
+
+**Decision rule for any new page:** Ask "is this a brand performance or a reading experience?"
+- Performance = dark (no toggle)
+- Reading = light default, dark toggle available
+- When unsure, default to light with toggle
+
+**Site shell stays consistent across both contexts.** Same logo treatment, same nav structure, same footer pattern. Only the page body content area changes context. Brand recognition stays intact.
+
+### Colours - Brand Context (Dark)
+
 ```css
---midnight: #121212;   /* Primary background */
---charcoal: #1A1A1A;   /* Surfaces, secondary buttons */
---graphite: #333333;   /* Borders */
---yellow:   #E3FF00;   /* Primary CTAs, punchlines */
---pink:     #FF2E93;   /* Groan button, negative reactions */
---cyan:     #00E0FF;   /* Share, secondary CTAs */
---lime:     #7CFF6B;   /* Props (positive reactions), success */
---red:      #FF4D4D;   /* Errors (with humour) */
---white:    #FFFFFF;   /* Primary text */
---smoke:    #A0A0A0;   /* Muted text */
+/* Backgrounds */
+--bg-primary:    #121212;   /* Midnight - primary background */
+--bg-surface:    #1A1A1A;   /* Charcoal - surfaces, cards */
+--bg-elevated:   #242424;   /* Surface plus - elevated surface */
+--bg-border:     #333333;   /* Graphite - borders */
+
+/* Text */
+--text-primary:   #FFFFFF;
+--text-secondary: rgba(255, 255, 255, 0.7);   /* Replaces "Smoke" for text */
+--text-tertiary:  rgba(255, 255, 255, 0.45);  /* Disabled, subtle */
+
+/* Brand */
+--brand-yellow:        #E3FF00;
+--brand-yellow-hover:  #C9E600;
+
+/* Reactions (refined for AA pass) */
+--lime: #7CFF6B;     /* Props - unchanged */
+--pink: #FF4DA6;     /* Groan - lightened from #FF2E93 for AA */
+--cyan: #00E0FF;     /* Share - unchanged */
+--red:  #FF6B6B;     /* Error - lightened from #FF4D4D for AA */
+
+/* Decorative only - not for text */
+--smoke: #A0A0A0;
 ```
 
+### Colours - Reading Context (Light)
+
+Used only on Reading Context pages. Warm, off-white tones - not pure white.
+
+```css
+/* Backgrounds */
+--bg-primary:    #FAF8F2;   /* Cream - primary background */
+--bg-surface:    #F4F1E8;   /* Paper - surfaces */
+--bg-elevated:   #ECE8DA;   /* Surface plus - elevated */
+--bg-border:     #DDD7C5;   /* Soft line - borders */
+
+/* Text */
+--text-primary:   #1A1A1A;
+--text-secondary: rgba(26, 26, 26, 0.7);
+--text-tertiary:  rgba(26, 26, 26, 0.5);
+
+/* Brand - cyber yellow stays the brand colour but used differently */
+--brand-yellow:  #E3FF00;   /* Same hex - context-dependent usage (see below) */
+
+/* Reactions - deeper, accessible versions for cream backgrounds */
+--lime: #2D8C1F;     /* Props - deep green */
+--pink: #C2185B;     /* Groan - deep pink */
+--cyan: #007A99;     /* Share - teal */
+--red:  #C62828;     /* Error - classic red */
+```
+
+### Yellow In Light Mode - The "Pill" Treatment
+
+Cyber Yellow on cream fails accessibility (1.1:1 contrast). The fix: yellow is wrapped in dark pills/blocks for any meaningful usage. This becomes a signature visual move.
+
+**Patterns:**
+- Logo wordmark: "HUMOR." appears as yellow text inside a dark pill
+- Article title highlights: keywords get yellow background highlight on dark text
+- Inline punchline emphasis: dark pill with yellow text
+- Embedded joke cards: full dark midnight card embedded inside light article body
+- CTAs: dark button with yellow text, OR yellow button with dark text (always high contrast)
+
+This treatment maintains brand recognition while solving the contrast problem.
+
 ### Typography
-- **Display:** Clash Display (Fontshare) - headings, punchlines, wordmark
-- **Fallback:** Space Grotesk (Google Fonts, free)
-- **Body:** Inter (Google Fonts)
+- **Display:** Outfit (Google Fonts) - headings, punchlines, wordmark, weights 600-800
+- **Body:** Inter (Google Fonts) - body text, setups, UI, weights 400-700
+
+Both loaded via `next/font/google`. No local font files needed. Outfit replaced Clash Display/Space Grotesk after brand review (v1.3).
 
 ### Joke Card Type Rules
-**Critical hierarchy: Punchline must be ~1.5x larger than setup. Same size = no comedic timing.**
+**Critical hierarchy: Setup uses body font (Inter), punchline uses display font (Outfit). Two different "voices" mirroring how comedians actually deliver setup vs punchline.**
 
-| Element | Mobile | Desktop | Weight | Colour | Notes |
+| Element | Font | Mobile | Desktop | Weight | Colour |
 |---|---|---|---|---|---|
-| Setup | 24px | 36px | 600 (Semibold) | Smoke (#A0A0A0) | Muted to push focus to punchline |
-| Punchline | 36px | 56px | 700 (Bold) | Cyber Yellow (#E3FF00) | The hero |
+| Setup | Inter | 22px | 32px | 400 (Regular) | white at 90% opacity |
+| Punchline | Outfit | 38px | 60px | 700 (Bold) | Cyber Yellow |
 
 **Dynamic sizing (length-aware):**
 - Long setup (>40 chars): 20px / 28px
@@ -95,11 +177,16 @@ Full brand guidelines are in `DadHumor_Brand_Guidelines_v1.0.pdf` (shared separa
 - Long punchline (>60 chars): 28px / 44px
 
 **Other rules:**
-- Letter spacing: tracking-tight (-0.02em) on both
-- Line height: leading-tight (1.2) on setup, leading-none (1.0) on punchline
+- Letter spacing: -0.01em on setup, -0.02em on punchline
+- Line height: 1.35 on setup, 1.1 on punchline
 - Gap between: 32px mobile, 40px desktop (the "comedic pause")
 - Setup never animates - it's been there since load
 - Punchline animates in with 100ms delay (the comedic beat)
+
+**Why this works:**
+- Setup feels conversational (Inter Regular), punchline lands hard (Outfit Bold)
+- Two-axis hierarchy (font family + weight + size) creates clearer comedic timing
+- White at 90% gives 17:1 contrast - WCAG AAA, no accessibility worry
 
 ### Wordmark
 Stacked two-line lockup:
@@ -107,10 +194,17 @@ Stacked two-line lockup:
 DAD
 HUMOR.
 ```
-"DAD" in white, "HUMOR." in Cyber Yellow. The full stop is part of the brand - always include it.
+- Font: **Outfit ExtraBold (800)**
+- Letter spacing: -0.04em
+- Line height: 0.9 (tight stack)
+- "DAD" in primary text colour, "HUMOR." in Cyber Yellow on dark contexts
+- On light contexts: "DAD" in dark text, "HUMOR." appears as yellow text inside a dark pill (the pill treatment)
+- The full stop is part of the brand - always include it
 
 ### Mascot - Stache
 Chunky cartoon handlebar moustache with expressive eyes above. No face - he IS the face. 9 expression states generated (smug, anticipation, laughing, groan, mind_blown, wink, sleep, pointing, shrug). Assets available as high-res PNGs.
+
+**Cross-context note:** Stache assets were designed for dark backgrounds. In Reading Context (light pages), Stache always appears INSIDE dark embedded-joke cards or dark pill treatments - never directly on cream. This solves the cross-context contrast problem without regenerating any assets.
 
 ### Voice
 "Your funniest uncle at 11pm - loud, self-aware, unembarrassed, a little too online."
@@ -330,6 +424,17 @@ Time-bound campaign for UK Father's Day (21 June 2026). See `fathers-day-campaig
 - Father's Day-specific microcopy across the app
 - Free downloadable Father's Day cards
 - Post-day: "How many of these did your dad tell you?" interactive quiz
+
+### Phase 4.6: Articles / Content System - NEW
+MDX-powered article system for SEO content, data stories, guides, and legal pages.
+- File-based: articles live in `/content/articles/` as `.mdx` files (no external CMS)
+- Custom MDX components: `<JokeEmbed>`, `<StacheReact>`, `<Callout>`, `<GroanLeaderboard>`, `<DadJokeQuiz>`
+- Routes: `/blog`, `/blog/[slug]`, `/[slug]` for static pages
+- Per-article OG image generation via `@vercel/og`
+- RSS feed at `/feed.xml`
+- Initial 5-7 articles at launch
+- Static pages: about, privacy, terms
+- Foundation for Phase 8 press/data marketing
 
 ### Phase 5: v2 Features (post-launch, prioritised)
 1. **Joke Battle Mode** (head-to-head voting, Elo rankings) - virality engine

@@ -10,8 +10,8 @@ export function Logo({ className }: LogoProps) {
       className={cn('font-display font-bold uppercase leading-none', className)}
       style={{ letterSpacing: '-0.04em', lineHeight: 0.85 }}
     >
-      <div className="text-white">DAD</div>
-      <div className="text-yellow">HUMOR.</div>
+      <div className="text-text">DAD</div>
+      <div className="text-brand-yellow">HUMOR.</div>
     </div>
   );
 }

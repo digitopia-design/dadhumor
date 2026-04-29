@@ -2,7 +2,7 @@
 
 This file gives Claude context about the Dad Humor project. Claude reads this automatically at the start of every session. Keep it current.
 
-**Document version:** 1.1
+**Document version:** 1.3
 
 ---
 
@@ -14,6 +14,7 @@ This file gives Claude context about the Dad Humor project. Claude reads this au
 **Stage:** MVP live, rebuilding for v1 launch
 **Current phase:** Phase 2 - Technical Foundation
 **Sister brand:** Bantered (POD/Shopify, owned by same parent) - merch integration planned for Phase 6
+**Content system:** MDX-based articles in Phase 4.6 (no external CMS)
 
 ---
 
@@ -43,30 +44,95 @@ If any of those files are missing, stop and ask the user where they are.
 
 ---
 
+## Page Context Rules (CRITICAL - read this carefully)
+
+The site uses a dual-context theme system. **The decision is behavioural, not structural.**
+
+### Brand Context (always dark, no toggle)
+Punchy, scrolling, sharing. Joke delivery and visual brand moments.
+- `/` - Main joke experience
+- `/j/[slug]` - Individual joke permalinks
+- `/fathers-day` - Campaign landing
+- `/widget/signage` - Digital signage
+- `/generate` - AI joke generator
+- `/leaderboard` - Battle mode (Phase 5)
+- `/shop` - Product showcase
+- API responses, OG image renders, share cards
+
+### Reading Context (light default, dark toggle available)
+Sustained reading. Articles, legal, about, etc.
+- `/about`, `/privacy`, `/terms`, `/contact`, `/colophon`
+- `/blog` - Article listing
+- `/blog/[slug]` - Individual articles
+
+### Decision rule for any new page:
+Ask "is this a brand performance or a reading experience?"
+- Performance = dark (no toggle)
+- Reading = light default, dark toggle available
+- When unsure, default to light with toggle
+
+**Site shell stays consistent across both contexts.** Same logo, same nav, same footer pattern. Only the body content area changes context.
+
+---
+
 ## Brand Tokens (Use These, No Hardcoded Values)
 
-### Colours (Tailwind class → hex)
-- `bg-midnight` / `#121212` - primary background
-- `bg-charcoal` / `#1A1A1A` - surfaces
-- `border-graphite` / `#333333` - borders
-- `text-yellow` / `#E3FF00` - primary CTAs, punchlines
-- `text-pink` / `#FF2E93` - Groan reactions
-- `text-cyan` / `#00E0FF` - Share actions
-- `text-lime` / `#7CFF6B` - Props reactions, success
-- `text-red` / `#FF4D4D` - errors (with humour)
-- `text-white` / `#FFFFFF` - body text
-- `text-smoke` / `#A0A0A0` - muted text
+### Context-aware tokens (preferred)
+
+These swap automatically based on `data-theme` attribute:
+
+```
+bg-bg               -- primary background
+bg-bg-surface       -- surfaces, cards
+bg-bg-elevated      -- elevated surfaces
+border-bg-border    -- borders
+
+text-text           -- primary text
+text-text-secondary -- muted text (replaces "smoke")
+text-text-tertiary  -- disabled, very subtle
+text-text-inverse   -- text on opposite-context backgrounds
+
+text-brand-yellow   -- the iconic yellow
+bg-brand-yellow     -- yellow as background
+
+text-reaction-lime  -- Props
+text-reaction-pink  -- Groan
+text-reaction-cyan  -- Share
+text-reaction-red   -- Errors
+```
+
+### Direct brand colours (use when context-independent)
+
+For things that NEVER change theme (share cards, OG images, etc.):
+```
+bg-midnight    /* #121212 */
+bg-charcoal    /* #1A1A1A */
+bg-cream       /* #FAF8F2 */
+bg-paper       /* #F4F1E8 */
+text-yellow    /* #E3FF00 */
+```
 
 ### Fonts
-- `font-display` - Clash Display (or Space Grotesk fallback) - headings, punchlines
-- `font-body` - Inter - everything else
+- `font-display` - Outfit - headings, punchlines, wordmark (weights 600-800)
+- `font-body` - Inter - body text, setups, UI (weights 400-700)
+
+### Yellow on light backgrounds - the "pill treatment"
+Cyber Yellow on cream fails accessibility (1.1:1). The fix: yellow always appears INSIDE a dark pill/block on light pages. Patterns:
+- Logo: "HUMOR." appears as yellow text inside a dark pill
+- Title highlights: yellow background highlight on dark text
+- Inline emphasis: dark pill with yellow text
+- Embedded jokes: full midnight card embedded inside light article body
+- CTAs: dark button with yellow text
+
+This becomes a signature visual move - it actually strengthens brand recognition.
 
 ### Never
-- Use light mode (dark mode is intentional brand)
-- Hardcode colours - always use tokens
+- Use light mode on Brand Context pages (joke app, etc.)
+- Use cyber yellow as text directly on cream backgrounds (always wrap in dark pill)
+- Hardcode hex colours - always use tokens
 - Use emoji as decorative crutch (one or two, surgically placed)
 - Apologise for jokes being bad (that's the point)
-- Write corporate-friendly microcopy (write like a person)
+- Write corporate-friendly microcopy
 
 ---
 
@@ -187,6 +253,7 @@ Every gesture has a button equivalent. Users can learn either way.
 ## What's For Phases 4.5-8 (Post-Launch, Time-bound or Strategic)
 
 🟡 Phase 4.5 - Father's Day campaign (June 2026)
+🟡 Phase 4.6 - Articles / content system (MDX-based, lightweight)
 🟡 Phase 5 - Battle mode, collections, streaks, Send-a-Joke, user submissions
 🟡 Phase 5.5 - AI joke generator
 🟡 Phase 6 - Bantered merchandise integration
@@ -195,7 +262,7 @@ Every gesture has a button equivalent. Users can learn either way.
 
 ## What's NOT In Scope At All
 
-❌ Light mode (never - it's brand)
+❌ Light mode on Brand Context pages (joke app stays dark forever - see Page Context Rules above)
 ❌ NFTs/blockchain
 ❌ SMS subscription
 ❌ AI-generated imagery per joke (different from AI joke text generator)
@@ -203,6 +270,8 @@ Every gesture has a button equivalent. Users can learn either way.
 ❌ Following / social graph
 
 These are explicitly out. Don't scope-creep into them.
+
+**Note on light mode:** As of v1.3, light mode IS permitted on Reading Context pages (articles, legal, about). It's NOT permitted on Brand Context pages (joke app, share cards, etc.). Read the Page Context Rules section above for the full picture.
 
 ---
 

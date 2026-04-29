@@ -86,11 +86,11 @@ export default function SignagePage() {
   const stacheMood = phase === 'punchline' ? 'laughing' : 'anticipation';
 
   return (
-    <div className="fixed inset-0 bg-midnight flex flex-col select-none overflow-hidden">
+    <div className="fixed inset-0 bg-bg flex flex-col select-none overflow-hidden">
       {/* Header */}
       <div className="flex items-center justify-between px-16 pt-12 pb-0">
         <Logo className="text-3xl" />
-        <span className="font-body text-smoke/40 text-base uppercase tracking-[0.25em]">
+        <span className="font-body text-text-secondary/40 text-base uppercase tracking-[0.25em]">
           dadhumor.app
         </span>
       </div>
@@ -110,7 +110,7 @@ export default function SignagePage() {
               className="flex flex-col items-center text-center gap-12 max-w-6xl"
             >
               <h1
-                className="font-display font-semibold text-smoke leading-tight"
+                className="font-display font-semibold text-text-secondary leading-tight"
                 style={{ fontSize: '4.5rem', letterSpacing: '-0.02em' }}
               >
                 {joke.setup}
@@ -123,7 +123,7 @@ export default function SignagePage() {
                     initial={{ opacity: 0, scale: 0.96, y: 12 }}
                     animate={{ opacity: 1, scale: 1, y: 0 }}
                     transition={{ duration: 0.45, delay: 0.1, ease: [0.34, 1.56, 0.64, 1] }}
-                    className="font-display font-bold text-yellow leading-none"
+                    className="font-display font-bold text-brand-yellow leading-none"
                     style={{ fontSize: '7.5rem', letterSpacing: '-0.02em' }}
                   >
                     {joke.punchline}
@@ -137,7 +137,7 @@ export default function SignagePage() {
 
       {/* Footer + progress */}
       <div className="px-16 pb-10 flex flex-col gap-4">
-        <div className="w-full h-1 bg-graphite rounded-full overflow-hidden">
+        <div className="w-full h-1 bg-bg-border rounded-full overflow-hidden">
           <div
             className="h-full rounded-full"
             style={{
@@ -148,10 +148,10 @@ export default function SignagePage() {
           />
         </div>
         <div className="flex justify-between items-center">
-          <span className="font-body text-smoke/30 text-sm uppercase tracking-widest">
+          <span className="font-body text-text-secondary/30 text-sm uppercase tracking-widest">
             {joke?.category?.replace(/-/g, ' ')}
           </span>
-          <span className="font-body text-smoke/30 text-sm">
+          <span className="font-body text-text-secondary/30 text-sm">
             #{joke?.id}
           </span>
         </div>

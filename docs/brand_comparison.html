@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dad Humor - Brand System Comparison</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --midnight: #121212;
+    --charcoal: #1A1A1A;
+    --surface: #242424;
+    --graphite: #333333;
+    --yellow: #E3FF00;
+    --pink-old: #FF2E93;
+    --pink-new: #FF4DA6;
+    --cyan: #00E0FF;
+    --lime: #7CFF6B;
+    --red-old: #FF4D4D;
+    --red-new: #FF6B6B;
+    --smoke: #A0A0A0;
+    --white: #FFFFFF;
+
+    --font-outfit: 'Outfit', system-ui, sans-serif;
+    --font-inter: 'Inter', system-ui, sans-serif;
+    --font-space-grotesk: 'Space Grotesk', system-ui, sans-serif;
+  }
+
+  body {
+    background: #0A0A0A;
+    font-family: var(--font-inter);
+    color: var(--white);
+    min-height: 100vh;
+    padding: 40px 20px 80px;
+  }
+
+  .header {
+    max-width: 1400px;
+    margin: 0 auto 50px;
+    text-align: center;
+    padding: 0 20px;
+  }
+
+  .page-title {
+    font-family: var(--font-outfit);
+    font-weight: 800;
+    font-size: clamp(32px, 5vw, 52px);
+    letter-spacing: -0.03em;
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+  .page-title .accent { color: var(--yellow); }
+
+  .page-subtitle {
+    color: rgba(255, 255, 255, 0.6);
+    font-size: 16px;
+    line-height: 1.5;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .controls {
+    max-width: 600px;
+    margin: 30px auto 0;
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .joke-selector {
+    background: var(--charcoal);
+    border: 1px solid var(--graphite);
+    color: var(--white);
+    padding: 8px 16px;
+    border-radius: 100px;
+    font-family: var(--font-inter);
+    font-weight: 500;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .joke-selector:hover { border-color: var(--yellow); }
+  .joke-selector.active {
+    background: var(--yellow);
+    color: var(--midnight);
+    border-color: var(--yellow);
+    font-weight: 600;
+  }
+
+  .comparison-grid {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .comparison-grid { grid-template-columns: 1fr; }
+  }
+
+  .version-card {
+    background: var(--midnight);
+    border-radius: 20px;
+    overflow: hidden;
+    border: 1px solid var(--graphite);
+    position: relative;
+  }
+
+  .version-card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle, #1f1f1f 1px, transparent 1px);
+    background-size: 18px 18px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+
+  .version-label {
+    position: relative;
+    z-index: 2;
+    padding: 16px 24px;
+    background: var(--charcoal);
+    border-bottom: 1px solid var(--graphite);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .version-label .name {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .version-label.current .name { color: rgba(255, 255, 255, 0.5); }
+  .version-label.proposed .name { color: var(--yellow); }
+
+  .version-label .meta {
+    font-family: var(--font-inter);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.4);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+
+  /* JOKE STAGE */
+  .joke-stage {
+    position: relative;
+    z-index: 2;
+    padding: 60px 30px;
+    min-height: 480px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 32px;
+  }
+
+  /* STACHE */
+  .stache {
+    width: 80px;
+    height: 50px;
+  }
+
+  /* ============ CURRENT SPEC ============ */
+  .v-current .setup {
+    font-family: var(--font-space-grotesk);
+    font-weight: 600;
+    font-size: 24px;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+    color: var(--smoke);
+  }
+  @media (min-width: 768px) {
+    .v-current .setup { font-size: 36px; }
+  }
+
+  .v-current .punchline {
+    font-family: var(--font-space-grotesk);
+    font-weight: 700;
+    font-size: 36px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+  }
+  @media (min-width: 768px) {
+    .v-current .punchline { font-size: 56px; }
+  }
+
+  /* ============ PROPOSED SPEC ============ */
+  .v-proposed .setup {
+    font-family: var(--font-inter);
+    font-weight: 400;
+    font-size: 22px;
+    line-height: 1.35;
+    letter-spacing: -0.01em;
+    color: rgba(255, 255, 255, 0.9);
+  }
+  @media (min-width: 768px) {
+    .v-proposed .setup { font-size: 32px; }
+  }
+
+  .v-proposed .punchline {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 38px;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: var(--yellow);
+  }
+  @media (min-width: 768px) {
+    .v-proposed .punchline { font-size: 60px; }
+  }
+
+  /* SPECS PANEL */
+  .specs {
+    position: relative;
+    z-index: 2;
+    padding: 16px 24px;
+    background: rgba(0, 0, 0, 0.3);
+    border-top: 1px solid var(--graphite);
+    font-family: var(--font-inter);
+    font-size: 11px;
+    color: rgba(255, 255, 255, 0.5);
+    line-height: 1.6;
+  }
+  .specs strong { color: rgba(255, 255, 255, 0.8); font-weight: 600; }
+  .specs .label {
+    display: inline-block;
+    background: var(--graphite);
+    color: rgba(255, 255, 255, 0.7);
+    padding: 1px 6px;
+    border-radius: 3px;
+    font-size: 10px;
+    font-weight: 500;
+    margin-right: 4px;
+  }
+
+  /* WORDMARK COMPARISON */
+  .wordmark-section {
+    max-width: 1400px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+  }
+
+  .section-heading {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 22px;
+    letter-spacing: -0.02em;
+    text-align: center;
+    margin-bottom: 24px;
+    color: rgba(255, 255, 255, 0.8);
+  }
+
+  .section-subheading {
+    text-align: center;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 13px;
+    margin-bottom: 28px;
+  }
+
+  .wordmark-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .wordmark-grid { grid-template-columns: 1fr; }
+  }
+
+  .wordmark-card {
+    background: var(--midnight);
+    border-radius: 20px;
+    border: 1px solid var(--graphite);
+    overflow: hidden;
+  }
+
+  .wordmark-display {
+    padding: 60px 20px;
+    text-align: center;
+  }
+
+  .logo-stack {
+    display: inline-block;
+    text-align: left;
+  }
+
+  .logo-stack .line1 {
+    font-weight: 700;
+    line-height: 0.9;
+    color: var(--white);
+    letter-spacing: -0.04em;
+    font-size: 64px;
+  }
+  .logo-stack .line2 {
+    font-weight: 700;
+    line-height: 0.9;
+    color: var(--yellow);
+    letter-spacing: -0.04em;
+    font-size: 64px;
+  }
+
+  .v-current .logo-stack .line1,
+  .v-current .logo-stack .line2 {
+    font-family: var(--font-space-grotesk);
+  }
+
+  .v-proposed .logo-stack .line1,
+  .v-proposed .logo-stack .line2 {
+    font-family: var(--font-outfit);
+    font-weight: 800;
+  }
+
+  /* COLOUR PALETTE COMPARISON */
+  .palette-section {
+    max-width: 1400px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+  }
+
+  .palette-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+  }
+
+  @media (max-width: 900px) {
+    .palette-grid { grid-template-columns: 1fr; }
+  }
+
+  .palette-card {
+    background: var(--midnight);
+    border-radius: 20px;
+    border: 1px solid var(--graphite);
+    overflow: hidden;
+    padding: 24px;
+  }
+
+  .swatch-row {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  .swatch-row:last-child { border-bottom: none; }
+
+  .swatch {
+    width: 60px;
+    height: 40px;
+    border-radius: 6px;
+    flex-shrink: 0;
+  }
+
+  .swatch-info {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .swatch-name {
+    font-family: var(--font-outfit);
+    font-weight: 600;
+    font-size: 14px;
+    color: var(--white);
+  }
+
+  .swatch-hex {
+    font-family: var(--font-inter);
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.5);
+  }
+
+  .swatch-meta {
+    text-align: right;
+    font-family: var(--font-inter);
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .contrast-badge {
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 10px;
+    letter-spacing: 0.03em;
+  }
+  .contrast-badge.aaa {
+    background: rgba(124, 255, 107, 0.15);
+    color: var(--lime);
+  }
+  .contrast-badge.aa {
+    background: rgba(255, 255, 0, 0.15);
+    color: var(--yellow);
+  }
+  .contrast-badge.fail {
+    background: rgba(255, 77, 77, 0.15);
+    color: var(--red-new);
+  }
+
+  /* WHY EXPLAINER */
+  .why-section {
+    max-width: 800px;
+    margin: 60px auto 0;
+    padding: 0 20px;
+  }
+
+  .why-card {
+    background: var(--midnight);
+    border-radius: 20px;
+    border: 1px solid var(--graphite);
+    padding: 28px;
+  }
+
+  .why-card h3 {
+    font-family: var(--font-outfit);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: var(--yellow);
+  }
+
+  .why-card p {
+    font-family: var(--font-inter);
+    color: rgba(255, 255, 255, 0.75);
+    font-size: 14px;
+    line-height: 1.6;
+    margin-bottom: 12px;
+  }
+
+  .why-card p:last-child { margin-bottom: 0; }
+
+  .why-card .check {
+    color: var(--lime);
+    margin-right: 4px;
+  }
+
+  /* FOOTER */
+  .footer {
+    max-width: 1400px;
+    margin: 60px auto 0;
+    padding: 30px 20px 0;
+    text-align: center;
+    color: rgba(255, 255, 255, 0.4);
+    font-size: 12px;
+  }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1 class="page-title">Brand System <span class="accent">Comparison.</span></h1>
+  <p class="page-subtitle">Current spec vs proposed system. Same jokes, different typography. Pick your fighter.</p>
+
+  <div class="controls">
+    <button class="joke-selector active" data-joke="0">Standard joke</button>
+    <button class="joke-selector" data-joke="1">Long setup</button>
+    <button class="joke-selector" data-joke="2">Short punchline</button>
+    <button class="joke-selector" data-joke="3">Short and snappy</button>
+  </div>
+</div>
+
+<!-- JOKE CARD COMPARISON -->
+<div class="comparison-grid">
+
+  <!-- CURRENT -->
+  <div class="version-card v-current">
+    <div class="version-label current">
+      <span class="name">Current</span>
+      <span class="meta">Space Grotesk only</span>
+    </div>
+
+    <div class="joke-stage">
+      <svg class="stache" viewBox="0 0 120 75">
+        <circle cx="42" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="78" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="42" cy="20" r="3" fill="#000"/>
+        <circle cx="78" cy="20" r="3" fill="#000"/>
+        <path d="M 60 38 Q 50 35, 42 40 Q 30 42, 20 50 Q 14 55, 18 62 Q 22 65, 30 60 Q 38 55, 46 52 Q 54 50, 60 52 Q 66 50, 74 52 Q 82 55, 90 60 Q 98 65, 102 62 Q 106 55, 100 50 Q 90 42, 78 40 Q 70 35, 60 38 Z" fill="#1a1a1a" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+
+      <h2 class="setup" data-current-setup>Why don't eggs tell jokes?</h2>
+      <h1 class="punchline" data-current-punchline>They'd crack each other up.</h1>
+    </div>
+
+    <div class="specs">
+      <strong>Setup:</strong> <span class="label">Space Grotesk</span> 600 weight, 24/36px, color: #A0A0A0<br>
+      <strong>Punchline:</strong> <span class="label">Space Grotesk</span> 700 weight, 36/56px, color: Yellow<br>
+      <strong>Issues:</strong> Setup feels too heavy, grey contrast borderline (6.5:1)
+    </div>
+  </div>
+
+  <!-- PROPOSED -->
+  <div class="version-card v-proposed">
+    <div class="version-label proposed">
+      <span class="name">Proposed ✨</span>
+      <span class="meta">Outfit + Inter</span>
+    </div>
+
+    <div class="joke-stage">
+      <svg class="stache" viewBox="0 0 120 75">
+        <circle cx="42" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="78" cy="18" r="8" fill="#FFFFFF" stroke="#000" stroke-width="2"/>
+        <circle cx="42" cy="20" r="3" fill="#000"/>
+        <circle cx="78" cy="20" r="3" fill="#000"/>
+        <path d="M 60 38 Q 50 35, 42 40 Q 30 42, 20 50 Q 14 55, 18 62 Q 22 65, 30 60 Q 38 55, 46 52 Q 54 50, 60 52 Q 66 50, 74 52 Q 82 55, 90 60 Q 98 65, 102 62 Q 106 55, 100 50 Q 90 42, 78 40 Q 70 35, 60 38 Z" fill="#1a1a1a" stroke="#000" stroke-width="2.5" stroke-linejoin="round"/>
+      </svg>
+
+      <h2 class="setup" data-proposed-setup>Why don't eggs tell jokes?</h2>
+      <h1 class="punchline" data-proposed-punchline>They'd crack each other up.</h1>
+    </div>
+
+    <div class="specs">
+      <strong>Setup:</strong> <span class="label">Inter</span> 400 weight, 22/32px, color: white at 90%<br>
+      <strong>Punchline:</strong> <span class="label">Outfit</span> 700 weight, 38/60px, color: Yellow<br>
+      <strong>Result:</strong> Two voices (read vs deliver), 17:1 contrast, cleaner hierarchy
+    </div>
+  </div>
+
+</div>
+
+<!-- WORDMARK COMPARISON -->
+<div class="wordmark-section">
+  <h2 class="section-heading">Wordmark</h2>
+  <p class="section-subheading">Stacked logo lockup - same colours, different fonts</p>
+
+  <div class="wordmark-grid">
+    <div class="wordmark-card v-current">
+      <div class="version-label current">
+        <span class="name">Current</span>
+        <span class="meta">Space Grotesk Bold</span>
+      </div>
+      <div class="wordmark-display">
+        <div class="logo-stack">
+          <div class="line1">DAD</div>
+          <div class="line2">HUMOR.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="wordmark-card v-proposed">
+      <div class="version-label proposed">
+        <span class="name">Proposed</span>
+        <span class="meta">Outfit ExtraBold (800)</span>
+      </div>
+      <div class="wordmark-display">
+        <div class="logo-stack">
+          <div class="line1">DAD</div>
+          <div class="line2">HUMOR.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- COLOUR COMPARISON -->
+<div class="palette-section">
+  <h2 class="section-heading">Colour System</h2>
+  <p class="section-subheading">Accessibility audit + minor refinements</p>
+
+  <div class="palette-grid">
+
+    <!-- CURRENT PALETTE -->
+    <div class="palette-card">
+      <div style="margin-bottom: 16px;">
+        <div style="font-family: var(--font-outfit); font-weight: 700; font-size: 14px; color: rgba(255,255,255,0.5); letter-spacing: 0.05em; text-transform: uppercase;">Current</div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #E3FF00;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyber Yellow</div>
+          <div class="swatch-hex">#E3FF00</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">17:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #7CFF6B;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Lime (Props)</div>
+          <div class="swatch-hex">#7CFF6B</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">14:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #00E0FF;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyan (Share)</div>
+          <div class="swatch-hex">#00E0FF</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">11.6:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #FF2E93;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Pink (Groan)</div>
+          <div class="swatch-hex">#FF2E93</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aa">4.7:1 AA-Lg</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #FF4D4D;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Red (Error)</div>
+          <div class="swatch-hex">#FF4D4D</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aa">5.1:1 AA-Lg</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #A0A0A0;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Smoke (text)</div>
+          <div class="swatch-hex">#A0A0A0</div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aa">6.5:1 AA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROPOSED PALETTE -->
+    <div class="palette-card" style="border: 1px solid var(--yellow);">
+      <div style="margin-bottom: 16px;">
+        <div style="font-family: var(--font-outfit); font-weight: 700; font-size: 14px; color: var(--yellow); letter-spacing: 0.05em; text-transform: uppercase;">Proposed ✨</div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #E3FF00;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyber Yellow</div>
+          <div class="swatch-hex">#E3FF00 <span style="color: rgba(255,255,255,0.4)">(unchanged)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">17:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #7CFF6B;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Lime (Props)</div>
+          <div class="swatch-hex">#7CFF6B <span style="color: rgba(255,255,255,0.4)">(unchanged)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">14:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #00E0FF;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Cyan (Share)</div>
+          <div class="swatch-hex">#00E0FF <span style="color: rgba(255,255,255,0.4)">(unchanged)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">11.6:1 AAA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #FF4DA6;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Pink (Groan)</div>
+          <div class="swatch-hex">#FF4DA6 <span style="color: var(--yellow);">(refined)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aa">5.8:1 AA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: #FF6B6B;"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Red (Error)</div>
+          <div class="swatch-hex">#FF6B6B <span style="color: var(--yellow);">(refined)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aa">5.4:1 AA</div>
+        </div>
+      </div>
+
+      <div class="swatch-row">
+        <div class="swatch" style="background: rgba(255,255,255,0.7); border: 1px solid rgba(255,255,255,0.1);"></div>
+        <div class="swatch-info">
+          <div class="swatch-name">Text Secondary</div>
+          <div class="swatch-hex">white @ 70% <span style="color: var(--yellow);">(replaces Smoke)</span></div>
+        </div>
+        <div class="swatch-meta">
+          <div class="contrast-badge aaa">12.9:1 AAA</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- WHY -->
+<div class="why-section">
+  <div class="why-card">
+    <h3>Why this works better</h3>
+    <p><span class="check">✓</span> <strong>Two-font system mirrors comedic delivery.</strong> Setup feels conversational (Inter), punchline lands hard (Outfit). Same way a comedian actually performs.</p>
+    <p><span class="check">✓</span> <strong>Outfit is more refined than Space Grotesk.</strong> Less "design school," more confident. Holds up better at huge sizes for OG share cards.</p>
+    <p><span class="check">✓</span> <strong>White-at-70% beats grey for muted text.</strong> Always WCAG AAA. Visually softer, structurally accessible. No more "is this readable?" anxiety.</p>
+    <p><span class="check">✓</span> <strong>Pink and Red bumped to AA pass.</strong> Tiny adjustments, no visible difference, full accessibility win.</p>
+    <p><span class="check">✓</span> <strong>Setup at weight 400 lets the punchline breathe.</strong> Hierarchy comes from font choice + weight + size, not just colour. Three layers of contrast.</p>
+  </div>
+</div>
+
+<div class="footer">
+  Dad Humor Brand System v1.3 - April 2026
+</div>
+
+<script>
+  const jokes = [
+    {
+      label: 'Standard joke',
+      setup: "Why don't eggs tell jokes?",
+      punchline: "They'd crack each other up."
+    },
+    {
+      label: 'Long setup',
+      setup: "I told my suitcases there would be no vacation this year.",
+      punchline: "Now I'm dealing with emotional baggage."
+    },
+    {
+      label: 'Short punchline',
+      setup: "What did the buffalo say to his son when he left for college?",
+      punchline: "Bison."
+    },
+    {
+      label: 'Short and snappy',
+      setup: "What's brown and sticky?",
+      punchline: "A stick."
+    }
+  ];
+
+  const buttons = document.querySelectorAll('.joke-selector');
+
+  function loadJoke(index) {
+    const joke = jokes[index];
+
+    document.querySelectorAll('[data-current-setup]').forEach(el => el.textContent = joke.setup);
+    document.querySelectorAll('[data-current-punchline]').forEach(el => el.textContent = joke.punchline);
+    document.querySelectorAll('[data-proposed-setup]').forEach(el => el.textContent = joke.setup);
+    document.querySelectorAll('[data-proposed-punchline]').forEach(el => el.textContent = joke.punchline);
+
+    buttons.forEach((b, i) => {
+      b.classList.toggle('active', i === index);
+    });
+  }
+
+  buttons.forEach((btn, i) => {
+    btn.addEventListener('click', () => loadJoke(i));
+  });
+</script>
+
+</body>
+</html>

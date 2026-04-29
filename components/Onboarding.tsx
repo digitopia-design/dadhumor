@@ -40,20 +40,20 @@ const STEPS: StepConfig[] = [
 ];
 
 const GESTURE_HINTS = [
-  { gesture: '← swipe',  label: 'next joke',   colour: 'text-yellow' },
-  { gesture: '→ swipe',  label: 'props',        colour: 'text-lime'   },
-  { gesture: '↑ swipe',  label: 'share',        colour: 'text-cyan'   },
-  { gesture: 'hold',     label: 'groan',        colour: 'text-pink'   },
+  { gesture: '← swipe',  label: 'next joke',   colour: 'text-brand-yellow' },
+  { gesture: '→ swipe',  label: 'props',        colour: 'text-reaction-lime'   },
+  { gesture: '↑ swipe',  label: 'share',        colour: 'text-reaction-cyan'   },
+  { gesture: 'hold',     label: 'groan',        colour: 'text-reaction-pink'   },
 ];
 
 export function Onboarding({ step, totalSteps, onNext, onSkip }: OnboardingProps) {
   const current = STEPS[step];
 
   return (
-    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-midnight/95 backdrop-blur-sm px-8">
+    <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-bg/95 backdrop-blur-sm px-8">
       <button
         onClick={onSkip}
-        className="absolute top-8 right-8 font-body text-smoke text-sm hover:text-white transition-colors"
+        className="absolute top-8 right-8 font-body text-text-secondary text-sm hover:text-text transition-colors"
       >
         Skip
       </button>
@@ -70,12 +70,12 @@ export function Onboarding({ step, totalSteps, onNext, onSkip }: OnboardingProps
           <Stache mood={current.mood} size="xl" priority />
 
           <div className="flex flex-col gap-4">
-            <h2 className="font-display font-bold text-4xl text-white">
+            <h2 className="font-display font-bold text-4xl text-text">
               {current.heading}
             </h2>
 
             {current.body && (
-              <p className="font-body text-smoke text-lg leading-relaxed">
+              <p className="font-body text-text-secondary text-lg leading-relaxed">
                 {current.body}
               </p>
             )}
@@ -87,7 +87,7 @@ export function Onboarding({ step, totalSteps, onNext, onSkip }: OnboardingProps
                     <span className={cn('font-display font-bold text-xl', colour)}>
                       {gesture}
                     </span>
-                    <span className="font-body text-white">{label}</span>
+                    <span className="font-body text-text">{label}</span>
                   </li>
                 ))}
               </ul>
@@ -96,7 +96,7 @@ export function Onboarding({ step, totalSteps, onNext, onSkip }: OnboardingProps
 
           <button
             onClick={onNext}
-            className="w-full py-4 rounded-2xl bg-yellow text-midnight font-body font-bold text-lg hover:bg-yellow/90 transition-colors"
+            className="w-full py-4 rounded-2xl bg-brand-yellow text-midnight font-body font-bold text-lg hover:bg-brand-yellow/90 transition-colors"
           >
             {current.cta}
           </button>
@@ -107,7 +107,7 @@ export function Onboarding({ step, totalSteps, onNext, onSkip }: OnboardingProps
                 key={i}
                 className={cn(
                   'w-2 h-2 rounded-full transition-colors',
-                  i === step ? 'bg-yellow' : 'bg-graphite'
+                  i === step ? 'bg-brand-yellow' : 'bg-bg-border'
                 )}
               />
             ))}

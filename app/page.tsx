@@ -121,7 +121,7 @@ export default function Home() {
     return (
       <main className="flex min-h-screen flex-col items-center justify-center gap-6">
         <Stache mood="anticipation" size="lg" priority />
-        <p className="font-body text-smoke animate-pulse">Fetching fresh groans...</p>
+        <p className="font-body text-text-secondary animate-pulse">Fetching fresh groans...</p>
       </main>
     );
   }
@@ -129,7 +129,7 @@ export default function Home() {
   if (!joke) {
     return (
       <main className="flex min-h-screen items-center justify-center">
-        <p className="font-body text-red">Oof. Something broke. Try again?</p>
+        <p className="font-body text-reaction-red">Oof. Something broke. Try again?</p>
       </main>
     );
   }
@@ -157,7 +157,7 @@ export default function Home() {
             onToggle={toggleDadMode}
             campaignActive={campaignActive}
           />
-          <span className="font-body text-smoke text-xs uppercase tracking-widest">
+          <span className="font-body text-text-secondary text-xs uppercase tracking-widest">
             #{joke.id}
           </span>
         </div>
@@ -191,7 +191,7 @@ export default function Home() {
           />
         )}
         {!isRevealed && (
-          <p className="font-body text-smoke/50 text-xs">
+          <p className="font-body text-text-secondary/50 text-xs">
             tap card · space to reveal · ← → ↑ for actions
           </p>
         )}

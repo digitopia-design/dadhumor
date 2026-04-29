@@ -24,10 +24,10 @@ function getTimeLeft(): TimeLeft {
 function Unit({ value, label }: { value: number; label: string }) {
   return (
     <div className="flex flex-col items-center gap-1">
-      <span className="font-display font-bold text-yellow text-5xl md:text-7xl leading-none tabular-nums">
+      <span className="font-display font-bold text-brand-yellow text-5xl md:text-7xl leading-none tabular-nums">
         {String(value).padStart(2, '0')}
       </span>
-      <span className="font-body text-smoke text-xs uppercase tracking-widest">{label}</span>
+      <span className="font-body text-text-secondary text-xs uppercase tracking-widest">{label}</span>
     </div>
   );
 }
@@ -42,7 +42,7 @@ export function CountdownTimer() {
 
   if (FATHERS_DAY <= new Date()) {
     return (
-      <p className="font-display font-bold text-yellow text-3xl">
+      <p className="font-display font-bold text-brand-yellow text-3xl">
         Happy Father's Day! 🎉
       </p>
     );
