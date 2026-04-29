@@ -1,9 +1,20 @@
 import Link from 'next/link';
 import type { MDXRemoteProps } from 'next-mdx-remote/rsc';
+import { Callout } from './Callout';
+import { StacheReact } from './StacheReact';
+import { ImageGrid } from './ImageGrid';
+import { JokeEmbed } from './JokeEmbed';
+import { GroanLeaderboard, PropsLeaderboard } from './Leaderboard';
 
 type MDXComponents = NonNullable<MDXRemoteProps['components']>;
 
 export const mdxComponents: MDXComponents = {
+  Callout,
+  StacheReact,
+  ImageGrid,
+  JokeEmbed,
+  GroanLeaderboard,
+  PropsLeaderboard,
   h1: props => (
     <h1
       className="font-display font-bold text-4xl md:text-5xl text-text mt-12 mb-6 first:mt-0"
